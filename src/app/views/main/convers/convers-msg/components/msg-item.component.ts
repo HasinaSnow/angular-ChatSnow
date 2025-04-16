@@ -14,8 +14,8 @@ import { AvatarModule } from 'primeng/avatar';
         </div>
     </div>
     <div class="flex flex-row-reverse py-1 ml-auto items-start gap-2 w-fit max-w-[75%]">
-        <div class="flex-1 bg-surface-500 px-3 py-2 rounded-lg">
-            <p class="leading-6 text-base text-surface-0 mb-0">Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque nesciunt error a illo, modi eveniet iusto sint ipsa explicabo? In excepturi vitae qui a mollitia quasi suscipit ad laudantium id?.</p>
+        <div class="flex-1 bg-surface-300 dark:bg-surface-600 px-3 py-2 rounded-lg">
+            <p class="leading-6 text-base text-color dark:text-surface-200 mb-0">Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque nesciunt error a illo, modi eveniet iusto sint ipsa explicabo? In excepturi vitae qui a mollitia quasi suscipit ad laudantium id?.</p>
         </div>
     </div>`
 })
