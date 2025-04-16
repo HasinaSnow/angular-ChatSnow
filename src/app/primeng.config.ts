@@ -11,6 +11,10 @@ const presetTheme = definePreset(Aura, {
             },
             dark: {
                 surface: palette('{neutral}'),
+                primary: {
+                    color:' {primary.500}',
+                    contrastColor: '{surface.0}'
+                }
             }
         },
     },
@@ -21,10 +25,6 @@ export const primengConfig: PrimeNGConfigType = {
         preset: presetTheme,
         options: {
             darkModeSelector: '.dark',
-            // cssLayer: {
-            //     name: 'primeng',
-            //     order: 'theme, base, primeng'
-            // }
         }
     }
 }
