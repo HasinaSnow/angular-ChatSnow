@@ -27,7 +27,7 @@ import { InputTextModule } from 'primeng/inputtext';
             <p-iconfield styleClass="w-full">
                 <p-inputicon styleClass="pi pi-search" />
                 <!-- <p-inputicon styleClass="pi pi-spinner pi-spin" /> -->
-                <input type="text" variant="filled" pInputText placeholder="Search" class="w-full" />
+                <input type="text" pInputText placeholder="Search" class="w-full" />
             </p-iconfield>
         </div>
     </div>`
