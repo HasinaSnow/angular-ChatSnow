@@ -1,7 +1,8 @@
-import { Component, ElementRef, OnInit, viewChild } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, viewChild } from '@angular/core';
 import { ConversMsgHeaderComponent } from './components/convers-msg-header.component';
 import { ConversMsgFormComponent } from "./components/convers-msg-form.component";
 import { MsgItemComponent } from './components/msg-item.component';
+import { ConversService } from '../../../../features/convers/convers.service';
 
 @Component({
     selector: 'app-convers-msg',
@@ -12,7 +13,7 @@ import { MsgItemComponent } from './components/msg-item.component';
 ],
     template: `<div class="flex flex-col overflow-auto h-full w-full">
         <!-- header -->
-        <app-convers-msg-header />
+        <app-convers-msg-header (onGoToInfo)="goToConversInfo()" (onCancel)="cancelToConversList()" />
 
         <!-- msg list -->
         <div #chatContent class="px-2 lg:px-4 pt-3 flex flex-1 pb-9 flex-col gap-2 overflow-auto">
@@ -30,6 +31,7 @@ import { MsgItemComponent } from './components/msg-item.component';
     </div>`
 })
 export class conversMsgComponent implements OnInit {
+    private conversService = inject(ConversService)
     private chatContent = viewChild<ElementRef<HTMLElement>>('chatContent')
 
     ngOnInit() {
@@ -39,6 +41,14 @@ export class conversMsgComponent implements OnInit {
     scrollToBottom() {
         const element = this.chatContent()
         if(element) element.nativeElement.scrollTop = element.nativeElement.scrollHeight
+    }
+
+    cancelToConversList() {
+        this.conversService.selectedComponent.set('list')
+    }
+
+    goToConversInfo() {
+        this.conversService.selectedComponent.set('info')
     }
 
 }

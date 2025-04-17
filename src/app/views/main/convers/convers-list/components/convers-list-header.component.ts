@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
 import { IconFieldModule } from 'primeng/iconfield';
@@ -13,17 +13,17 @@ import { InputTextModule } from 'primeng/inputtext';
         <!-- title -->
         <div class="flex justify-between text-color">
             <!-- left -->
-            <span class="flex items-center gap-2 font-medium text-2xl pl-3">
+            <span class="flex items-center gap-2 font-medium text-2xl">
                 <!-- if mobile screen -->
-                <p-button icon="pi pi-bars text-muted-color" class="sm:hidden" rounded="true" size="large" variant="text" severity="secondary" />
-                <h2>Chat</h2>
+                <p-button (onClick)="openSideMenu()" icon="pi pi-bars text-muted-color" class="sm:hidden"  size="large" variant="text" severity="secondary" />
+                <h2 class="md:ml-3 leading-0">Chat</h2>
             </span>
             <!-- right -->
-            <p-button icon="pi pi-plus" class="border-0 shadow-none" variant="text" outlined="true" severity="secondary"/>
+            <p-button icon="pi pi-plus" class="border-0 shadow-none" variant="text" rounded="true" outlined="true" severity="secondary"/>
         </div>
 
         <!-- search -->
-        <div class="w-full px-2 my-4">
+        <div class="w-full px-2 mb-2 mt-3">
             <p-iconfield styleClass="w-full">
                 <p-inputicon styleClass="pi pi-search" />
                 <!-- <p-inputicon styleClass="pi pi-spinner pi-spin" /> -->
@@ -33,7 +33,8 @@ import { InputTextModule } from 'primeng/inputtext';
     </div>`
 })
 export class ConversListHeaderComponent implements OnInit {
-    constructor() { }
-
     ngOnInit() { }
+
+    openSideMenu() {
+    }
 }

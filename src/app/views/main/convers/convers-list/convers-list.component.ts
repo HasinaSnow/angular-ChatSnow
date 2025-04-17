@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ConversListHeaderComponent } from "./components/convers-list-header.component";
 import { ConversItemComponent } from "./components/convers-item.component";
 import { ConversItemInlineComponent } from "./components/convers-item-inline.component";
+import { ConversService } from '../../../../features/convers/convers.service';
 
 @Component({
     selector: 'app-convers-list',
@@ -14,7 +15,7 @@ import { ConversItemInlineComponent } from "./components/convers-item-inline.com
             <!-- convers list -->
             <div class="w-full flex-1 flex flex-col pb-6 overflow-auto">
                 <!-- inline convers list -->
-                <div class="w-full flex gap-3 min-h-min overflow-y-auto mb-2">
+                <div class="w-full flex gap-3 min-h-min overflow-y-auto pb-3 px-2">
                     <app-convers-item-inline/>
                     <app-convers-item-inline/>
                     <app-convers-item-inline/>
@@ -25,17 +26,18 @@ import { ConversItemInlineComponent } from "./components/convers-item-inline.com
                 </div>
 
                 <!-- convers item -->
-                <app-convers-item/>
-                <app-convers-item/>
-                <app-convers-item/>
-                <app-convers-item/>
-                <app-convers-item/>
+                <app-convers-item (onSelect)="selectConversItem($event)" />
             </div>
         </div>
     `
 })
 export class ConversListComponent implements OnInit {
-    constructor() { }
+    private conversService = inject(ConversService)
 
     ngOnInit() { }
+
+    selectConversItem(id: string) {
+        this.conversService.idConversSelected.set(id)
+        this.conversService.selectedComponent.set('msg')
+    }
 }

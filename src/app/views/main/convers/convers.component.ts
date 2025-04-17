@@ -4,6 +4,7 @@ import { conversMsgComponent } from './convers-msg/convers-msg.component';
 import { ConversInfoComponent } from "./convers-info/convers-info.component";
 import { BreakpointService } from '../../../shared/services/breakpoint.service';
 import { CommonModule } from '@angular/common';
+import { ConversService } from '../../../features/convers/convers.service';
 
 @Component({
     selector: 'app-convers',
@@ -19,7 +20,18 @@ import { CommonModule } from '@angular/common';
 
             <!-- convers msg -->
             <div class="md:col-span-2 h-full w-full">
-                <app-convers-msg/>
+                @if(bpService.screenWidth() >= bp.md) {
+                    @switch (selectedComponent()) {
+                        @case ('info') { <app-convers-info/>}
+                        @default { <app-convers-msg/>}
+                    }
+                } @else {
+                    @switch (selectedComponent()) {
+                        @case ('info') { <app-convers-info/>}
+                        @case ('msg') { <app-convers-msg/>}
+                        @default { <app-convers-list/>}
+                    }
+                }
             </div>
 
             <!-- convers info -->
@@ -33,8 +45,13 @@ import { CommonModule } from '@angular/common';
 })
 export class ConversComponent implements OnInit {
     readonly bpService = inject(BreakpointService)
+    private conversService = inject(ConversService)
+    readonly selectedComponent = this.conversService.selectedComponent
     bp = this.bpService.breakpooint
 
     ngOnInit() {
+    }
+
+    openSideMenu() {
     }
 }
