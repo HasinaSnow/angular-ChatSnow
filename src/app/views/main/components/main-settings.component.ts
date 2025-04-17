@@ -1,32 +1,44 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { ThemeService } from '../../../shared/services/theme.service';
 import { FormsModule } from '@angular/forms';
+import { IItemSettings, MenuSettingsComponent } from "../../../shared/components/menu-settings.component";
 
 @Component({
     selector: 'app-main-settings',
-    imports: [FormsModule , ToggleSwitchModule],
+    imports: [FormsModule, ToggleSwitchModule, MenuSettingsComponent],
     template: `
-    <div class="bg-surface-0 dark:bg-surface-950 text-color p-3 border border-surface z-50 shadow-lg rounded-xl">
-        <div class="font-semibold flex items-center gap-2 text-color text-2xl pb-2 border-b border-surface">
+    <div class="bg-surface-0 dark:bg-surface-950 text-color p-4 border border-surface z-50 shadow-lg rounded-xl">
+        <div class="font-semibold flex items-center gap-2 text-color text-2xl pb-2">
             <i class="pi pi-cog text-3xl"></i>
             Settings
         </div>
-        <div class="flex flex-col my-2">
-            <div class="flex justify-between items-center p-2 gap-6">
-                <span class="text-color text-lg">Dark theme</span>
-                <p-toggleswitch styleClass="m-auto" [(ngModel)]='themeService.isDark' class="leading-0"/>
-            </div>
-            <div class="flex justify-between items-center p-2 gap-6">
-                <span class="text-color text-lg">Inline status</span>
-                <p-toggleswitch styleClass="m-auto" class="leading-0"/>
-            </div>
-        </div>
+        <app-menu-settings [items]="mainSettingsItems"/>
     </div>`
 })
 export class MainSettingsComponent implements OnInit {
     themeService = inject(ThemeService)
     constructor() { }
-
+    mainSettingsItems: IItemSettings[] = [
+        {
+            label: 'Preferences',
+            items: [
+                {
+                    label: 'Sound & Notification',
+                    icon: 'pi pi-info-circle',
+                    inputCheck: {
+                        check: signal(true),
+                    }
+                },
+                {
+                    label: 'Dark theme',
+                    icon: 'pi pi-moon',
+                    inputCheck: {
+                        check: this.themeService.isDark,
+                    }
+                }
+            ],
+        },
+    ]
     ngOnInit() { }
 }
