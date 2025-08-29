@@ -1,4 +1,4 @@
-import { Component, input, OnInit, output, signal } from '@angular/core';
+import { Component, OnInit, output, signal } from '@angular/core';
 import { AvatarModule } from 'primeng/avatar';
 import { BadgeModule } from 'primeng/badge';
 
@@ -24,8 +24,8 @@ import { BadgeModule } from 'primeng/badge';
     </div> -->
     <div (click)="onSelect.emit('id')" routerLinkActive="bg-surface-200 text-surface-800"  class="{{isActive() ? 'bg-surface-200 dark:bg-surface-800 text-surface-800 dark:text-surface-100' : ''}}  p-4 flex gap-2 items-center hover:bg-emphasis transition-all duration-300 cursor-pointer">
         <div class="relative flex items-center flex-col justify-center">
-            <p-badge class="absolute top-0 right-0 p-[1px]" severity="success"/>
-            <p-avatar image="./favicon.ico" styleClass="font-medium text-base" size="large" shape="circle"/>
+            <p-badge class="absolute top-1 right-0 p-[1px] backdrop-blur-md" severity="success"/>
+            <p-avatar image="./images/pdp1.jpg" styleClass="font-medium text-base" size="large" shape="circle"/>
         </div>
         <div class="text-color-emphasis">
             <div class="flex gap-1 items-start justify-between">

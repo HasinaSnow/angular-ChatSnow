@@ -1,19 +1,20 @@
 import { Component, ElementRef, inject, OnInit, viewChild } from '@angular/core';
-import { ConversMsgHeaderComponent } from './components/convers-msg-header.component';
-import { ConversMsgFormComponent } from "./components/convers-msg-form.component";
+import { Location } from '@angular/common';
+import { ConversService } from '../../../../../features/convers/convers.service';
+import { HeaderConversMsgComponent } from '../../../../../shared/components/header-convers-msg.component';
+import { ConversMsgFormComponent } from './components/convers-msg-form.component';
 import { MsgItemComponent } from './components/msg-item.component';
-import { ConversService } from '../../../../features/convers/convers.service';
 
 @Component({
     selector: 'app-convers-msg',
     imports: [
-    ConversMsgHeaderComponent,
-    MsgItemComponent,
-    ConversMsgFormComponent
-],
+        HeaderConversMsgComponent,
+        MsgItemComponent,
+        ConversMsgFormComponent
+    ],
     template: `<div class="flex flex-col overflow-auto h-full w-full">
         <!-- header -->
-        <app-convers-msg-header (onGoToInfo)="goToConversInfo()" (onCancel)="cancelToConversList()" />
+        <app-header-convers-msg (onGoToInfo)="goToConversInfo()" (onCancel)="cancel()" />
 
         <!-- msg list -->
         <div #chatContent class="px-2 lg:px-4 pt-3 flex flex-1 pb-9 flex-col gap-2 overflow-auto">
@@ -30,8 +31,9 @@ import { ConversService } from '../../../../features/convers/convers.service';
         </div>
     </div>`
 })
-export class conversMsgComponent implements OnInit {
+export class ConversMsgComponent implements OnInit {
     private conversService = inject(ConversService)
+    private location = inject(Location)
     private chatContent = viewChild<ElementRef<HTMLElement>>('chatContent')
 
     ngOnInit() {
@@ -43,9 +45,7 @@ export class conversMsgComponent implements OnInit {
         if(element) element.nativeElement.scrollTop = element.nativeElement.scrollHeight
     }
 
-    cancelToConversList() {
-        this.conversService.selectedComponent.set('list')
-    }
+    cancel() {this.location.back()}
 
     goToConversInfo() {
         this.conversService.selectedComponent.set('info')

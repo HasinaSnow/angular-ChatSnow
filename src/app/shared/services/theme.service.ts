@@ -2,11 +2,11 @@ import { effect, Injectable, signal, WritableSignal } from '@angular/core';
 
 @Injectable({providedIn: 'root'})
 export class ThemeService {
-    isDark: WritableSignal<boolean> = signal(false)
+    isDark: WritableSignal<boolean> = signal(true)
     onEffect = effect(() => {
         const isDark = this.isDark()
         const element = document.querySelector('html')
-        isDark ? element?.classList.remove('dark') : element?.classList.add('dark')
+        !isDark ? element?.classList.remove('dark') : element?.classList.add('dark')
     })
 
     toggleTheme() {

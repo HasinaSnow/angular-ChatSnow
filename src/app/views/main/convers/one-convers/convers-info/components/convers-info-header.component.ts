@@ -7,7 +7,7 @@ import { ButtonModule } from 'primeng/button';
     imports: [AvatarModule, ButtonModule],
     template: `
     <div class=" flex flex-col items-center justify-center pb-3">
-        <p-avatar image="./favicon.ico" styleClass="w-32 w-32" size="xlarge" shape="circle"/>
+        <p-avatar image="./images/pdp1.jpg" styleClass="w-32 w-32" size="xlarge" shape="circle"/>
         <div class="leading-6 font-medium text-color text-2xl mt-3 w-full text-center">PrimeTek</div>
         <div class="leading-5 text-muted-color text-md mt-1 w-full text-center">{{'@primetek'}}</div>
 

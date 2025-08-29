@@ -2,24 +2,23 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { ThemeService } from '../../../shared/services/theme.service';
 import { FormsModule } from '@angular/forms';
-import { IItemSettings, MenuSettingsComponent } from "../../../shared/components/menu-settings.component";
+import { IInfoItem, ListMsgInfoComponent } from "../../../shared/components/list-msg-info.component";
 
 @Component({
     selector: 'app-main-settings',
-    imports: [FormsModule, ToggleSwitchModule, MenuSettingsComponent],
+    imports: [FormsModule, ToggleSwitchModule, ListMsgInfoComponent],
     template: `
     <div class="bg-surface-0 dark:bg-surface-950 text-color p-4 border border-surface z-50 shadow-lg rounded-xl">
         <div class="font-semibold flex items-center gap-2 text-color text-2xl pb-2">
             <i class="pi pi-cog text-3xl"></i>
-            Settings
+            <span class="leading-0">Settings</span>
         </div>
-        <app-menu-settings [items]="mainSettingsItems"/>
+        <app-list-msg-info [items]="mainSettingsItems"/>
     </div>`
 })
 export class MainSettingsComponent implements OnInit {
     themeService = inject(ThemeService)
-    constructor() { }
-    mainSettingsItems: IItemSettings[] = [
+    mainSettingsItems: IInfoItem[] = [
         {
             label: 'Preferences',
             items: [

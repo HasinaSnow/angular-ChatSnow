@@ -3,11 +3,10 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
     {
         path: '',
-        redirectTo: 'main-app',
-        pathMatch: 'full'
+        loadChildren: () => import('./views/main/main.routes').then(m => m.MainRoutes)
     },
     {
-        path: 'main-app',
-        loadChildren: () => import('./views/main/main.routes').then(m => m.MainRoutes)
-    }
+        path: 'mobile',
+        loadChildren: () => import('./views/main/main.routes').then(m => m.MainRoutesMobile)
+    },
 ];

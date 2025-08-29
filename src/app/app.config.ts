@@ -4,11 +4,13 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { providePrimeNG } from 'primeng/config'
 import { routes } from './app.routes';
 import { primengConfig } from './primeng.config'
+import { BreakpointService } from './shared/services/breakpoint.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
+    BreakpointService,
     provideAnimationsAsync(),
     providePrimeNG(primengConfig)
   ]

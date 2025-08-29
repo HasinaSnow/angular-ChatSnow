@@ -1,43 +1,60 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ConversListHeaderComponent } from "./components/convers-list-header.component";
-import { ConversItemComponent } from "./components/convers-item.component";
 import { ConversItemInlineComponent } from "./components/convers-item-inline.component";
 import { ConversService } from '../../../../features/convers/convers.service';
+import { MenuItem } from 'primeng/api';
+import { TooltipModule } from 'primeng/tooltip';
+import { ItemConversComponent } from '../../../../shared/components/item-convers.component';
+import { IconField } from "primeng/iconfield";
+import { InputIcon } from "primeng/inputicon";
+import { InputText } from 'primeng/inputtext';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'app-convers-list',
-    imports: [ConversListHeaderComponent, ConversItemComponent, ConversItemInlineComponent],
+    imports: [
+    ConversItemInlineComponent,
+    ItemConversComponent,
+    TooltipModule,
+    FormsModule,
+    IconField,
+    InputIcon,
+    InputText
+],
     template: `
-        <div class="flex flex-col overflow-auto h-full w-full">
-            <!-- header -->
-            <app-convers-list-header/>
+        <div class="p-1 flex flex-col gap-4 overflow-auto h-full w-full">
+            <!-- search -->
+            <p-iconfield styleClass="w-full">
+                <p-inputicon styleClass="pi pi-search" />
+                <input type="text" pInputText placeholder="Search" class="w-full" />
+            </p-iconfield>
 
             <!-- convers list -->
-            <div class="w-full flex-1 flex flex-col pb-6 overflow-auto">
+            <div class="w-full flex-1 flex flex-col gap-1 pb-6 overflow-auto">
                 <!-- inline convers list -->
                 <div class="w-full flex gap-3 min-h-min overflow-y-auto pb-3 px-2">
-                    <app-convers-item-inline/>
-                    <app-convers-item-inline/>
-                    <app-convers-item-inline/>
-                    <app-convers-item-inline/>
                     <app-convers-item-inline/>
                     <app-convers-item-inline/>
                     <app-convers-item-inline/>
                 </div>
 
                 <!-- convers item -->
-                <app-convers-item (onSelect)="selectConversItem($event)" />
+                <app-item-convers (onSelect)="selectComponent()" [idSelected]="'bf'" />
+                <app-item-convers/>
             </div>
+
         </div>
     `
 })
-export class ConversListComponent implements OnInit {
+export class ConversListComponent {
     private conversService = inject(ConversService)
+    items: MenuItem[] = [
+        { label: 'Profile', icon: 'pi pi-user', routerLink: './profile' },
+        { label: 'Chat', icon: 'pi pi-comment', routerLink: './convers'},
+        { label: 'Settings', icon: 'pi pi-cog', routerLink: './profile'},
+    ];
 
-    ngOnInit() { }
-
-    selectConversItem(id: string) {
-        this.conversService.idConversSelected.set(id)
-        this.conversService.selectedComponent.set('msg')
+    selectComponent() {
+        this.conversService.swicthToComponent('msg')
     }
+
 }

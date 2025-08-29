@@ -1,57 +1,56 @@
 import { Component, inject, OnInit, viewChild} from '@angular/core';
 import { MenuItem } from 'primeng/api';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { TooltipModule } from 'primeng/tooltip'
 import { FormsModule } from '@angular/forms';
 import { PopupService } from '../../../shared/services/popup.service';
 import { PopupComponent } from "../../../shared/components/popup.component";
 import { MainSettingsComponent } from "./main-settings.component";
+import { BreakpointService } from '../../../shared/services/breakpoint.service';
 
 @Component({
     selector: 'app-main-sidebar',
     imports: [
-    CommonModule,
-    FormsModule,
-    RouterLink,
-    RouterLinkActive,
-    TooltipModule,
-    PopupComponent,
-    MainSettingsComponent
-],
+        CommonModule,
+        FormsModule,
+        RouterLink,
+        RouterLinkActive,
+        TooltipModule,
+        PopupComponent,
+        MainSettingsComponent
+    ],
     template: `
-    <div class="flex flex-col w-full h-full p-2">
+    <div class="flex justify-between sm:justify-start sm:flex-col w-full h-full max-sm:px-6 p-2">
         <!-- header -->
-        <div class="p-2 items-center justify-center gap-3 flex">
+        <div class="hidden sm:block p-2 items-center justify-center gap-3">
             <!-- logo -->
             <img src="./favicon.ico" alt="logo" height="35" width="35">
-            <!-- <h2 class="text-color font-bold text-2xl">Logo app</h2> -->
         </div>
 
         <!-- content -->
-        <div class="flex-1 py-4 h-full overflow-auto flex items-center flex-col gap-3">
-            <div class="flex items-center bg-surface-0 dark:bg-surface-950 border p-3 hover:text-primary text-primary border-primary hover:border-primary transition-all rounded-md font-bold gap-2 cursor-pointer">
-                <i class="pi pi-home text-inherit"></i>
-            </div>
+        <div class="flex-1 justify-between sm:justify-start py-2 sm:py-4 h-full overflow-auto flex items-center sm:flex-col sm:gap-3">
             @for (item of items; track $index) {
                 <div
+                (click)="selectUrl($event, item.routerLink)"
                 [routerLink]="[ item.routerLink ]"
-                routerLinkActive="bg-primary text-white"
+                routerLinkActive="text-primary bg-highlight-emphasis"
                 pTooltip="{{item.label}}"
                 tooltipStyleClass="ml-1 font-semibold"
-                class="hover:bg-surface-0 flex items-center p-3 hover:text-primary dark:hover:bg-surface-950 hover:border hover:border-primary transition-all rounded-md font-bold text-color gap-2 cursor-pointer">
-                    <i class="{{item.icon}} text-inherit"></i>
+                class="{{item.disabled ? 'hidden' : ''}} text-color max-sm:flex-1 flex items-center max-sm:flex max-sm:justify-center p-3 hover:text-primary transition-all rounded-md gap-2 cursor-pointer">
+                    <i class="{{item.icon}}" style="font-size: 1rem"></i>
+                    <span class="sm:hidden text-xs font-light">{{item.label}}</span>
                 </div>
             }
         </div>
 
         <!-- footer -->
-        <div class="py-3 relative flex items-center flex-col gap-3">
-            <div tooltipStyleClass="ml-1 font-semibold" pTooltip="Settings" (click)="togglePoPupSettings($event)"  class="relative z-50 flex items-center hover:bg-surface-0 p-3 hover:border hover:text-primary text-color hover:border-primary transition-all rounded-md font-bold gap-2 cursor-pointer">
-                <i class="pi pi-cog text-inherit"></i>
+        <div class="hidden py-3 relative sm:flex items-center sm:flex-col sm:gap-3">
+            <div tooltipStyleClass="ml-1 font-semibold" pTooltip="Settings" (click)="togglePoPupSettings($event)" class="relative z-50 flex items-center hover:bg-highlight-emphasis p-3 hover:text-primary text-color transition-all rounded font-bold gap-2 cursor-pointer">
+                <i class="pi pi-cog text-inherit" style="font-size: 1rem"></i>
             </div>
-            <div pTooltip="Sign out" tooltipStyleClass="ml-1 font-semibold" class="flex items-center hover:bg-surface-0 p-3 hover:border hover:text-primary hover:border-primary text-color transition-all rounded-md font-bold gap-2 cursor-pointer">
-                <i class="pi pi-sign-out text-inherit"></i>
+            <div pTooltip="Sign out" tooltipStyleClass="ml-1 font-semibold" class="hidden sm:flex items-center p-3 hover:text-red-500 text-color transition-all rounded font-bold gap-2 cursor-pointer">
+                <i class="pi pi-sign-out text-inherit" style="font-size: 1rem"></i>
             </div>
         </div>
 
@@ -63,20 +62,35 @@ import { MainSettingsComponent } from "./main-settings.component";
     </div>`
 })
 export class MainSidebarComponent implements OnInit {
+    private router = inject(Router)
     popupSettings = viewChild<PopupComponent|undefined>('popupSettings')
     popupHome = viewChild<PopupComponent|undefined>('popupHome')
     popupService = inject(PopupService)
+    screenService = inject(BreakpointService)
 
     items: MenuItem[] = [
-        { label: 'Chat', icon: 'pi pi-comment', routerLink: '/chat' },
-        { label: 'Profile', icon: 'pi pi-user', routerLink: '/profile' },
+        { label: 'Menu', icon: 'pi pi-bars', routerLink: 'menu'},
+        { label: 'Chat', icon: 'pi pi-comment', routerLink: 'convers'},
     ];
 
     ngOnInit() {
     }
 
+    selectUrl($event: MouseEvent, currentUrl: string) {
+        const url = this.router.url
+        if(url.includes(currentUrl)) {
+            $event.preventDefault()
+            this.router.navigateByUrl(url)
+        }
+    }
+
+    isSmScreen() {
+        return this.screenService.screenWidth() <= this.screenService.breakpoint.sm
+    }
+
     togglePoPupSettings($event: MouseEvent) {
-        this.popupService.togglePopup(this.popupSettings, $event)
+        const position = (this.screenService.screenWidth() > this.screenService.breakpoint.sm) ? 'auto' : 'top-left'
+        this.popupService.togglePopup(this.popupSettings, $event, position)
     }
 
     togglePoPupHome($event: MouseEvent) {

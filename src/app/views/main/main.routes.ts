@@ -13,12 +13,36 @@ export const MainRoutes: Routes = [
             {
                 path: 'convers',
                 title: 'ChatSnow - conversation',
-                loadComponent: () => import('./convers/convers.component').then(m => m.ConversComponent)
+                loadChildren: () => import('./convers/convers.routes').then(m => m.ConversRoutes)
             },
             {
-                path: 'profile',
-                title: 'ChatSnow - profile',
-                loadComponent: () => import('./profile/profile.component').then(m => m.ProfileComponent)
+                path: 'menu',
+                title: 'ChatSnow - menu',
+                loadChildren: () => import('./menu/menu.routes').then(m => m.MenuRoutes)
+            }
+        ]
+    }
+]
+
+export const MainRoutesMobile: Routes = [
+    {
+        path: '',
+        loadComponent: () => import('./main.component').then(m => m.MainComponent),
+        children: [
+            {
+                path: '',
+                redirectTo: 'convers',
+                pathMatch: 'full'
+            },
+            {
+                path: 'convers',
+                title: 'ChatSnow - conversation',
+                loadChildren: () => import('./convers/convers.routes').then(m => m.ConversRoutesMobile)
+            },
+            {
+                path: 'menu',
+                title: 'ChatSnow - menu',
+                loadChildren: () => import('./menu/menu.routes').then(m => m.MenuRoutesMobile)
             }
         ]
     }
