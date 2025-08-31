@@ -2,16 +2,16 @@ import { Component, inject, OnInit } from "@angular/core";
 import { ConversService } from "../../../../features/convers/convers.service";
 import { BreakpointService } from "../../../../shared/services/breakpoint.service";
 import { ConversMsgComponent } from "./convers-msg/convers-msg.component";
-import { ConversInfoComponent } from "./convers-info/convers-info.component";
+import { RouterOutlet } from "@angular/router";
 
 @Component({
     selector: 'app-one-convers',
-    imports: [ConversMsgComponent, ConversInfoComponent],
+    imports: [ConversMsgComponent, RouterOutlet],
     template: `
         @if(bpService.screenWidth() < bp.lg) {
             @switch(selectedComponent()) {
                 @case ('msg') {<app-convers-msg/>}
-                @case ('info') {<app-convers-info/>}
+                @case ('info') {<router-outlet/>}
             }
         } @else {
             <div class="w-full h-full grid grid-cols-5 overflow-auto">
@@ -19,7 +19,7 @@ import { ConversInfoComponent } from "./convers-info/convers-info.component";
                     <app-convers-msg/>
                 </div>
                 <div class="col-span-2 overflow-auto">
-                    <app-convers-info/>
+                    <router-outlet/>
                 </div>
             </div>
         }

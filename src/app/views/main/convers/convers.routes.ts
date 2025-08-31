@@ -2,6 +2,7 @@ import { Routes } from "@angular/router";
 import { ConversComponent } from "./convers.component";
 import { OneConversComponent } from "./one-convers/one-convers.component";
 import { ListParticipantsComponent } from "../../../shared/components/list-participant.component";
+import { ConversInfoComponent } from "./one-convers/convers-info/convers-info.component";
 
 export const ConversRoutes: Routes = [
     {
@@ -10,12 +11,18 @@ export const ConversRoutes: Routes = [
         children: [
             {
                 path: ':id',
-                component: OneConversComponent
+                component: OneConversComponent,
+                children: [
+                    {
+                        path: '',
+                        component: ConversInfoComponent
+                    },
+                    {
+                        path: 'participants',
+                        component: ListParticipantsComponent
+                    }
+                ]
             },
-            {
-                path: ':id/participants',
-                component: ListParticipantsComponent
-            }
         ]
     }
 ]
