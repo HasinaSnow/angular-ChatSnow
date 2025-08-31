@@ -3,6 +3,7 @@ import { Component, inject } from "@angular/core";
 import { Button } from "primeng/button";
 import { Avatar } from "primeng/avatar";
 import { IInfoItem, ListMsgInfoComponent } from "../../../../../shared/components/list-msg-info.component";
+import { Router } from "@angular/router";
 
 @Component({
     selector: 'app-msg-request-info',
@@ -34,12 +35,19 @@ import { IInfoItem, ListMsgInfoComponent } from "../../../../../shared/component
 })
 export class MsgRequestInfosComponent {
     private location = inject(Location)
+    private router = inject(Router)
+
     requestInfoItems: IInfoItem[] = [
         {
             label: 'Discussion Informations',
             items: [
                 {
                     label: 'All participants',
+                    command: () => {
+                        const paths = this.router.url.split('/')
+                        const url = paths.filter(path => path !== paths[paths.length - 1]).join('/')
+                        this.router.navigateByUrl(url + '/participants')
+                    },
                     icon: 'pi pi-users'
                 }
             ]

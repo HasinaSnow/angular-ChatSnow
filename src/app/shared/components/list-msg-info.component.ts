@@ -1,4 +1,4 @@
-import { Component, input, WritableSignal } from '@angular/core';
+import { Component, Input, input, Signal, WritableSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ToggleSwitchChangeEvent, ToggleSwitchModule } from 'primeng/toggleswitch';
@@ -52,7 +52,7 @@ export interface IInfoItem {
                                     </div>
                                 </div>
                                 @if(item2.inputCheck) {
-                                    <p-toggleswitch styleClass="m-auto" [disabled]="item.inputCheck?.disabled ?? false" (onChange)="item.inputCheck?.command ? item.inputCheck?.command($event) : default()" [(ngModel)]='item2.inputCheck.check' class="leading-0"/>
+                                    <p-toggleswitch styleClass="m-auto" [disabled]="item.inputCheck?.disabled ?? false" (onChange)="item2?.inputCheck?.command ? item2?.inputCheck?.command($event) : default()" [(ngModel)]="item2.inputCheck.check" class="leading-0"/>
                                 }
                             </div>
                         }

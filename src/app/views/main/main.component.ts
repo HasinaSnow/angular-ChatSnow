@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { MainSidebarComponent } from "./components/main-sidebar.component";
 import { CommonModule } from '@angular/common';
 import { BreakpointService } from '../../shared/services/breakpoint.service';
@@ -14,7 +14,7 @@ import { MainMenubar } from "./components/main-menubar.component";
     MainMenubar
 ],
     template: `
-        <div class="flex flex-col sm:flex-row h-full w-full sm:p-3 lg:p-4 xl:p-6 bg-surface-100 dark:bg-surface-800">
+        <div class="flex flex-col sm:flex-row h-full w-full sm:p-3 lg:p-4 xl:p-6">
             <!-- main sidebar -->
             <div class="sm:h-full sm:block hidden">
                 <app-main-sidebar/>
@@ -25,12 +25,20 @@ import { MainMenubar } from "./components/main-menubar.component";
                 <router-outlet/>
             </div>
 
-            <div class="sm:hidden border-t border-surface bg-surface-0 dark:bg-surface-950">
-                <app-main-menubar/>
-            </div>
+            @if(showMenuBar()) {
+                <div class="sm:hidden border-t border-surface bg-surface-0 dark:bg-surface-950">
+                    <app-main-menubar/>
+                </div>
+            }
 
         </div>`
 })
-export class MainComponent implements OnInit {
-    ngOnInit() { }
+export class MainComponent {
+    private router = inject(Router)
+
+    showMenuBar() {
+        const paths = this.router.url.split('/')
+        const lastPath = paths[paths.length - 1]
+        return lastPath === 'convers' || lastPath === 'menu'
+    }
 }

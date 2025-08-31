@@ -25,10 +25,8 @@ export class BreakpointService {
         const isMobile = screen <= this.breakpoint.md
         const url = this.router.url
             if(!isMobile && url.startsWith('/mobile')) {
-                console.log('is desktop')
                 this.router.navigateByUrl(url.replace('/mobile', ''), {replaceUrl: true})
             } else if(isMobile && !url.startsWith('/mobile')) {
-                console.log('is mobile')
                 this.router.navigateByUrl('/mobile' + url, {replaceUrl: true})
             }
     }

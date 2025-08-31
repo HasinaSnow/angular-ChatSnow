@@ -5,6 +5,7 @@ import { MenuItem } from 'primeng/api';
 import { IInfoItem, ListMsgInfoComponent } from "../../../../../shared/components/list-msg-info.component";
 import { ConversInfoHeaderComponent } from "./components/convers-info-header.component";
 import { ConversService } from '../../../../../features/convers/convers.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-convers-info',
@@ -31,6 +32,7 @@ import { ConversService } from '../../../../../features/convers/convers.service'
 })
 export class ConversInfoComponent implements OnInit {
     readonly conversService = inject(ConversService)
+    private router = inject(Router)
     items!: MenuItem[];
     menuSettingsItems: IInfoItem[] = [
         {
@@ -38,6 +40,10 @@ export class ConversInfoComponent implements OnInit {
             items: [
                 {
                     label: 'All participants',
+                    command: () => {
+                        const url = this.router.url
+                        this.router.navigateByUrl(url + '/participants')
+                    },
                     icon: 'pi pi-users'
                 },
                 {

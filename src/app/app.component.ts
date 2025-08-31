@@ -5,7 +5,7 @@ import { RouterOutlet } from '@angular/router';
   selector: 'app-root',
   imports: [RouterOutlet],
   template: `
-  <div class="h-full w-full">
+  <div class="h-full w-full bg-surface-200 dark:bg-surface-800">
     <router-outlet/>
   </div>`
 })

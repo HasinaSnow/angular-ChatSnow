@@ -54,6 +54,6 @@ export const MenuRoutesMobile: Routes = [
   },
   {
     path: 'invitations',
-    loadComponent: () => import('./invitations/invitations.component').then(m => m.InvitationsComponent),
+    loadChildren: () => import('./invitations/invitation.routes').then(m => m.InvitationMobileRoutes),
   }
 ]

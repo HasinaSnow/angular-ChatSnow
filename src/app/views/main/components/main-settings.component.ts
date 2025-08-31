@@ -16,7 +16,7 @@ import { IInfoItem, ListMsgInfoComponent } from "../../../shared/components/list
         <app-list-msg-info [items]="mainSettingsItems"/>
     </div>`
 })
-export class MainSettingsComponent implements OnInit {
+export class MainSettingsComponent {
     themeService = inject(ThemeService)
     mainSettingsItems: IInfoItem[] = [
         {
@@ -39,5 +39,4 @@ export class MainSettingsComponent implements OnInit {
             ],
         },
     ]
-    ngOnInit() { }
 }

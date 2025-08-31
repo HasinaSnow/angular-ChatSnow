@@ -49,7 +49,9 @@ export class OneInvitationComponent {
                 {
                     label: 'Mutual friends',
                     icon: 'pi pi-users',
-                    command: () => { this.router.navigateByUrl('menu/invitations/bf/mutual-friends') }
+                    command: () => {
+                        const url = this.router.url
+                        this.router.navigateByUrl(url + '/mutual-friends') }
                 },
             ]
         },

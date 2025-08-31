@@ -1,5 +1,7 @@
 import { Routes } from "@angular/router";
 import { MutualFriendsComponent } from "./components/mutual-friends.component";
+import { InvitationsComponent } from "./invitations.component";
+import { OneInvitationComponent } from "./components/one-invitation.component";
 
 export const InvitationRoutes: Routes = [
     {
@@ -12,6 +14,26 @@ export const InvitationRoutes: Routes = [
             },
             {
                 path: ':id/mutual-friends',
+                component: MutualFriendsComponent
+            }
+        ]
+    }
+]
+
+export const InvitationMobileRoutes: Routes = [
+    {
+        path: '',
+        component: InvitationsComponent
+    },
+    {
+        path: ':id',
+        children: [
+            {
+                path: '',
+                component: OneInvitationComponent
+            },
+            {
+                path: 'mutual-friends',
                 component: MutualFriendsComponent
             }
         ]

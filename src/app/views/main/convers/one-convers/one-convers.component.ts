@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { ConversService } from "../../../../features/convers/convers.service";
 import { BreakpointService } from "../../../../shared/services/breakpoint.service";
 import { ConversMsgComponent } from "./convers-msg/convers-msg.component";
@@ -25,10 +25,14 @@ import { ConversInfoComponent } from "./convers-info/convers-info.component";
         }
     `
 })
-export class OneConversComponent {
+export class OneConversComponent implements OnInit {
     readonly bpService = inject(BreakpointService)
     readonly bp = this.bpService.breakpoint
     private conversService = inject(ConversService)
     readonly selectedComponent = this.conversService.selectedComponent
+
+    ngOnInit(): void {
+        this.conversService.cancelToDefault()
+    }
 
 }

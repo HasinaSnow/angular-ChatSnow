@@ -1,8 +1,9 @@
-import { Component, computed, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, effect, inject, Signal, signal, WritableSignal } from '@angular/core';
 import { BreakpointService } from '../../../../shared/services/breakpoint.service';
 import { Button } from "primeng/button";
 import { Location } from '@angular/common';
 import { IInfoItem, ListMsgInfoComponent } from '../../../../shared/components/list-msg-info.component';
+import { ThemeService } from '../../../../shared/services/theme.service';
 
 @Component({
     selector: 'app-profile',
@@ -26,6 +27,7 @@ import { IInfoItem, ListMsgInfoComponent } from '../../../../shared/components/l
     imports: [Button, ListMsgInfoComponent]
 })
 export class ProfileComponent {
+    themeService = inject(ThemeService)
     private location = inject(Location)
     screen = inject(BreakpointService)
     bp = this.screen.breakpoint
@@ -35,6 +37,7 @@ export class ProfileComponent {
         if(screenWidth < this.bp.lg) return 150
         else return 180
     })
+    inlineStatus: WritableSignal<boolean> = signal(true)
 
     profileInfo: IInfoItem[] = [
         {
@@ -60,12 +63,18 @@ export class ProfileComponent {
                 {
                     label: 'Inline status',
                     icon: 'pi pi-globe',
-                    description: 'Disabled'
+                    inputCheck: {
+                        check: this.inlineStatus
+                    },
+                    description: 'Enable Inline status'
                 },
                 {
                     label: 'Dark theme',
                     icon: 'pi pi-moon',
-                    description: 'Disable'
+                    inputCheck: {
+                        check: this.themeService.isDark
+                    },
+                    description: 'Enable Dark mode'
                 },
                 {
                     label: 'Profile name',
@@ -93,6 +102,5 @@ export class ProfileComponent {
     ]
 
     cancel() { this.location.back() }
-
 
 }

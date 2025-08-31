@@ -1,8 +1,6 @@
-import { Component, inject } from "@angular/core";
+import { Component } from "@angular/core";
 import { RouterLink, RouterLinkActive } from "@angular/router";
 import { MenuItem } from "primeng/api";
-import { BreakpointService } from "../../../shared/services/breakpoint.service";
-import { MenuService } from "../menu/menu.service";
 
 @Component({
     selector: 'app-main-menubar',

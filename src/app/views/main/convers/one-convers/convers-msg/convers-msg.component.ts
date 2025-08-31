@@ -4,6 +4,8 @@ import { ConversService } from '../../../../../features/convers/convers.service'
 import { HeaderConversMsgComponent } from '../../../../../shared/components/header-convers-msg.component';
 import { ConversMsgFormComponent } from './components/convers-msg-form.component';
 import { MsgItemComponent } from './components/msg-item.component';
+import { BreakpointService } from '../../../../../shared/services/breakpoint.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-convers-msg',
@@ -33,6 +35,8 @@ import { MsgItemComponent } from './components/msg-item.component';
 })
 export class ConversMsgComponent implements OnInit {
     private conversService = inject(ConversService)
+    private router = inject(Router)
+    private bpService = inject(BreakpointService)
     private location = inject(Location)
     private chatContent = viewChild<ElementRef<HTMLElement>>('chatContent')
 
@@ -45,7 +49,13 @@ export class ConversMsgComponent implements OnInit {
         if(element) element.nativeElement.scrollTop = element.nativeElement.scrollHeight
     }
 
-    cancel() {this.location.back()}
+    cancel() {
+        const paths = this.router.url.split('/')
+        const url = paths.filter(path => paths[paths.length - 1] !== path)
+        console.log(url)
+        this.router.navigateByUrl(url.join('/'))
+        // this.location.back()
+    }
 
     goToConversInfo() {
         this.conversService.selectedComponent.set('info')

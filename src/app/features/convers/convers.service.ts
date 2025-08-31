@@ -5,9 +5,9 @@ export class ConversService {
     idConversSelected: WritableSignal<string|null> = signal(null)
     selectedComponent: WritableSignal<'msg'|'info'> = signal('msg')
 
-    swicthToComponent(value: 'msg'|'info'|undefined) {
-        value
-            ? this.selectedComponent.set(value)
-            : this.selectedComponent.update(value => value === 'info' ? 'msg' : 'info')
+    cancelToDefault() { this.selectedComponent.set('msg')}
+
+    swicthToComponent(value: 'msg'|'info') {
+        this.selectedComponent.set(value)
     }
 }
