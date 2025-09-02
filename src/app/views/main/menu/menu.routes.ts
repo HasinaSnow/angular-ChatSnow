@@ -10,10 +10,6 @@ export const MenuRoutes: Routes = [
         loadComponent: () => import('./profile/profile.component').then(m => m.ProfileComponent),
       },
       {
-        path: 'settings',
-        loadComponent: () => import('./settings/settings.component').then(m => m.SettingsComponent),
-      },
-      {
         path: 'archives',
         loadChildren: () => import('./archive/archive.routes').then(m => m.ArchiveRoutes),
       },
@@ -38,10 +34,6 @@ export const MenuRoutesMobile: Routes = [
   {
     path: 'profile',
     loadComponent: () => import('./profile/profile.component').then(m => m.ProfileComponent),
-  },
-  {
-    path: 'settings',
-    loadComponent: () => import('./settings/settings.component').then(m => m.SettingsComponent),
   },
   {
     path: 'archives',

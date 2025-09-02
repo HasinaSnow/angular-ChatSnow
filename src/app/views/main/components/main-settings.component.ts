@@ -3,16 +3,14 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { ThemeService } from '../../../shared/services/theme.service';
 import { FormsModule } from '@angular/forms';
 import { IInfoItem, ListMsgInfoComponent } from "../../../shared/components/list-msg-info.component";
+import { HeaderTitleComponent } from "../../../shared/components/header-title.component";
 
 @Component({
     selector: 'app-main-settings',
-    imports: [FormsModule, ToggleSwitchModule, ListMsgInfoComponent],
+    imports: [FormsModule, ToggleSwitchModule, ListMsgInfoComponent, HeaderTitleComponent],
     template: `
-    <div class="bg-surface-0 dark:bg-surface-950 text-color p-4 border border-surface z-50 shadow-lg rounded-xl">
-        <div class="font-semibold flex items-center gap-2 text-color text-2xl pb-2">
-            <i class="pi pi-cog text-3xl"></i>
-            <span class="leading-0">Settings</span>
-        </div>
+    <div class="bg-surface-0 dark:bg-surface-950 text-color p-4 flex flex-col gap-2 border border-surface z-50 shadow-lg rounded-xl">
+        <app-header-title [title]="'Settings'" [icon]="'pi pi-cog'"/>
         <app-list-msg-info [items]="mainSettingsItems"/>
     </div>`
 })
@@ -20,7 +18,7 @@ export class MainSettingsComponent {
     themeService = inject(ThemeService)
     mainSettingsItems: IInfoItem[] = [
         {
-            label: 'Preferences',
+            label: '',
             items: [
                 {
                     label: 'Sound & Notification',
@@ -36,7 +34,7 @@ export class MainSettingsComponent {
                         check: this.themeService.isDark,
                     }
                 }
-            ],
-        },
+            ]
+        }
     ]
 }
