@@ -14,15 +14,15 @@ import { Location } from '@angular/common';
         </div>
 
         <!-- list -->
-        <div class="flex-1 flex flex-col overflow-auto pt-1 gap-1 px-2">
-            <app-item-participant [mutualFriends]="4" [isAdmin]="true"/>
-            <app-item-participant [mutualFriends]="1" [isAdmin]="true"/>
-            <app-item-participant [mutualFriends]="34" [isAdmin]="false"/>
-            <app-item-participant [mutualFriends]="45" [isAdmin]="false"/>
-            <app-item-participant [mutualFriends]="23" [isAdmin]="false"/>
-            <app-item-participant [mutualFriends]="12" [isAdmin]="false"/>
-            <app-item-participant [mutualFriends]="8" [isAdmin]="false"/>
-            <app-item-participant [mutualFriends]="20" [isAdmin]="false"/>
+        <div class="flex-1 flex flex-col overflow-auto items-center pt-1 gap-1 pl-3">
+            <app-item-participant class="w-full" [mutualFriends]="4" [isAdmin]="true"/>
+            <app-item-participant class="w-full" [mutualFriends]="1" [isAdmin]="true"/>
+            <app-item-participant class="w-full" [mutualFriends]="34" [isAdmin]="false"/>
+            <app-item-participant class="w-full" [mutualFriends]="45" [isAdmin]="false"/>
+            <app-item-participant class="w-full" [mutualFriends]="23" [isAdmin]="false"/>
+            <app-item-participant class="w-full" [mutualFriends]="12" [isAdmin]="false"/>
+            <app-item-participant class="w-full" [mutualFriends]="8" [isAdmin]="false"/>
+            <app-item-participant class="w-full" [mutualFriends]="20" [isAdmin]="false"/>
         </div>
     </div>
     `,

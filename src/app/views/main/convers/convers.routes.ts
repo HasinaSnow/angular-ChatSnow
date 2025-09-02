@@ -3,6 +3,7 @@ import { ConversComponent } from "./convers.component";
 import { OneConversComponent } from "./one-convers/one-convers.component";
 import { ListParticipantsComponent } from "../../../shared/components/list-participant.component";
 import { ConversInfoComponent } from "./one-convers/convers-info/convers-info.component";
+import { ListMediaComponent } from "../../../shared/components/list-media.component";
 
 export const ConversRoutes: Routes = [
     {
@@ -20,6 +21,10 @@ export const ConversRoutes: Routes = [
                     {
                         path: 'participants',
                         component: ListParticipantsComponent
+                    },
+                    {
+                        path: 'medias',
+                        component: ListMediaComponent
                     }
                 ]
             },
@@ -40,8 +45,16 @@ export const ConversRoutesMobile: Routes = [
                 component: OneConversComponent
             },
             {
+                path: 'info',
+                component: ConversInfoComponent,
+            },
+            {
                 path: 'participants',
                 component: ListParticipantsComponent
+            },
+            {
+                path: 'medias',
+                component: ListMediaComponent
             }
         ]
     }

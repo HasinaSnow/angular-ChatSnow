@@ -6,6 +6,7 @@ import { IInfoItem, ListMsgInfoComponent } from "../../../../../shared/component
 import { ConversInfoHeaderComponent } from "./components/convers-info-header.component";
 import { ConversService } from '../../../../../features/convers/convers.service';
 import { Router } from '@angular/router';
+import { BreakpointService } from '../../../../../shared/services/breakpoint.service';
 
 @Component({
     selector: 'app-convers-info',
@@ -32,7 +33,9 @@ import { Router } from '@angular/router';
 })
 export class ConversInfoComponent implements OnInit {
     readonly conversService = inject(ConversService)
+    private bpService = inject(BreakpointService)
     private router = inject(Router)
+
     items!: MenuItem[];
     menuSettingsItems: IInfoItem[] = [
         {
@@ -41,14 +44,20 @@ export class ConversInfoComponent implements OnInit {
                 {
                     label: 'All participants',
                     command: () => {
-                        const url = this.router.url
-                        this.router.navigateByUrl(url + '/participants')
+                        this.bpService.isMobile()
+                            ? this.router.navigateByUrl(this.mobileCurrentUrl() + '/participants')
+                            : this.router.navigateByUrl(this.router.url + '/participants')
                     },
                     icon: 'pi pi-users'
                 },
                 {
                     label: 'Media, Files and Links',
                     icon: 'pi pi-images',
+                    command: () => {
+                        this.bpService.isMobile()
+                            ? this.router.navigateByUrl(this.mobileCurrentUrl() + '/medias')
+                            : this.router.navigateByUrl(this.router.url + '/medias')
+                    }
                 },
                 {
                     label: 'Pin messages',
@@ -94,6 +103,12 @@ export class ConversInfoComponent implements OnInit {
     ]
 
     ngOnInit() {}
+
+    mobileCurrentUrl() {
+        const paths = this.router.url.split('/')
+        const mobilePaths = paths.filter(path => path !== paths[paths.length - 1])
+        return mobilePaths.join('/')
+    }
 
     cancelToConversMsg() {
         this.conversService.selectedComponent.set('msg')

@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, OnInit, viewChild } from "@angular/core";
+import { Component, computed, ElementRef, inject, OnInit, viewChild } from "@angular/core";
 import { HeaderConversMsgComponent } from "../../../../../shared/components/header-convers-msg.component";
 import { ListMsgComponent } from "../../../../../shared/components/list-msg.component";
 import { Button } from "primeng/button";
@@ -13,7 +13,7 @@ import { ArchiveService } from "../archive.service";
     imports: [HeaderConversMsgComponent, ListMsgComponent, Button],
     template: `
     <div class="flex-1 flex flex-col gap-2 overflow-auto h-full w-full">
-        <app-header-convers-msg (onGoToInfo)="goToInfo()" (onCancel)="cancel()" />
+        <app-header-convers-msg [withCancel]="withCancel()" (onGoToInfo)="goToInfo()" (onCancel)="cancel()" />
         <div #msgList class="flex-1 overflow-auto px-2">
             <app-list-msg/>
         </div>
@@ -39,6 +39,7 @@ export class OneArchiveComponent implements OnInit {
     private archiveService = inject(ArchiveService)
     private bpService = inject(BreakpointService)
     readonly bp = this.bpService.breakpoint
+    withCancel = computed(() => !this.bpService.isMobile() && this.bpService.screenWidth() <= this.bp.lg)
 
     ngOnInit() {
         this.scrollToBottom()

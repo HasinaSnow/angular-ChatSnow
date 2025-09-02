@@ -37,7 +37,6 @@ export class ConversMsgComponent implements OnInit {
     private conversService = inject(ConversService)
     private router = inject(Router)
     private bpService = inject(BreakpointService)
-    private location = inject(Location)
     private chatContent = viewChild<ElementRef<HTMLElement>>('chatContent')
 
     ngOnInit() {
@@ -58,6 +57,9 @@ export class ConversMsgComponent implements OnInit {
     }
 
     goToConversInfo() {
+        if(this.bpService.isMobile()) {
+            this.router.navigateByUrl(this.router.url + '/info')
+        }
         this.conversService.selectedComponent.set('info')
     }
 

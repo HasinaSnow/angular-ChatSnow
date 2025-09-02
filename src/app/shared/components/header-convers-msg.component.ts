@@ -1,10 +1,11 @@
-import { Component, output, signal, WritableSignal } from '@angular/core';
+import { Component, inject, input, output, signal, WritableSignal } from '@angular/core';
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
 import { TextareaModule } from 'primeng/textarea';
 import { IconField } from "primeng/iconfield";
 import { InputIcon } from "primeng/inputicon";
 import { InputText } from 'primeng/inputtext';
+import { BreakpointService } from '../services/breakpoint.service';
 
 @Component({
     selector: 'app-header-convers-msg',
@@ -14,7 +15,9 @@ import { InputText } from 'primeng/inputtext';
         @if(!isSearching()) {
             <!-- left -->
             <div class="flex items-center gap-1">
-                <p-button (onClick)="onCancel.emit()" icon="pi pi-arrow-left text-muted-color" rounded="true" class="md:hidden" size="large" variant="text" severity="secondary" />
+                @if(withCancel()) {
+                    <p-button (onClick)="onCancel.emit()" icon="pi pi-arrow-left text-muted-color" rounded="true" size="large" variant="text" severity="secondary" />
+                }
                 <p-avatar image="./favicon.ico" class="mr-2" size="large" shape="circle"/>
                 <div class="flex-1">
                     <div class="text-color font-medium leading-6 cursor-pointer hover:text-muted-color-emphasis transition-colors">PrimeTek</div>
@@ -39,9 +42,15 @@ import { InputText } from 'primeng/inputtext';
 })
 
 export class HeaderConversMsgComponent {
+    private bpService = inject(BreakpointService)
     onCancel = output()
     onGoToInfo = output()
     isSearching: WritableSignal<boolean> = signal(false)
+    withCancel = input<boolean>(this.withCancelBtn())
+
+    withCancelBtn() {
+        return this.bpService.isMobile()
+    }
 
     switchSearch(value: boolean) { this.isSearching.set(value) }
 

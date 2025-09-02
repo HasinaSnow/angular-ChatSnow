@@ -2,6 +2,8 @@ import { Routes } from "@angular/router";
 import { ArchiveComponent } from "./archive.component";
 import { OneArchiveComponent } from "./components/one-archive.component";
 import { ArchiveInfoComponent } from "./components/archive-info.component";
+import { ListParticipantsComponent } from "../../../../shared/components/list-participant.component";
+import { ListMediaComponent } from "../../../../shared/components/list-media.component";
 
 export const ArchiveRoutes: Routes = [
     {
@@ -15,6 +17,14 @@ export const ArchiveRoutes: Routes = [
             {
                 path: ':id/info',
                 component: ArchiveInfoComponent
+            },
+            {
+                path: ':id/participants',
+                component: ListParticipantsComponent
+            },
+            {
+                path: ':id/medias',
+                component: ListMediaComponent
             }
         ]
     }
@@ -35,6 +45,14 @@ export const ArchiveMobileRoutes: Routes = [
             {
                 path: 'info',
                 component: ArchiveInfoComponent
+            },
+            {
+                path: 'participants',
+                component: ListParticipantsComponent
+            },
+            {
+                path: 'medias',
+                component: ListMediaComponent
             }
         ]
     },

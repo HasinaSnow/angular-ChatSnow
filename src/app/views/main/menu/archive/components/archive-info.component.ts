@@ -3,6 +3,7 @@ import { Button } from "primeng/button";
 import { Avatar } from "primeng/avatar";
 import { IInfoItem, ListMsgInfoComponent } from "../../../../../shared/components/list-msg-info.component";
 import { Location } from "@angular/common";
+import { Router } from "@angular/router";
 
 @Component({
     selector: 'app-archive-info',
@@ -34,17 +35,25 @@ import { Location } from "@angular/common";
 })
 export class ArchiveInfoComponent {
     private location = inject(Location)
+    private router = inject(Router)
+
     invitationInfoItems: IInfoItem[] = [
             {
                 label: 'Discussion Informations',
                 items: [
                     {
                         label: 'All participants',
-                        icon: 'pi pi-users'
+                        icon: 'pi pi-users',
+                        command: () => {
+                            this.router.navigateByUrl(this.mobileCurrentUrl() + '/participants')
+                        },
                     },
                     {
                         label: 'Media, Files and Links',
-                        icon: 'pi pi-images'
+                        icon: 'pi pi-images',
+                        command: () => {
+                            this.router.navigateByUrl(this.mobileCurrentUrl() + '/medias')
+                        }
                     }
                 ]
             },
@@ -70,5 +79,11 @@ export class ArchiveInfoComponent {
         ]
 
     cancel() { this.location.back() }
+
+    mobileCurrentUrl() {
+        const paths = this.router.url.split('/')
+        const mobilePaths = paths.filter(path => path !== paths[paths.length - 1])
+        return mobilePaths.join('/')
+    }
 
 }

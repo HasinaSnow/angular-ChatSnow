@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, viewChild } from "@angular/core";
+import { Component, computed, ElementRef, inject, viewChild } from "@angular/core";
 import { Location } from "@angular/common";
 import { PanelModule } from 'primeng/panel';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
@@ -16,17 +16,13 @@ import { MsgRequestService } from "../msg-request.service";
     imports: [HeaderConversMsgComponent, PanelModule, ScrollPanelModule, ListMsgComponent, Button, MessageModule],
     template: `
     <div class="flex-1 flex flex-col gap-2 overflow-auto h-full w-full">
-        <app-header-convers-msg (onGoToInfo)="goToInfo()" (onCancel)="cancel()" />
+        <app-header-convers-msg [withCancel]="withCancel()" (onGoToInfo)="goToInfo()" (onCancel)="cancel()" />
         <div #msgList class="flex-1 overflow-auto px-2">
             <app-list-msg>
                 <p-message size="small" msg-info severity="info" class="m-1">
                     <div class="text-color font-normale max-md:text-sm">
-                        <p class="">
-                            Vous n'êtes pas ami(e) ou vous avez été ajouté(e) par un membre dont vous n'êtes pas ami(e).
-                        </p>
-                        <p class="">
-                            3 amis en commun ou 3 amis membres de la discussion.
-                        </p>
+                        <p class="">Vous n'êtes pas ami(e) ou vous avez été ajouté(e) par un membre dont vous n'êtes pas ami(e).</p>
+                        <p class="">3 amis en commun ou 3 amis membres de la discussion.</p>
                     </div>
                 </p-message>
             </app-list-msg>
@@ -51,6 +47,7 @@ export class OneMsgRequestComponent {
     private msgRqService = inject(MsgRequestService)
     private bpService = inject(BreakpointService)
     readonly bp = this.bpService.breakpoint
+    withCancel = computed(() => !this.bpService.isMobile() && this.bpService.screenWidth() <= this.bp.lg)
 
     ngOnInit() {
         this.scrollToBottom()
