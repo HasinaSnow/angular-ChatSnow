@@ -9,7 +9,8 @@ export interface IInfoItem {
     icon?: string,
     img?: string,
     description?: string,
-    command?: () => void,
+    wrapText?: boolean,
+    command?: ($event: MouseEvent) => void,
     inputCheck?: {
         check: WritableSignal<boolean>,
         disabled?: boolean,
@@ -36,7 +37,7 @@ export interface IInfoItem {
                 @if (item.items) {
                     <div class="flex flex-col py-1 px-2 gap-5">
                         @for(item2 of item.items; track $index) {
-                            <div [routerLink]="item2.routerLink" (click)="item2?.command ? item2?.command() : null" class="flex cursor-pointer justify-between w-full items-center gap-6">
+                            <div [routerLink]="item2.routerLink" (click)="item2?.command ? item2?.command($event) : null" class="flex cursor-pointer justify-between w-full items-center gap-6">
                                 <div class="{{severity(item2.severity)}} flex space-x-2 items-center gap-3 text-lg">
                                     @if(item2.icon) {
                                         <i class="{{item2.icon}} leading-none" style="font-size: 1.2rem"></i>
@@ -47,7 +48,7 @@ export interface IInfoItem {
                                     <div class="flex flex-col gap-1 flex-1 leading-none">
                                         <span class="text-md">{{item2.label}}</span>
                                         @if(item2.description) {
-                                            <span class="text-muted-color text-sm line-clamp-1">{{item2.description}}</span>
+                                            <span class="text-muted-color text-sm {{!item2.wrapText ? 'line-clamp-1' : ''}}">{{item2.description}}</span>
                                         }
                                     </div>
                                 </div>
