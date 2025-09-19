@@ -27,7 +27,9 @@ import { BreakpointService } from '../services/breakpoint.service';
             <!-- right -->
             <div class="flex items-center gap-1">
                 <p-button (onClick)="switchSearch(true)" icon="pi pi-search" rounded="true" size="large" variant="text" severity="secondary" />
-                <p-button (onClick)="onGoToInfo.emit()" icon="pi pi-info-circle" rounded="true" size="large" variant="text" severity="secondary" />
+                @if(!hiddenInfoBtn()) {
+                    <p-button (onClick)="onGoToInfo.emit()" icon="pi pi-info-circle" rounded="true" size="large" variant="text" severity="secondary" />
+                }
             </div>
         } @else {
             <p-iconfield styleClass="w-full">
@@ -47,6 +49,7 @@ export class HeaderConversMsgComponent {
     onGoToInfo = output()
     isSearching: WritableSignal<boolean> = signal(false)
     withCancel = input<boolean>(this.withCancelBtn())
+    hiddenInfoBtn = input<boolean>(false)
 
     withCancelBtn() {
         return this.bpService.isMobile()
