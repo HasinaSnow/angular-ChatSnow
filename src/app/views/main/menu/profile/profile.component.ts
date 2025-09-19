@@ -48,6 +48,8 @@ export class ProfileComponent {
     inlineStatus: WritableSignal<boolean> = signal(true)
 
     profileName: WritableSignal<string> = signal('Hasina Snow')
+    showEmail: WritableSignal<boolean> = signal(false)
+    emailDescription = computed(() => this.showEmail() ? 'rakotohasinasnow@gmail.com': 'Disabled : ****')
 
     profileInfo: IInfoItem[] = [
         {
@@ -115,7 +117,8 @@ export class ProfileComponent {
                 {
                     label: 'Email',
                     icon: 'pi pi-at',
-                    description: 'rakotohasinasnow@gmail.com'
+                    signalDescription: this.emailDescription,
+                    signalInputCheck: this.showEmail
                 },
                 {
                     label: 'Password',
