@@ -1,9 +1,11 @@
-import { ChangeDetectorRef, Component, computed, effect, inject, Signal, signal, WritableSignal } from '@angular/core';
+import { Component, computed, inject, signal, WritableSignal } from '@angular/core';
 import { BreakpointService } from '../../../../shared/services/breakpoint.service';
 import { Button } from "primeng/button";
 import { Location } from '@angular/common';
 import { IInfoItem, ListMsgInfoComponent } from '../../../../shared/components/list-msg-info.component';
 import { ThemeService } from '../../../../shared/services/theme.service';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { ProfileNameEditComponent } from './components/profile-name-edit.component';
 
 @Component({
     selector: 'app-profile',
@@ -28,6 +30,12 @@ import { ThemeService } from '../../../../shared/services/theme.service';
 })
 export class ProfileComponent {
     themeService = inject(ThemeService)
+    darkTheme = computed(() => this.themeService.isDark() ? 'enabled': 'disabled')
+
+    private bpService = inject(BreakpointService)
+    private dialogService = inject(DialogService)
+    ref: DynamicDialogRef|undefined
+
     private location = inject(Location)
     screen = inject(BreakpointService)
     bp = this.screen.breakpoint
@@ -38,6 +46,8 @@ export class ProfileComponent {
         else return 180
     })
     inlineStatus: WritableSignal<boolean> = signal(true)
+
+    profileName: WritableSignal<string> = signal('Hasina Snow')
 
     profileInfo: IInfoItem[] = [
         {
@@ -71,15 +81,36 @@ export class ProfileComponent {
                 {
                     label: 'Dark theme',
                     icon: 'pi pi-moon',
-                    inputCheck: {
-                        check: this.themeService.isDark
-                    },
-                    description: 'Enable Dark mode'
+                    signalInputCheck: this.themeService.isDark,
+                    signalDescription: this.darkTheme
                 },
                 {
                     label: 'Profile name',
                     icon: 'pi pi-user-edit',
-                    description: 'Hasina Niaina Snow'
+                    signalDescription: this.profileName,
+                    command: () => {
+                        this.ref = this.dialogService.open(ProfileNameEditComponent, {
+                            header: 'Edit your Profile name',
+                            inputValues: {
+                                name: this.profileName(),
+                                cancelBtnVisible: this.bpService.isMobile(),
+                                onSave: (isEdited: boolean, value?: string) => {
+                                    if(isEdited && value) {
+                                        console.info('new profile name saved')
+                                        this.profileName.set(value)
+                                    } else console.warn('edit cancel')
+                                    this.ref?.close()
+                                },
+                            },
+                            modal: true,
+                            closable: !this.bpService.isMobile(),
+                            position: 'center',
+                            breakpoints: {
+                                '1024px': '60vw',
+                                '640px': '95vw',
+                            }
+                        })
+                    }
                 },
                 {
                     label: 'Email',

@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { BreakpointService } from '../../../../../shared/services/breakpoint.service';
 import { DynamicDialogRef, DialogService, DynamicDialogConfig } from 'primeng/dynamicdialog'
 import { BlockComponent } from '../../../../../shared/components/block.component';
+import { Location } from '@angular/common';
 
 @Component({
     selector: 'app-convers-info',
@@ -36,11 +37,14 @@ import { BlockComponent } from '../../../../../shared/components/block.component
 export class ConversInfoComponent implements OnInit {
     readonly conversService = inject(ConversService)
     private bpService = inject(BreakpointService)
+    private location = inject(Location)
     private router = inject(Router)
 
     private confirmService = inject(ConfirmationService)
     private dialogService = inject(DialogService)
     ref: DynamicDialogRef|undefined
+
+    enableSoundNotif = signal(false)
 
     items!: MenuItem[];
     menuSettingsItems: IInfoItem[] = [
@@ -77,9 +81,7 @@ export class ConversInfoComponent implements OnInit {
                 {
                     label: 'Sound and Notification',
                     icon: 'pi pi-bell',
-                    inputCheck: {
-                        check: signal(false),
-                    }
+                    signalInputCheck: this.enableSoundNotif
                 },
                 {
                     label: 'Search in conversation',
@@ -164,7 +166,9 @@ export class ConversInfoComponent implements OnInit {
     }
 
     cancelToConversMsg() {
-        this.conversService.selectedComponent.set('msg')
+        this.bpService.isMobile()
+            ? this.location.back()
+            : this.conversService.selectedComponent.set('msg')
     }
 
 }

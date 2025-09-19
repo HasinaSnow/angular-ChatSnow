@@ -1,14 +1,16 @@
-import { Component, Input, input, Signal, WritableSignal } from '@angular/core';
+import { Component, input, Signal, WritableSignal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ToggleSwitchChangeEvent, ToggleSwitchModule } from 'primeng/toggleswitch';
 import { Avatar } from "primeng/avatar";
 
 export interface IInfoItem {
-    label: string,
+    label?: string,
+    signalLabel?: WritableSignal<string>,
     icon?: string,
     img?: string,
     description?: string,
+    signalDescription?: WritableSignal<string> | Signal<string>
     wrapText?: boolean,
     command?: ($event: MouseEvent) => void,
     inputCheck?: {
@@ -16,6 +18,7 @@ export interface IInfoItem {
         disabled?: boolean,
         command?: ($event: ToggleSwitchChangeEvent) => void,
     },
+    signalInputCheck?: WritableSignal<boolean>,
     hide?: boolean,
     routerLink?: string,
     styleClass?: string
@@ -34,7 +37,9 @@ export interface IInfoItem {
                             @if(item.icon) {
                                 <i class="{{item.icon}}" style="font-size: 1.2rem"></i>
                             }
-                            {{item.label}}
+                            @if(item.label || item.signalLabel) {
+                                {{item.label || item?.signalLabel()}}
+                            }
                         </h4>
                     @if (item.items) {
                         <div class="flex flex-col py-1 px-2 gap-5">
@@ -49,14 +54,16 @@ export interface IInfoItem {
                                                 <p-avatar image="{{item2.img}}" styleClass="font-medium text-base flex" size="normal" shape="circle"/>
                                             }
                                             <div class="flex flex-col gap-1 flex-1 leading-none">
-                                                <span class="">{{item2.label}}</span>
-                                                @if(item2.description) {
-                                                    <span class="text-muted-color text-sm {{!item2.wrapText ? 'line-clamp-1' : ''}}">{{item2.description}}</span>
+                                                <span class="">{{item2.label || item2?.signalLabel()}}</span>
+                                                @if(item2.description || item2.signalDescription) {
+                                                    <span class="text-muted-color text-sm {{!item2.wrapText ? 'line-clamp-1' : ''}}">{{item2.description || item2?.signalDescription()}}</span>
                                                 }
                                             </div>
                                         </div>
                                         @if(item2.inputCheck) {
-                                            <p-toggleswitch styleClass="m-auto" [disabled]="item.inputCheck?.disabled ?? false" (onChange)="item2?.inputCheck?.command ? item2?.inputCheck?.command($event) : default()" [(ngModel)]="item2.inputCheck.check" class="leading-0"/>
+                                            <p-toggleswitch styleClass="m-auto" [disabled]="item2.inputCheck.disabled ?? false" (onChange)="item2?.inputCheck?.command ? item2?.inputCheck?.command($event) : default()" [(ngModel)]="item2.inputCheck.check" class="leading-0"/>
+                                        } @else if(item2.signalInputCheck) {
+                                            <p-toggleswitch styleClass="m-auto" (onChange)="item2.signalInputCheck.set($event.checked)" [(ngModel)]="item2.signalInputCheck" class="leading-0"/>
                                         }
                                     </div>
                                 }
