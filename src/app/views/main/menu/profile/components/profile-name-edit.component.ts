@@ -1,5 +1,4 @@
-import { Component, input, OnInit, output } from '@angular/core';
-import { FloatLabel } from "primeng/floatlabel";
+import { Component, input, OnInit } from '@angular/core';
 import { Button } from "primeng/button";
 import { InputText } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';

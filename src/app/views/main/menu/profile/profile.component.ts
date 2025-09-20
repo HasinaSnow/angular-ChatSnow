@@ -6,6 +6,8 @@ import { IInfoItem, ListMsgInfoComponent } from '../../../../shared/components/l
 import { ThemeService } from '../../../../shared/services/theme.service';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ProfileNameEditComponent } from './components/profile-name-edit.component';
+import { ChangePasswordComponent } from './components/change-pwd.component';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
     selector: 'app-profile',
@@ -30,10 +32,11 @@ import { ProfileNameEditComponent } from './components/profile-name-edit.compone
 })
 export class ProfileComponent {
     themeService = inject(ThemeService)
-    darkTheme = computed(() => this.themeService.isDark() ? 'enabled': 'disabled')
+    darkTheme = computed(() => this.themeService.isDark() ? 'Enabled': 'Disabled')
 
     private bpService = inject(BreakpointService)
     private dialogService = inject(DialogService)
+    private confirmService = inject(ConfirmationService)
     ref: DynamicDialogRef|undefined
 
     private location = inject(Location)
@@ -45,24 +48,57 @@ export class ProfileComponent {
         if(screenWidth < this.bp.lg) return 150
         else return 180
     })
-    inlineStatus: WritableSignal<boolean> = signal(true)
 
     profileName: WritableSignal<string> = signal('Hasina Snow')
     showEmail: WritableSignal<boolean> = signal(false)
     emailDescription = computed(() => this.showEmail() ? 'rakotohasinasnow@gmail.com': 'Disabled : ****')
+    enableInlineSatus = signal(true)
+    inlineStatus = computed(() => this.enableInlineSatus() ? 'Enabled': 'Disabled')
+
+    accounts = [
+        {
+            name: 'Hasina Niaina Snow',
+            id: 'hasina_id',
+            imgUrl: "./images/pdp1.jpg"
+        },
+        {
+            name: 'Mark Anthony',
+            id: 'mark_id',
+            imgUrl: "./images/pdp1.jpg"
+        }
+    ]
 
     profileInfo: IInfoItem[] = [
         {
             label: 'Accounts',
             items: [
-                {
-                    label: 'Hasina Niaina Snow',
-                    img: './images/pdp1.jpg'
-                },
-                {
-                    label: 'Mark Anthonny',
-                    img: './images/pdp1.jpg'
-                },
+                ...this.accounts.map(account => ({
+                    label: account.name,
+                    img: account.imgUrl,
+                    command: ($event) => {
+                        this.confirmService.confirm({
+                            target: $event.target as EventTarget,
+                            message: `Voulez-vous changer de compte en tant que "${account.name}" ?`,
+                            header: 'Change account ?',
+                            closable: this.bpService.isMobile(),
+                            closeOnEscape: true,
+                            icon: 'pi pi-exclamation-triangle',
+                            rejectVisible: this.bpService.isMobile(),
+                            rejectButtonProps: {
+                                label: 'cancel',
+                                severity: 'secondary',
+                                outlined: true
+                            },
+                            acceptButtonProps: {
+                                label: 'change account',
+                                severity: 'primary'
+                            },
+                            acceptIcon: 'pi pi-check',
+                            accept: () => console.log('vous avez changer de compte!'),
+                            reject: () => console.log('changement de compte annulé!')
+                        })
+                    }
+                }) as IInfoItem),
                 {
                     label: 'Add an account',
                     icon: 'pi pi-user-plus'
@@ -75,10 +111,8 @@ export class ProfileComponent {
                 {
                     label: 'Inline status',
                     icon: 'pi pi-globe',
-                    inputCheck: {
-                        check: this.inlineStatus
-                    },
-                    description: 'Enable Inline status'
+                    signalInputCheck: this.enableInlineSatus,
+                    signalDescription: this.inlineStatus,
                 },
                 {
                     label: 'Dark theme',
@@ -125,11 +159,56 @@ export class ProfileComponent {
                     description: 'Change password',
                     severity: 'danger',
                     icon: 'pi pi-lock',
+                    command: () => {
+                        this.ref = this.dialogService.open(ChangePasswordComponent, {
+                            header: 'Change Password',
+                            inputValues: {
+                                id: 'id_User',
+                                cancelBtnVisible: this.bpService.isMobile(),
+                                onSave: (value: boolean) => {
+                                    value
+                                        ? console.info('block confirmed')
+                                        : console.warn('block non confirmed')
+                                    this.ref?.close()
+                                }
+                            },
+                            modal: true,
+                            closable: !this.bpService.isMobile(),
+                            position: 'center',
+                            breakpoints: {
+                                '1024px': '60vw',
+                                '640px': '95vw',
+                            }
+                        })
+                    }
                 },
                 {
                     label: 'Sign out',
                     severity: 'danger',
-                    icon: 'pi pi-sign-out'
+                    icon: 'pi pi-sign-out',
+                    command: ($event) => {
+                        this.confirmService.confirm({
+                            target: $event.target as EventTarget,
+                            message: 'Etes-vous sûre de vouloir se déconnecter ?',
+                            header: 'Log out ?',
+                            closable: this.bpService.isMobile(),
+                            closeOnEscape: true,
+                            icon: 'pi pi-exclamation-triangle',
+                            rejectVisible: this.bpService.isMobile(),
+                            rejectButtonProps: {
+                                label: 'cancel',
+                                severity: 'secondary',
+                                outlined: true
+                            },
+                            acceptButtonProps: {
+                                label: 'Log out',
+                                severity: 'primary'
+                            },
+                            acceptIcon: 'pi pi-sign-out',
+                            accept: () => console.log('vous êtes déconnecter!'),
+                            reject: () => console.log('deconnexion annulée!')
+                        })
+                    }
                 },
             ]
         }
