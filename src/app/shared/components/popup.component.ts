@@ -1,18 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, HostListener, model, signal, viewChild, WritableSignal } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, input, model, signal, viewChild, WritableSignal } from '@angular/core';
 
 @Component({
     selector: 'app-popup',
     imports: [CommonModule],
     template: `
     @if(isVisible()) {
-        <div #popupContent class="fixed hidden z-50">
+        <div #popupContent class="{{className()}} fixed hidden z-200">
             <ng-content select="[popupContent]"></ng-content>
         </div>
     }
     `
 })
 export class PopupComponent implements AfterViewInit {
+    className = input<string>()
     popupContent = viewChild<ElementRef<HTMLElement>>('popupContent')
     isVisible = model<boolean>()
     contentSize: WritableSignal<{width: number|undefined, height: number|undefined}> = signal({width: undefined, height: undefined})
@@ -35,7 +36,7 @@ export class PopupComponent implements AfterViewInit {
             this.closePopup()
     }
 
-    private closePopup() {
+    closePopup() {
         this.isVisible.set(false)
     }
 }

@@ -2,6 +2,7 @@
 @import "primeicons/primeicons.css";
 @import "tailwindcss";
 @import "tailwindcss-primeui";
+@import '@ctrl/ngx-emoji-mart/picker';
 @custom-variant dark (&:where(.dark, .dark *));
 
 

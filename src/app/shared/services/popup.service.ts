@@ -10,6 +10,10 @@ export type TPopupPosition = 'auto'
 @Injectable({providedIn: 'root'})
 export class PopupService {
 
+    closePopup(viewChild: Signal<PopupComponent|undefined>) {
+        viewChild()?.isVisible.set(false)
+    }
+
     togglePopup(viewChild: Signal<PopupComponent|undefined>, $event: MouseEvent, position: TPopupPosition = 'auto') {
         const triggle = $event?.currentTarget as HTMLElement
         const rect = triggle.getBoundingClientRect()

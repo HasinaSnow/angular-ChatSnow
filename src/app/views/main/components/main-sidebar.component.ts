@@ -46,7 +46,7 @@ import { BreakpointService } from '../../../shared/services/breakpoint.service';
 
         <!-- footer -->
         <div class="hidden py-3 relative sm:flex items-center sm:flex-col sm:gap-3">
-            <div tooltipStyleClass="ml-1 font-semibold" pTooltip="Settings" (click)="togglePoPupSettings($event)" class="relative z-50 flex items-center hover:bg-highlight-emphasis p-3 hover:text-primary text-color transition-all rounded font-bold gap-2 cursor-pointer">
+            <div tooltipStyleClass="ml-1 font-semibold" pTooltip="Settings" (click)="togglePopupSettings($event)" class="relative z-50 flex items-center hover:bg-highlight-emphasis p-3 hover:text-primary text-color transition-all rounded font-bold gap-2 cursor-pointer">
                 <i class="pi pi-cog text-inherit" style="font-size: 1rem"></i>
             </div>
             <div pTooltip="Sign out" tooltipStyleClass="ml-1 font-semibold" class="hidden sm:flex items-center p-3 hover:text-red-500 text-color transition-all rounded font-bold gap-2 cursor-pointer">
@@ -62,11 +62,12 @@ import { BreakpointService } from '../../../shared/services/breakpoint.service';
     </div>`
 })
 export class MainSidebarComponent implements OnInit {
-    private router = inject(Router)
     popupSettings = viewChild<PopupComponent|undefined>('popupSettings')
     popupHome = viewChild<PopupComponent|undefined>('popupHome')
-    popupService = inject(PopupService)
+
+    private popupService = inject(PopupService)
     screenService = inject(BreakpointService)
+    private router = inject(Router)
 
     items: MenuItem[] = [
         { label: 'Menu', icon: 'pi pi-bars', routerLink: 'menu'},
@@ -88,7 +89,7 @@ export class MainSidebarComponent implements OnInit {
         return this.screenService.screenWidth() <= this.screenService.breakpoint.sm
     }
 
-    togglePoPupSettings($event: MouseEvent) {
+    togglePopupSettings($event: MouseEvent) {
         const position = (this.screenService.screenWidth() > this.screenService.breakpoint.sm) ? 'auto' : 'top-left'
         this.popupService.togglePopup(this.popupSettings, $event, position)
     }
