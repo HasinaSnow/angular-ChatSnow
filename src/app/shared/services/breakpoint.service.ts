@@ -25,9 +25,11 @@ export class BreakpointService {
         const isMobile = screen <= this.breakpoint.md
         const url = this.router.url
             if(!isMobile && url.startsWith('/mobile')) {
-                this.router.navigateByUrl(url.replace('/mobile', ''), {replaceUrl: true})
+                // this.router.navigateByUrl(url.replace('/mobile', ''), {replaceUrl: true})
+                this.router.navigate(['convers'])
             } else if(isMobile && !url.startsWith('/mobile')) {
-                this.router.navigateByUrl('/mobile' + url, {replaceUrl: true})
+                // this.router.navigateByUrl('/mobile' + url, {replaceUrl: true})
+                this.router.navigate(['mobile/convers'])
             }
     }
 

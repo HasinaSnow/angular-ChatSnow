@@ -13,7 +13,7 @@ import { InputText } from 'primeng/inputtext';
                     <i class="pi pi-lock" style="font-size: .9rem;"></i>
                     Current password
                 </label>
-                <input id="password" placeholder="your current password" class="w-full my-2" pInputText />
+                <input id="password" type="password" placeholder="your current password" class="w-full my-2" pInputText />
                 <small class="w-full text-red-500 block text-end" id="email-help">invalid password.</small>
             </div>
             <div class="w-full">
@@ -21,7 +21,7 @@ import { InputText } from 'primeng/inputtext';
                     <i class="pi pi-lock" style="font-size: .9rem;"></i>
                     New password
                 </label>
-                <input id="password" placeholder="your new password" class="w-full my-2" pInputText />
+                <input id="password" type="password" placeholder="your new password" class="w-full my-2" pInputText />
                 <small class="w-full text-red-500 block text-end" id="email-help">invalid password.</small>
             </div>
             <div class="w-full">
@@ -29,7 +29,7 @@ import { InputText } from 'primeng/inputtext';
                     <i class="pi pi-lock" style="font-size: .9rem;"></i>
                     Confirmation
                 </label>
-                <input id="password" placeholder="confirm your new password" class="w-full my-2" pInputText />
+                <input id="password" type="password" placeholder="confirm your new password" class="w-full my-2" pInputText />
                 <small class="w-full text-red-500 block text-end" id="email-help">invalid password.</small>
             </div>
             <p class="w-full text-muted-color max-md:text-sm">

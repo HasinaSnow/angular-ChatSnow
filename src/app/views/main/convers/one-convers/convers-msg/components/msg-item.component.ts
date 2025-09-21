@@ -3,7 +3,7 @@ import { EmojiComponent, EmojiData } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { AvatarModule } from 'primeng/avatar';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Message } from "primeng/message";
-import { IMsgReaction, ReactionsComponent } from '../../../../../../shared/components/reactions-component';
+import { IMsgReaction, ReactionsComponent } from '../../../../../../shared/components/reactions.component';
 import { BreakpointService } from '../../../../../../shared/services/breakpoint.service';
 import { PopupComponent } from "../../../../../../shared/components/popup.component";
 import { PopupService } from '../../../../../../shared/services/popup.service';
@@ -30,8 +30,8 @@ import { MsgOptionsComponent } from "../../../../../../shared/components/msg-opt
                                 {{replyToMessage()}}
                             </p>
                         </div>
-                        <div (click)="togglePopupMsgOptions($event)" class="cursor-pointer relative flex justify-end">
-                            <p-message size="small" styleClass="relative pb-0.5 w-fit !bg-surface-0 dark:!bg-surface-950 relative z-10 max-w-full" severity="primary">
+                        <div class="relative flex justify-end">
+                            <p-message (click)="togglePopupMsgOptions($event)" size="small" styleClass=" cursor-pointerrelative pb-0.5 w-fit !bg-surface-0 dark:!bg-surface-950 relative z-10 max-w-full" severity="primary">
                                 {{message()}}
                             </p-message>
                             @if(reactions().length > 0) {
@@ -48,8 +48,8 @@ import { MsgOptionsComponent } from "../../../../../../shared/components/msg-opt
                     </div>
                 </div>
             } @else {
-                <div (click)="togglePopupMsgOptions($event)" class="cursor-pointer relative flex justify-end">
-                    <p-message size="small" styleClass="!bg-surface-0 pb-0.5 dark:!bg-surface-950" severity="secondary">
+                <div class="relative flex justify-end">
+                    <p-message (click)="togglePopupMsgOptions($event)" size="small" styleClass="cursor-pointer !bg-surface-0 pb-0.5 dark:!bg-surface-950" severity="secondary">
                         {{message()}}
                     </p-message>
                     @if(reactions().length > 0) {
@@ -79,8 +79,8 @@ import { MsgOptionsComponent } from "../../../../../../shared/components/msg-opt
                                 {{replyToMessage()}}
                             </p>
                         </div>
-                        <div (click)="togglePopupMsgOptions($event)" class="cursor-pointer relative flex justify-end">
-                            <p-message size="small" styleClass="w-fit pb-0.5 !bg-surface-300 dark:!bg-surface-800 relative z-10 max-w-full" severity="secondary">
+                        <div class="relative flex justify-end">
+                            <p-message (click)="togglePopupMsgOptions($event)" size="small" styleClass="cursor-pointer w-fit pb-0.5 !bg-surface-300 dark:!bg-surface-800 relative z-10 max-w-full" severity="secondary">
                                 {{message()}}
                             </p-message>
                             @if(reactions().length > 0) {
@@ -97,8 +97,8 @@ import { MsgOptionsComponent } from "../../../../../../shared/components/msg-opt
                     </div>
                 </div>
             } @else {
-                <div (click)="togglePopupMsgOptions($event)" class="cursor-pointer relative flex justify-end">
-                    <p-message size="small" styleClass="relative pb-0.5 !bg-surface-0 dark:!bg-surface-950">
+                <div class="relative flex justify-end">
+                    <p-message (click)="togglePopupMsgOptions($event)" size="small" styleClass="cursor-pointer relative pb-0.5 !bg-surface-0 dark:!bg-surface-950">
                         {{message()}}
                     </p-message>
                     @if(reactions().length > 0) {

@@ -10,7 +10,6 @@ export interface IMsgReaction {
     },
     emoji: string|EmojiData
 }
-
 @Component({
     selector: 'app-reactions',
     template: `

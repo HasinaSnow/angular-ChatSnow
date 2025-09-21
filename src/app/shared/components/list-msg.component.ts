@@ -1,7 +1,7 @@
 import { Component, ElementRef, inject, input, signal, viewChild } from "@angular/core";
 import { MsgItemComponent } from "../../views/main/convers/one-convers/convers-msg/components/msg-item.component";
 import { ScrollService } from "../services/scroll.service";
-import { IMsgReaction } from "./reactions-component";
+import { IMsgReaction } from "./reactions.component";
 
 @Component({
     selector: 'app-list-msg',

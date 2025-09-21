@@ -47,7 +47,7 @@ export class OneMsgRequestComponent {
     private msgRqService = inject(MsgRequestService)
     private bpService = inject(BreakpointService)
     readonly bp = this.bpService.breakpoint
-    withCancel = computed(() => !this.bpService.isMobile() && this.bpService.screenWidth() <= this.bp.lg)
+    withCancel = computed(() => this.bpService.isMobile() || this.bpService.screenWidth() <= this.bp.lg)
 
     ngOnInit() {
         this.scrollToBottom()
