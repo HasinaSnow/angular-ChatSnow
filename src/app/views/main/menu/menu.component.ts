@@ -3,7 +3,7 @@ import { MenuListComponent } from "./components/menu-list.component";
 import { Router, RouterOutlet } from "@angular/router";
 import { ButtonModule } from "primeng/button";
 import { BreakpointService } from "../../../shared/services/breakpoint.service";
-import { HeaderTitleComponent } from "../../../shared/components/header-title.component";
+import { HeaderTitleComponent } from "../../../shared/components/ui/header-title.component";
 
 @Component({
     selector: 'app-menu',

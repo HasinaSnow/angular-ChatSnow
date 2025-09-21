@@ -1,14 +1,14 @@
 import { Component, computed, inject, OnInit, signal, viewChild, WritableSignal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { TextareaModule } from 'primeng/textarea';
-import { PopupComponent } from '../../../../../../shared/components/popup.component';
+import { PopupComponent } from '../../../../../../shared/components/ui/popup.component';
 import { BreakpointService } from '../../../../../../shared/services/breakpoint.service';
 import { PopupService } from '../../../../../../shared/services/popup.service';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart'
 import { EmojiComponent, EmojiData } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { ThemeService } from '../../../../../../shared/services/theme.service';
 import { FormsModule } from '@angular/forms';
-import { EmojiPickerComponent } from "../../../../../../shared/components/emoji-picker.component";
+import { EmojiPickerComponent } from "../../../../../../shared/components/ui/emoji-picker.component";
 
 @Component({
     selector: 'app-convers-msg-form',

@@ -1,13 +1,13 @@
 import { Component, input, OnInit } from '@angular/core';
-import { IInfoItem, ListMsgInfoComponent } from "./list-msg-info.component";
+import { IInfoItem, ListMenuItemComponent } from "./list-menu-item.component";
 import { Button } from "primeng/button";
 
 @Component({
     selector: 'app-block',
-    imports: [ListMsgInfoComponent, Button],
+    imports: [ListMenuItemComponent, Button],
     template: `
     <div class="flex flex-col items-center">
-        <app-list-msg-info [items]="blockinfolist"/>
+        <app-list-menu-item [items]="blockinfolist"/>
         <div class="flex gap-2 justify-center">
             @if(cancelBtnVisible()) {
                 <p-button (onClick)="onConfirm()(false)" label="Cancel" severity="secondary" outlined="true" styleClass="m-0"/>

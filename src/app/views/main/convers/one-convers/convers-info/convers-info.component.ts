@@ -2,13 +2,13 @@ import { Component, inject, OnInit, signal, Type } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { PanelModule } from 'primeng/panel';
 import { ConfirmationService, MenuItem } from 'primeng/api';
-import { IInfoItem, ListMsgInfoComponent } from "../../../../../shared/components/list-msg-info.component";
+import { IInfoItem, ListMenuItemComponent } from "../../../../../shared/components/ui/list-menu-item.component";
 import { ConversInfoHeaderComponent } from "./components/convers-info-header.component";
-import { ConversService } from '../../../../../features/convers/convers.service';
+import { ConversService } from '../../convers.service';
 import { Router } from '@angular/router';
 import { BreakpointService } from '../../../../../shared/services/breakpoint.service';
 import { DynamicDialogRef, DialogService, DynamicDialogConfig } from 'primeng/dynamicdialog'
-import { BlockComponent } from '../../../../../shared/components/block.component';
+import { BlockComponent } from '../../../../../shared/components/ui/block.component';
 import { Location } from '@angular/common';
 
 @Component({
@@ -16,7 +16,7 @@ import { Location } from '@angular/common';
     imports: [
         ButtonModule,
         PanelModule,
-        ListMsgInfoComponent,
+        ListMenuItemComponent,
         ConversInfoHeaderComponent,
     ],
     template: `
@@ -29,8 +29,8 @@ import { Location } from '@angular/common';
             <!-- header -->
             <app-convers-info-header/>
 
-            <!-- content -->
-            <app-list-msg-info [items]="menuSettingsItems"/>
+            <!-- list info -->
+            <app-list-menu-item [items]="menuSettingsItems"/>
         </div>
     `
 })

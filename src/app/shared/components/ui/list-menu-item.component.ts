@@ -27,7 +27,7 @@ export interface IInfoItem {
 }
 
 @Component({
-    selector: 'app-list-msg-info',
+    selector: 'app-list-menu-item',
     imports: [ToggleSwitchModule, FormsModule, RouterLink, Avatar],
     template: `
         @for (item of items(); track $index) {
@@ -75,7 +75,7 @@ export interface IInfoItem {
         }
     `
 })
-export class ListMsgInfoComponent {
+export class ListMenuItemComponent {
 
     items = input.required<IInfoItem[]>()
 

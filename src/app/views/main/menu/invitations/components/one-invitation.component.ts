@@ -1,7 +1,7 @@
 import { Location } from "@angular/common";
 import { Component, inject } from "@angular/core";
 import { Button } from "primeng/button";
-import { IInfoItem, ListMsgInfoComponent } from "../../../../../shared/components/list-msg-info.component";
+import { IInfoItem, ListMenuItemComponent } from "../../../../../shared/components/ui/list-menu-item.component";
 import { Avatar } from "primeng/avatar";
 import { Router } from "@angular/router";
 import { BreakpointService } from "../../../../../shared/services/breakpoint.service";
@@ -9,7 +9,7 @@ import { InvitationService } from "../invitation.service";
 
 @Component({
     selector: 'app-one-invitation',
-    imports: [Button, ListMsgInfoComponent, Avatar],
+    imports: [Button, ListMenuItemComponent, Avatar],
     template: `
     <div class="relative h-full w-full flex flex-col px-3 py-5 overflow-auto">
             <div class="absolute lg:hidden top-3 left-2">
@@ -30,7 +30,7 @@ import { InvitationService } from "../invitation.service";
                 </div>
             </div>
             <div class="my-2">
-                <app-list-msg-info [items]="items"/>
+                <app-list-menu-item [items]="items"/>
             </div>
         </div>
     `

@@ -2,14 +2,14 @@ import { Component, computed, ElementRef, inject, viewChild } from "@angular/cor
 import { Location } from "@angular/common";
 import { PanelModule } from 'primeng/panel';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
-import { ListMsgComponent } from "../../../../../shared/components/list-msg.component";
 import { ScrollService } from "../../../../../shared/services/scroll.service";
 import { Button } from "primeng/button";
 import { MessageModule } from 'primeng/message';
 import { Router } from "@angular/router";
-import { HeaderConversMsgComponent } from "../../../../../shared/components/header-convers-msg.component";
+import { HeaderConversMsgComponent } from "../../../../../shared/components/ui/header-convers-msg.component";
 import { BreakpointService } from "../../../../../shared/services/breakpoint.service";
 import { MsgRequestService } from "../msg-request.service";
+import { ListMsgComponent } from "../../../../../shared/components/ui/list-msg.component";
 
 @Component({
     selector: 'app-one-msg-request',

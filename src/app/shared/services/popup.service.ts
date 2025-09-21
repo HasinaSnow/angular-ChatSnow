@@ -1,5 +1,5 @@
 import { ElementRef, Injectable, Signal } from '@angular/core';
-import { PopupComponent } from '../components/popup.component';
+import { PopupComponent } from '../components/ui/popup.component';
 
 export type TPopupPosition = 'auto'
     |'top-right'|'top-left'

@@ -1,8 +1,8 @@
 import { Routes } from "@angular/router";
 import { MsgRequestComponent } from "./msg-request.component";
-import { MsgRequestInfosComponent } from "./components/msg-request-info.component";
-import { OneMsgRequestComponent } from "./components/one-msg-request.component";
-import { ListParticipantsComponent } from "../../../../shared/components/list-participant.component";
+import { MsgRequestInfosComponent } from "./msg-request-info/msg-request-info.component";
+import { OneMsgRequestComponent } from "./one-msg-request/one-msg-request.component";
+import { MsgRequestParticipantComponent } from "./msg-request-info/pages/msg-request-participant.component";
 
 export const MsgRequestRoutes: Routes = [
     {
@@ -19,7 +19,7 @@ export const MsgRequestRoutes: Routes = [
             },
             {
                 path: ':id/participants',
-                component: ListParticipantsComponent
+                component: MsgRequestParticipantComponent
             }
         ]
     }
@@ -43,7 +43,7 @@ export const MsgRequestMobileRoutes: Routes = [
             },
             {
                 path: 'participants',
-                component: ListParticipantsComponent
+                component: MsgRequestParticipantComponent
             }
         ]
     },

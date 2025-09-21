@@ -1,10 +1,10 @@
 import { Location } from "@angular/common";
 import { Component, inject, OnInit } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
-import { MsgRequestListComponent } from "./components/msq-request-list.component";
+import { MsgRequestListComponent } from "./msg-request-list/msq-request-list.component";
 import { BreakpointService } from "../../../../shared/services/breakpoint.service";
 import { MsgRequestService } from "./msg-request.service";
-import { HeaderTitleComponent } from "../../../../shared/components/header-title.component";
+import { HeaderTitleComponent } from "../../../../shared/components/ui/header-title.component";
 
 @Component({
     selector: 'app-message-request',

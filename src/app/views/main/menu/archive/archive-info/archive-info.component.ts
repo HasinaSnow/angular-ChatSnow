@@ -1,13 +1,13 @@
 import { Component, inject } from "@angular/core";
 import { Button } from "primeng/button";
 import { Avatar } from "primeng/avatar";
-import { IInfoItem, ListMsgInfoComponent } from "../../../../../shared/components/list-msg-info.component";
+import { IInfoItem, ListMenuItemComponent } from "../../../../../shared/components/ui/list-menu-item.component";
 import { Location } from "@angular/common";
 import { Router } from "@angular/router";
 
 @Component({
     selector: 'app-archive-info',
-    imports: [Button, Avatar, ListMsgInfoComponent],
+    imports: [Button, Avatar, ListMenuItemComponent],
     template: `
         <div class="relative h-full w-full flex flex-col px-3 py-5 overflow-auto">
             <div class="absolute top-3 left-2">
@@ -28,7 +28,7 @@ import { Router } from "@angular/router";
                 </div>
             </div>
             <div class="my-2">
-                <app-list-msg-info [items]="invitationInfoItems"/>
+                <app-list-menu-item [items]="invitationInfoItems"/>
             </div>
         </div>
     `

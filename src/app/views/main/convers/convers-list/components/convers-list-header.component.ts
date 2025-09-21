@@ -5,7 +5,7 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { BreakpointService } from '../../../../../shared/services/breakpoint.service';
-import { HeaderTitleComponent } from "../../../../../shared/components/header-title.component";
+import { HeaderTitleComponent } from "../../../../../shared/components/ui/header-title.component";
 
 @Component({
     selector: 'app-convers-list-header',

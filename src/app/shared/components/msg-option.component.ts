@@ -1,10 +1,10 @@
-import { Component, inject, input, OnInit, output, viewChild } from '@angular/core';
+import { Component, inject, input, output, viewChild } from '@angular/core';
 import { Button } from "primeng/button";
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { PopupComponent } from './popup.component';
+import { PopupComponent } from './ui/popup.component';
 import { PopupService } from '../services/popup.service';
 import { EmojiData, EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
-import { EmojiPickerComponent } from './emoji-picker.component';
+import { EmojiPickerComponent } from './ui/emoji-picker.component';
 
 @Component({
     selector: 'app-msg-options',

@@ -1,9 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ConversItemInlineComponent } from "./components/convers-item-inline.component";
-import { ConversService } from '../../../../features/convers/convers.service';
+import { ConversService } from '../convers.service';
 import { MenuItem } from 'primeng/api';
 import { TooltipModule } from 'primeng/tooltip';
-import { ItemConversComponent } from '../../../../shared/components/item-convers.component';
+import { ItemConversComponent } from '../../../../shared/components/ui/item-convers.component';
 import { IconField } from "primeng/iconfield";
 import { InputIcon } from "primeng/inputicon";
 import { InputText } from 'primeng/inputtext';

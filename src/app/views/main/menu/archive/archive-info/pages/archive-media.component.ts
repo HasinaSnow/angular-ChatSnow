@@ -1,14 +1,13 @@
-import { Component, inject, model, OnInit, signal } from '@angular/core';
-import { ISelectMenuBarOptions, SelectMenubarComponent } from "./select-menubar.component";
-import { ItemFileComponent } from "./item-file.component";
-import { ItemLinkComponent } from "./item-link.component";
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { Button } from "primeng/button";
 import { CommonModule, Location } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { IImage, ListImageComponent } from './list-image.component';
+import { ListImageComponent, IImage } from '../../../../../../shared/components/list-image.component';
+import { SelectMenubarComponent, ISelectMenuBarOptions } from '../../../../../../shared/components/ui/select-menubar.component';
+import { ItemFileComponent } from '../../../../../../shared/components/ui/item-file.component';
+import { ItemLinkComponent } from '../../../../../../shared/components/ui/item-link.component';
 
 @Component({
-    selector: 'app-list-media',
+    selector: 'app-archive-media',
     template: `
     <div class="py-2 pl-3 text-color h-full w-full flex flex-col gap-3 overflow-auto">
         <!-- header -->
@@ -42,7 +41,7 @@ import { IImage, ListImageComponent } from './list-image.component';
     `,
     imports: [SelectMenubarComponent, CommonModule, ItemFileComponent, ItemLinkComponent, Button, ListImageComponent]
 })
-export class ListMediaComponent implements OnInit {
+export class ArchiveMediaComponent implements OnInit {
 
     private location = inject(Location)
     images = signal<IImage[]>([])

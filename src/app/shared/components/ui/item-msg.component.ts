@@ -3,14 +3,22 @@ import { EmojiComponent, EmojiData } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { AvatarModule } from 'primeng/avatar';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Message } from "primeng/message";
-import { IMsgReaction, ReactionsComponent } from '../../../../../../shared/components/reactions.component';
-import { BreakpointService } from '../../../../../../shared/services/breakpoint.service';
-import { PopupComponent } from "../../../../../../shared/components/popup.component";
-import { PopupService } from '../../../../../../shared/services/popup.service';
-import { MsgOptionsComponent } from "../../../../../../shared/components/msg-option.component";
+import { IMsgReaction, ReactionsComponent } from '../reactions.component';
+import { BreakpointService } from '../../services/breakpoint.service';
+import { PopupComponent } from "./popup.component";
+import { PopupService } from '../../services/popup.service';
+import { MsgOptionsComponent } from "../msg-option.component";
+
+export interface IItemMsg {
+    isReceived: boolean,
+    replytoMsg: string,
+    msg: string,
+    reactions: IMsgReaction[],
+    withInteraction: boolean,
+}
 
 @Component({
-    selector: 'app-msg-item',
+    selector: 'app-item-msg',
     imports: [AvatarModule, Message, EmojiComponent, PopupComponent, MsgOptionsComponent],
     template: `
     @if(isReceived()) {
@@ -18,7 +26,7 @@ import { MsgOptionsComponent } from "../../../../../../shared/components/msg-opt
             <div class="flex items-center gap-2 py-1 sticky top-0 transition-all">
                 <p-avatar image="./favicon.ico" styleClass="h-10 w-10 text-sm font-medium" size="normal" shape="circle"/>
             </div>
-            @if(replyToMessage()) {
+            @if(replytoMsg()) {
                 <div class="mt-1">
                     <small class="text-muted-color px-2 flex items-center gap-2">
                         <i class="pi pi-undo" style="font-size: .8rem;"></i>
@@ -27,12 +35,12 @@ import { MsgOptionsComponent } from "../../../../../../shared/components/msg-opt
                     <div class="flex-1 w-full mt-6 pt-3 relative">
                         <div class="absolute z-0 -top-5 pb-4 w-fit border border-surface rounded-br-2xl rounded-t-2xl">
                             <p class="w-full line-clamp-1 text-sm text-muted-color px-3 pt-1">
-                                {{replyToMessage()}}
+                                {{replytoMsg()}}
                             </p>
                         </div>
                         <div class="relative flex justify-end">
                             <p-message (click)="togglePopupMsgOptions($event)" size="small" styleClass=" cursor-pointerrelative pb-0.5 w-fit !bg-surface-0 dark:!bg-surface-950 relative z-10 max-w-full" severity="primary">
-                                {{message()}}
+                                {{msg()}}
                             </p-message>
                             @if(reactions().length > 0) {
                                 <div class="absolute z-100 w-fit -bottom-6 rounded-full right-0 border border-surface px-1 text-color bg-surface dark:!bg-surface-950">
@@ -50,7 +58,7 @@ import { MsgOptionsComponent } from "../../../../../../shared/components/msg-opt
             } @else {
                 <div class="relative flex justify-end">
                     <p-message (click)="togglePopupMsgOptions($event)" size="small" styleClass="cursor-pointer !bg-surface-0 pb-0.5 dark:!bg-surface-950" severity="secondary">
-                        {{message()}}
+                        {{msg()}}
                     </p-message>
                     @if(reactions().length > 0) {
                         <div class="absolute z-100 w-fit -bottom-6 rounded-full right-0 border border-surface px-1 text-color bg-surface-100 dark:!bg-surface-950">
@@ -67,7 +75,7 @@ import { MsgOptionsComponent } from "../../../../../../shared/components/msg-opt
         </div>
     } @else {
         <div class="flex flex-row-reverse py-1 ml-auto items-start gap-2 w-fit max-w-[75%]">
-            @if(replyToMessage()) {
+            @if(replytoMsg()) {
                 <div class="mt-1">
                     <small class="text-muted-color px-2 flex items-center gap-2">
                         <i class="pi pi-undo" style="font-size: .8rem;"></i>
@@ -76,12 +84,12 @@ import { MsgOptionsComponent } from "../../../../../../shared/components/msg-opt
                     <div class="flex-1 w-full mt-6 pt-3 relative">
                         <div class="absolute right-0 z-0 -top-5 pb-4 w-fit border border-surface rounded-bl-2xl rounded-t-2xl">
                             <p class="w-full line-clamp-1 text-sm text-muted-color px-3 pt-1">
-                                {{replyToMessage()}}
+                                {{replytoMsg()}}
                             </p>
                         </div>
                         <div class="relative flex justify-end">
                             <p-message (click)="togglePopupMsgOptions($event)" size="small" styleClass="cursor-pointer w-fit pb-0.5 !bg-surface-300 dark:!bg-surface-800 relative z-10 max-w-full" severity="secondary">
-                                {{message()}}
+                                {{msg()}}
                             </p-message>
                             @if(reactions().length > 0) {
                                 <div class="absolute z-100 w-fit -bottom-6 rounded-full right-0 border border-surface px-1 text-color bg-surface-300 dark:!bg-surface-800">
@@ -99,7 +107,7 @@ import { MsgOptionsComponent } from "../../../../../../shared/components/msg-opt
             } @else {
                 <div class="relative flex justify-end">
                     <p-message (click)="togglePopupMsgOptions($event)" size="small" styleClass="cursor-pointer relative pb-0.5 !bg-surface-0 dark:!bg-surface-950">
-                        {{message()}}
+                        {{msg()}}
                     </p-message>
                     @if(reactions().length > 0) {
                         <div class="absolute z-100 w-fit -bottom-6 rounded-full right-0 border border-surface px-1 text-color bg-surface-300 dark:!bg-surface-800">
@@ -124,10 +132,10 @@ import { MsgOptionsComponent } from "../../../../../../shared/components/msg-opt
     </app-popup>
     `
 })
-export class MsgItemComponent implements OnInit {
+export class ItemMsgComponent implements OnInit {
     isReceived = input.required<boolean>()
-    replyToMessage = input<string>()
-    message = input.required<string>()
+    replytoMsg = input<string>()
+    msg = input.required<string>()
     reactions = input<IMsgReaction[]>([])
     withInteraction = input<boolean>()
     reactionEmojis = computed(() => [...new Set(this.reactions().map(reaction => reaction.emoji))])

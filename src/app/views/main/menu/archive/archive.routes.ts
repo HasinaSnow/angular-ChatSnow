@@ -1,9 +1,9 @@
 import { Routes } from "@angular/router";
 import { ArchiveComponent } from "./archive.component";
-import { OneArchiveComponent } from "./components/one-archive.component";
-import { ArchiveInfoComponent } from "./components/archive-info.component";
-import { ListParticipantsComponent } from "../../../../shared/components/list-participant.component";
-import { ListMediaComponent } from "../../../../shared/components/list-media.component";
+import { OneArchiveComponent } from "./one-archive/one-archive.component";
+import { ArchiveInfoComponent } from "./archive-info/archive-info.component";
+import { ArchiveMediaComponent } from "./archive-info/pages/archive-media.component";
+import { ArchiveParticipantComponent } from "./archive-info/pages/archive-participant.component";
 
 export const ArchiveRoutes: Routes = [
     {
@@ -20,11 +20,11 @@ export const ArchiveRoutes: Routes = [
             },
             {
                 path: ':id/participants',
-                component: ListParticipantsComponent
+                component: ArchiveParticipantComponent
             },
             {
                 path: ':id/medias',
-                component: ListMediaComponent
+                component: ArchiveMediaComponent
             }
         ]
     }
@@ -48,11 +48,11 @@ export const ArchiveMobileRoutes: Routes = [
             },
             {
                 path: 'participants',
-                component: ListParticipantsComponent
+                component: ArchiveParticipantComponent
             },
             {
                 path: 'medias',
-                component: ListMediaComponent
+                component: ArchiveMediaComponent
             }
         ]
     },

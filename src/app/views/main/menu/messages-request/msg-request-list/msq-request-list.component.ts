@@ -1,10 +1,10 @@
 import { Component, inject, OnInit, signal } from "@angular/core";
-import { ItemConversComponent } from "../../../../../shared/components/item-convers.component";
+import { ItemConversComponent } from "../../../../../shared/components/ui/item-convers.component";
 import { Router } from "@angular/router";
 import { FormsModule } from "@angular/forms";
 import { Message } from "primeng/message";
 import { BreakpointService } from "../../../../../shared/services/breakpoint.service";
-import { ISelectMenuBarOptions, SelectMenubarComponent } from "../../../../../shared/components/select-menubar.component";
+import { ISelectMenuBarOptions, SelectMenubarComponent } from "../../../../../shared/components/ui/select-menubar.component";
 import { MsgRequestService } from "../msg-request.service";
 
 @Component({

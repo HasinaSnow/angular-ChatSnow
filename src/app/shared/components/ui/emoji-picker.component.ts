@@ -1,5 +1,5 @@
 import { Component, computed, inject, input, OnInit, output } from '@angular/core';
-import { ThemeService } from '../services/theme.service';
+import { ThemeService } from '../../services/theme.service';
 import { PickerComponent } from "@ctrl/ngx-emoji-mart";
 import { EmojiData } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 

@@ -3,14 +3,14 @@ import { Avatar } from 'primeng/avatar';
 import { Badge } from 'primeng/badge';
 import { Button } from 'primeng/button';
 import { Popover } from 'primeng/popover';
-import { IInfoItem, ListMsgInfoComponent } from './list-msg-info.component';
 import { Router } from '@angular/router';
-import { BreakpointService } from '../services/breakpoint.service';
 import { ConfirmationService } from 'primeng/api';
+import { BreakpointService } from '../../services/breakpoint.service';
+import { IInfoItem, ListMenuItemComponent } from './list-menu-item.component';
 
 @Component({
     selector: 'app-item-participant',
-    imports: [Badge, Avatar, Button, Popover, ListMsgInfoComponent],
+    imports: [Badge, Avatar, Button, Popover, ListMenuItemComponent],
     template: `
     <div class="md:px-3 py-2 flex gap-3 items-center hover:bg-emphasis transition-all duration-200 cursor-pointer rounded">
         <div class="relative flex items-center flex-col justify-center">
@@ -30,7 +30,7 @@ import { ConfirmationService } from 'primeng/api';
 
         <!-- popover -->
         <p-popover #op>
-            <app-list-msg-info [items]="optionItems"/>
+            <app-list-menu-item [items]="optionItems"/>
         </p-popover>
     </div>`
 })

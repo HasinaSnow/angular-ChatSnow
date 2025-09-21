@@ -1,10 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { Button } from "primeng/button";
-import { ItemParticipantComponent } from "./item-participant.component";
 import { Location } from '@angular/common';
+import { ItemParticipantComponent } from '../../../../../../shared/components/ui/item-participant.component';
 
 @Component({
-    selector: 'app-list-participants',
+    selector: 'app-archive-participant',
     template: `
     <div class="py-2 pl-3 text-color h-full w-full flex flex-col gap-3 overflow-auto">
         <!-- header -->
@@ -28,7 +28,7 @@ import { Location } from '@angular/common';
     `,
     imports: [Button, ItemParticipantComponent]
 })
-export class ListParticipantsComponent {
+export class ArchiveParticipantComponent {
     private location = inject(Location)
     cancel() { this.location.back() }
 }

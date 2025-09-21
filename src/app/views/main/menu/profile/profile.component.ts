@@ -2,7 +2,7 @@ import { Component, computed, inject, signal, WritableSignal } from '@angular/co
 import { BreakpointService } from '../../../../shared/services/breakpoint.service';
 import { Button } from "primeng/button";
 import { Location } from '@angular/common';
-import { IInfoItem, ListMsgInfoComponent } from '../../../../shared/components/list-msg-info.component';
+import { IInfoItem, ListMenuItemComponent } from '../../../../shared/components/ui/list-menu-item.component';
 import { ThemeService } from '../../../../shared/services/theme.service';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ProfileNameEditComponent } from './components/profile-name-edit.component';
@@ -25,10 +25,10 @@ import { ConfirmationService } from 'primeng/api';
         </div>
 
         <!-- sections -->
-        <app-list-msg-info class="md:col-span-2 p-2 flex flex-col gap-3" [items]="profileInfo"/>
+        <app-list-menu-item class="md:col-span-2 p-2 flex flex-col gap-3" [items]="profileInfo"/>
 
     </div>`,
-    imports: [Button, ListMsgInfoComponent]
+    imports: [Button, ListMenuItemComponent]
 })
 export class ProfileComponent {
     themeService = inject(ThemeService)

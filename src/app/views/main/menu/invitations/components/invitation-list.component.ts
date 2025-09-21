@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { BreakpointService } from "../../../../../shared/services/breakpoint.service";
 import { FormsModule } from "@angular/forms";
 import { InvitationItemComponent } from "./invitation-item.component";
-import { ISelectMenuBarOptions, SelectMenubarComponent } from "../../../../../shared/components/select-menubar.component";
+import { ISelectMenuBarOptions, SelectMenubarComponent } from "../../../../../shared/components/ui/select-menubar.component";
 import { InputIcon } from "primeng/inputicon";
 import { IconField } from "primeng/iconfield";
 import { InputText } from "primeng/inputtext";

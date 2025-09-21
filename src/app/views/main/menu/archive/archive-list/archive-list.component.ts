@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { BreakpointService } from "../../../../../shared/services/breakpoint.service";
-import { ItemConversComponent } from "../../../../../shared/components/item-convers.component";
+import { ItemConversComponent } from "../../../../../shared/components/ui/item-convers.component";
 import { Message } from "primeng/message";
 import { ArchiveService } from "../archive.service";
 

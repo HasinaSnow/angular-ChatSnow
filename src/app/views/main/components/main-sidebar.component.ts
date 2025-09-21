@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { TooltipModule } from 'primeng/tooltip'
 import { FormsModule } from '@angular/forms';
 import { PopupService } from '../../../shared/services/popup.service';
-import { PopupComponent } from "../../../shared/components/popup.component";
+import { PopupComponent } from "../../../shared/components/ui/popup.component";
 import { MainSettingsComponent } from "./main-settings.component";
 import { BreakpointService } from '../../../shared/services/breakpoint.service';
 

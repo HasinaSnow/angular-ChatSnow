@@ -13,7 +13,7 @@ import { Button } from "primeng/button";
     imports: [Button]
 })
     export class HeaderTitleComponent {
-    location = inject(Location)    
+    location = inject(Location)
     title = input.required<string>()
     icon = input<string>()
     withCancelBtn = input<boolean>(false)

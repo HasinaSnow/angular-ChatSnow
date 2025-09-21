@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from "@angular/core";
-import { ConversService } from "../../../../features/convers/convers.service";
+import { ConversService } from "../convers.service";
 import { BreakpointService } from "../../../../shared/services/breakpoint.service";
 import { ConversMsgComponent } from "./convers-msg/convers-msg.component";
 import { RouterOutlet } from "@angular/router";

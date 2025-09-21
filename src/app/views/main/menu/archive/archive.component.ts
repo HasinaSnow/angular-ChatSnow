@@ -1,10 +1,9 @@
 import { Component, inject, OnInit } from "@angular/core";
 import { BreakpointService } from "../../../../shared/services/breakpoint.service";
-import { MsgRequestService } from "../messages-request/msg-request.service";
 import { Location } from "@angular/common";
-import { HeaderTitleComponent } from "../../../../shared/components/header-title.component";
+import { HeaderTitleComponent } from "../../../../shared/components/ui/header-title.component";
 import { RouterOutlet } from "@angular/router";
-import { ArchiveListComponent } from "./components/archive-list.component";
+import { ArchiveListComponent } from "./archive-list/archive-list.component";
 import { ArchiveService } from "./archive.service";
 
 @Component({

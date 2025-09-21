@@ -5,7 +5,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { IconField } from "primeng/iconfield";
 import { InputIcon } from "primeng/inputicon";
 import { InputText } from 'primeng/inputtext';
-import { BreakpointService } from '../services/breakpoint.service';
+import { BreakpointService } from '../../services/breakpoint.service';
 
 @Component({
     selector: 'app-header-convers-msg',

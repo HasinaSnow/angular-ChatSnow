@@ -1,10 +1,10 @@
 import { Component, computed, ElementRef, inject, OnInit, viewChild } from '@angular/core';
-import { ConversService } from '../../../../../features/convers/convers.service';
-import { HeaderConversMsgComponent } from '../../../../../shared/components/header-convers-msg.component';
+import { ConversService } from '../../convers.service';
+import { HeaderConversMsgComponent } from '../../../../../shared/components/ui/header-convers-msg.component';
 import { ConversMsgFormComponent } from './components/convers-msg-form.component';
 import { BreakpointService } from '../../../../../shared/services/breakpoint.service';
 import { Router } from '@angular/router';
-import { ListMsgComponent } from "../../../../../shared/components/list-msg.component";
+import { ListMsgComponent } from '../../../../../shared/components/ui/list-msg.component';
 
 @Component({
     selector: 'app-convers-msg',
@@ -19,7 +19,7 @@ import { ListMsgComponent } from "../../../../../shared/components/list-msg.comp
 
         <!-- msg list -->
         <div #chatContent class="px-2 lg:px-4 pt-3 flex flex-1 pb-9 flex-col gap-2 overflow-auto">
-           <app-list-msg [idConvers]="idConvers"/>
+           <app-list-msg [msgList]=""/>
         </div>
 
         <!-- footer -->

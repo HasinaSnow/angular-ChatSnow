@@ -1,5 +1,5 @@
 import { Component, inject } from "@angular/core";
-import { ItemFriendComponent } from "../../../../../shared/components/item-friend.component";
+import { ItemFriendComponent } from "../../../../../shared/components/ui/item-friend.component";
 import { InputTextModule } from "primeng/inputtext";
 import { IconFieldModule } from "primeng/iconfield";
 import { InputIconModule } from "primeng/inputicon";

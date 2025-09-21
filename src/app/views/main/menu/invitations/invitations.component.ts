@@ -5,7 +5,7 @@ import { Button } from "primeng/button";
 import { InvitationListComponent } from "./components/invitation-list.component";
 import { RouterOutlet } from "@angular/router";
 import { InvitationService } from "./invitation.service";
-import { HeaderTitleComponent } from "../../../../shared/components/header-title.component";
+import { HeaderTitleComponent } from "../../../../shared/components/ui/header-title.component";
 
 @Component({
     selector: 'app-invitations',

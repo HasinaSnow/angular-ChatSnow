@@ -1,8 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ConversListComponent } from "./convers-list/convers-list.component";
 import { BreakpointService } from '../../../shared/services/breakpoint.service';
-import { ConversService } from '../../../features/convers/convers.service';
-import { HeaderTitleComponent } from "../../../shared/components/header-title.component";
+import { ConversService } from './convers.service';
+import { HeaderTitleComponent } from "../../../shared/components/ui/header-title.component";
 import { Router, RouterOutlet } from '@angular/router';
 import { Button } from "primeng/button";
 
