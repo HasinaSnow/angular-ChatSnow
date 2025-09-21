@@ -7,6 +7,7 @@ import { primengConfig } from './primeng.config'
 import { BreakpointService } from './shared/services/breakpoint.service';
 import { ConfirmationService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
+import { InMemoryProviders } from './core/providers/in-memory.providers';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,6 +17,7 @@ export const appConfig: ApplicationConfig = {
     ConfirmationService,
     DialogService,
     provideAnimationsAsync(),
-    providePrimeNG(primengConfig)
+    providePrimeNG(primengConfig),
+    ...InMemoryProviders
   ]
 };
