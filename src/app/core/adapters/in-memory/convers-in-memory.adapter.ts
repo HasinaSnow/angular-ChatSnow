@@ -37,7 +37,8 @@ export class ConversInMemoryAdapter extends ConversGateway {
             type: "private",
             participants: [],
             createdAt: new Date(),
-            createdBy: ""
+            createdBy: "",
+            ...data
         }
         this.convers.push(newConvers)
         return of(newConvers)

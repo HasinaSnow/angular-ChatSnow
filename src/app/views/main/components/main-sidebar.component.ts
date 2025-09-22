@@ -8,6 +8,7 @@ import { PopupService } from '../../../shared/services/popup.service';
 import { PopupComponent } from "../../../shared/components/ui/popup.component";
 import { MainSettingsComponent } from "./main-settings.component";
 import { BreakpointService } from '../../../shared/services/breakpoint.service';
+import { AuthService } from '../../../shared/auth/auth.service';
 
 @Component({
     selector: 'app-main-sidebar',
@@ -49,7 +50,7 @@ import { BreakpointService } from '../../../shared/services/breakpoint.service';
             <div tooltipStyleClass="ml-1 font-semibold" pTooltip="Settings" (click)="togglePopupSettings($event)" class="relative z-50 flex items-center hover:bg-highlight-emphasis p-3 hover:text-primary text-color transition-all rounded font-bold gap-2 cursor-pointer">
                 <i class="pi pi-cog text-inherit" style="font-size: 1rem"></i>
             </div>
-            <div pTooltip="Sign out" tooltipStyleClass="ml-1 font-semibold" class="hidden sm:flex items-center p-3 hover:text-red-500 text-color transition-all rounded font-bold gap-2 cursor-pointer">
+            <div (click)="logout()" pTooltip="Sign out" tooltipStyleClass="ml-1 font-semibold" class="hidden sm:flex items-center p-3 hover:text-red-500 text-color transition-all rounded font-bold gap-2 cursor-pointer">
                 <i class="pi pi-sign-out text-inherit" style="font-size: 1rem"></i>
             </div>
         </div>
@@ -65,8 +66,9 @@ export class MainSidebarComponent implements OnInit {
     popupSettings = viewChild<PopupComponent|undefined>('popupSettings')
     popupHome = viewChild<PopupComponent|undefined>('popupHome')
 
+    private authService = inject(AuthService)
     private popupService = inject(PopupService)
-    screenService = inject(BreakpointService)
+    private bpService = inject(BreakpointService)
     private router = inject(Router)
 
     items: MenuItem[] = [
@@ -86,16 +88,20 @@ export class MainSidebarComponent implements OnInit {
     }
 
     isSmScreen() {
-        return this.screenService.screenWidth() <= this.screenService.breakpoint.sm
+        return this.bpService.screenWidth() <= this.bpService.breakpoint.sm
     }
 
     togglePopupSettings($event: MouseEvent) {
-        const position = (this.screenService.screenWidth() > this.screenService.breakpoint.sm) ? 'auto' : 'top-left'
+        const position = (this.bpService.screenWidth() > this.bpService.breakpoint.sm) ? 'auto' : 'top-left'
         this.popupService.togglePopup(this.popupSettings, $event, position)
     }
 
     togglePoPupHome($event: MouseEvent) {
         this.popupService.togglePopup(this.popupHome, $event)
+    }
+
+    logout() {
+        
     }
 
 

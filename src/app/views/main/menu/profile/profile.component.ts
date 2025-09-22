@@ -8,6 +8,8 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ProfileNameEditComponent } from './components/profile-name-edit.component';
 import { ChangePasswordComponent } from './components/change-pwd.component';
 import { ConfirmationService } from 'primeng/api';
+import { LogoutConfirm } from '../../../../shared/helpers/logout-confirmation';
+import { AuthService } from '../../../../shared/auth/auth.service';
 
 @Component({
     selector: 'app-profile',
@@ -34,6 +36,7 @@ export class ProfileComponent {
     themeService = inject(ThemeService)
     darkTheme = computed(() => this.themeService.isDark() ? 'Enabled': 'Disabled')
 
+    private authService = inject(AuthService)
     private bpService = inject(BreakpointService)
     private dialogService = inject(DialogService)
     private confirmService = inject(ConfirmationService)
@@ -188,24 +191,8 @@ export class ProfileComponent {
                     icon: 'pi pi-sign-out',
                     command: ($event) => {
                         this.confirmService.confirm({
-                            target: $event.target as EventTarget,
-                            message: 'Etes-vous sûre de vouloir se déconnecter ?',
-                            header: 'Log out ?',
-                            closable: !this.bpService.isMobile,
-                            closeOnEscape: true,
-                            icon: 'pi pi-exclamation-triangle',
-                            rejectVisible: this.bpService.isMobile(),
-                            rejectButtonProps: {
-                                label: 'cancel',
-                                severity: 'secondary',
-                                outlined: true
-                            },
-                            acceptButtonProps: {
-                                label: 'Log out',
-                                severity: 'primary'
-                            },
-                            acceptIcon: 'pi pi-sign-out',
-                            accept: () => console.log('vous êtes déconnecter!'),
+                            ...LogoutConfirm($event, this.bpService),
+                            accept: () => this.authService.signOut(),
                             reject: () => console.log('deconnexion annulée!')
                         })
                     }

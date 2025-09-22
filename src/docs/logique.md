@@ -1,0 +1,31 @@
+# CONVERS
+- providedIn: main (apres authentification)
+- states: convers[], buffer[], initialDataLoaded(boolean: false default)
+- computed: inlineConvers[], lastUpdatedConvers[], unread(int)
+- methods:
+  - initConvers
+    -> httpGet(data)
+    -> initialDataLoaded = true
+  - loadConvers(data)
+    - if initialDataLoaded == false
+        -> buffer.push(data)
+    - else
+        - if convers[].find(data) == undefined
+            -> convers[].push(data)
+        - else,
+          - if data.updatedAt > convers[data].updatedAt
+            -> convers[data] = data
+  - createConvers
+    -> request:create > response ok > ajouter l'element dans convers[]
+  - deleteConvers
+    -> request:delete > response ok > retirer l'element dans convers[]
+
+# MSG
+- providedIn: main/convers/one/msg
+- states: msg[], buffer[]
+- computed:
+- methods:
+  - initMsg
+  - loadMsg
+  - createMsg
+  - deleteMsg

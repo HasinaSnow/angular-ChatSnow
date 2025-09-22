@@ -2,7 +2,7 @@ import { computed, effect, Injectable, Signal, signal, WritableSignal } from '@a
 
 @Injectable({providedIn: 'root'})
 export class ThemeService {
-    isDark: WritableSignal<boolean> = signal(true)
+    isDark: WritableSignal<boolean> = signal(false)
     darkThemeInfo: Signal<string> = computed(() => this.isDark() ? 'Enabled': 'Disabled')
 
     onEffect = effect(() => {
