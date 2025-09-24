@@ -16,16 +16,7 @@ import { ArchiveService } from "../archive.service";
                     Ouvrez une discussion pour en savroir plus sur la personne qui vous l'envoie. Elle ne saura pas que vous l'avez vue tant que vous n'aurez pas répondu
                 </p>
             </p-message>
-            <app-item-convers (onSelect)="selectComponent()" [idSelected]="'bf'" />
-            <app-item-convers/>
-            <app-item-convers/>
-            <app-item-convers/>
-            <app-item-convers/>
-            <app-item-convers/>
-            <app-item-convers/>
-            <app-item-convers/>
-            <app-item-convers/>
-            <app-item-convers/>
+            <!-- <app-item-convers (onSelect)="selectComponent()" [idSelected]="'bf'" /> -->
         </div>
     </div>`
 })

@@ -34,7 +34,6 @@ import { AuthService } from '../../../../shared/auth/auth.service';
 })
 export class ProfileComponent {
     themeService = inject(ThemeService)
-    darkTheme = computed(() => this.themeService.isDark() ? 'Enabled': 'Disabled')
 
     private authService = inject(AuthService)
     private bpService = inject(BreakpointService)
@@ -57,6 +56,7 @@ export class ProfileComponent {
     emailDescription = computed(() => this.showEmail() ? 'rakotohasinasnow@gmail.com': 'Disabled : ****')
     enableInlineSatus = signal(true)
     inlineStatus = computed(() => this.enableInlineSatus() ? 'Enabled': 'Disabled')
+    darkThemeStatus = computed(() => this.themeService.isDark() ? 'Enabled': 'Disabled')
 
     accounts = [
         {
@@ -121,7 +121,7 @@ export class ProfileComponent {
                     label: 'Dark theme',
                     icon: 'pi pi-moon',
                     signalInputCheck: this.themeService.isDark,
-                    signalDescription: this.darkTheme
+                    signalDescription: this.darkThemeStatus
                 },
                 {
                     label: 'Profile name',

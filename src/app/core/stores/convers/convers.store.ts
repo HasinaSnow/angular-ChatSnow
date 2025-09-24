@@ -1,32 +1,44 @@
-import { patchState, signalStore, withComputed, withMethods, withState } from "@ngrx/signals";
+import { signalStore, withComputed, withHooks, withMethods, withState } from "@ngrx/signals";
 import { WithEntityCrud } from "../with-entity-crud.store";
 import { ConversEntity } from "../../entities/convers.entity";
 import { ConversGateway } from "../../ports/convers.gateway";
 import { computed, inject } from "@angular/core";
-import { TUniqId } from "../../../shared/types/uniq-id.type";
 import { ProfileStore } from "../profile/profile.store";
-import { UserStore } from "../user/user.store";
-import { UserEntity } from "../../entities/user.entity";
+import { OnlineUserStore } from "../user/online-user.store";
 
 export const ConversStore = signalStore(
     WithEntityCrud<ConversEntity, Partial<ConversEntity>, Partial<ConversEntity>>(ConversGateway),
-    withState({onlineIds: [] as TUniqId[]}),
-    withMethods((store) => ({
-        PatchOnlineIds: (ids: TUniqId[]) => {
-            patchState(store, {onlineIds: ids})
-        },
-    })),
-    withComputed((store, userStore = inject(UserStore)) => ({
-        onlineConvers: computed(() => {
-            const myProfile = userStore.myProfile() as UserEntity
-            return store.entities().filter(convers => convers.participants
-                .filter(participant => participant !== myProfile.id)
-                .some(participant => store.onlineIds().includes(participant)))
-        }),
+    withMethods((store) => ({})),
+    withComputed((
+        store,
+        onlineStore = inject(OnlineUserStore),
+        profileStore = inject(ProfileStore)
+    ) => ({
         conversList: computed(() => {
-            return store.entities().map((entity) => ({
-                ...entity, isOnline: store.onlineIds().includes(entity.id)
-            }))
-        })
-    }))
+            const myId = profileStore.profile()?.id
+            if(myId) {
+                const onlines = onlineStore.OnlineUser()
+                return store.entities().map((convers) => ({
+                    ...convers,
+                    name: convers.name
+                        ?? convers.type == 'group' 
+                            ? convers.participants.map(p => p.name).join(', ')
+                            : convers.participants.find(p => p.idUser != myId)?.name as string,
+                    isOnline: convers.participants
+                        .map(p => p.idUser)
+                        .filter(p => p !== myId)
+                        .some(p => onlines
+                            .map(online => online.id)
+                            .includes(p)
+                        ),
+                    unreadCount: convers.participants.find(p => p.idUser === myId)?.unreadCount as number
+                }))
+            } return []
+        }),
+    })),
+    withHooks({
+        onInit: ({load}) => {
+            load()
+        }
+    })
 )

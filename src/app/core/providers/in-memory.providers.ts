@@ -6,8 +6,14 @@ import { UserInMemoryAdapter } from "../adapters/in-memory/user-in-memory.adaper
 import { _FAKE_DATA_CONVERS, _FAKE_DATA_USERS } from "../data/fake.data";
 import { AuthGateway } from "../ports/auth.gateway";
 import { AuthInMemoryAdapter } from "../adapters/in-memory/auth-in-memory.adapter";
+import { ProfileGateway } from "../ports/profile.gateway";
+import { ProfileInMemoryAdpater } from "../adapters/in-memory/profile-in-memory.adapter";
 
 export const InMemoryProviders: Provider[] = [
+    {
+        provide: ProfileGateway,
+        useValue: new ProfileInMemoryAdpater()
+    },
     {
         provide: AuthGateway,
         useValue: new AuthInMemoryAdapter()

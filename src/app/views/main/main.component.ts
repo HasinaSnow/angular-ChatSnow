@@ -1,18 +1,19 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { MainSidebarComponent } from "./components/main-sidebar.component";
 import { CommonModule } from '@angular/common';
-import { BreakpointService } from '../../shared/services/breakpoint.service';
 import { MainMenubar } from "./components/main-menubar.component";
+import { FakeSocketService } from '../../core/services/fake-socket.service';
 
 @Component({
     selector: 'app-main',
     imports: [
-    CommonModule,
-    RouterOutlet,
-    MainSidebarComponent,
-    MainMenubar
-],
+        CommonModule,
+        RouterOutlet,
+        MainSidebarComponent,
+        MainMenubar
+    ],
+    providers: [FakeSocketService],
     template: `
         <div class="flex flex-col sm:flex-row h-full w-full sm:p-3 lg:p-4 xl:p-6">
             <!-- main sidebar -->
@@ -33,8 +34,19 @@ import { MainMenubar } from "./components/main-menubar.component";
 
         </div>`
 })
-export class MainComponent {
+export class MainComponent implements OnInit, OnDestroy {
+
+    private socketService = inject(FakeSocketService)
     private router = inject(Router)
+
+    ngOnInit(): void {
+        this.socketService.patchOnlineUsers()
+    }
+
+    ngOnDestroy(): void {
+        console.log('on destroy => unsubscribe stream online users')
+        this.socketService.unsubscribeStream()
+    }
 
     showMenuBar() {
         const paths = this.router.url.split('/')

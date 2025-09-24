@@ -8,6 +8,8 @@ import { IconField } from "primeng/iconfield";
 import { InputIcon } from "primeng/inputicon";
 import { InputText } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
+import { ConversStore } from '../../../../core/stores/convers/convers.store';
+import { OnlineUserStore } from '../../../../core/stores/user/online-user.store';
 
 @Component({
     selector: 'app-convers-list',
@@ -32,14 +34,25 @@ import { FormsModule } from '@angular/forms';
             <div class="w-full flex-1 flex flex-col gap-1 pb-6 overflow-auto">
                 <!-- inline convers list -->
                 <div class="w-full flex gap-3 min-h-min overflow-y-auto pb-3 px-2">
-                    <app-convers-item-inline/>
-                    <app-convers-item-inline/>
-                    <app-convers-item-inline/>
+                    @for (online of onlines(); track $index) {
+                        <app-convers-item-inline [name]="online.name" [urlAvatar]="online.urlAvatar" />
+                    }
                 </div>
 
                 <!-- convers item -->
-                <app-item-convers (onSelect)="selectComponent()" [idSelected]="'bf'" />
-                <app-item-convers/>
+                 @for(convers of conversList(); track $index) {
+                    <app-item-convers 
+                      (onSelect)="selectComponent()"
+                      [idSelected]="convers.id"
+                      [urlAvatar]="convers.urlAvatar"
+                      [name]="convers.name"
+                      [lastMsg]="convers.lastMsg"
+                      [updatedAt]="convers.updatedAt"
+                      [createdAt]="convers.createdAt"
+                      [isOnline]="convers.isOnline"
+                      [unreadCount]="convers.unreadCount"
+                    />
+                 }
             </div>
 
         </div>
@@ -47,6 +60,10 @@ import { FormsModule } from '@angular/forms';
 })
 export class ConversListComponent {
     private conversService = inject(ConversService)
+    private store = inject(ConversStore)
+    onlines = inject(OnlineUserStore).OnlineUser
+    conversList = this.store.conversList
+
     items: MenuItem[] = [
         { label: 'Profile', icon: 'pi pi-user', routerLink: './profile' },
         { label: 'Chat', icon: 'pi pi-comment', routerLink: './convers'},

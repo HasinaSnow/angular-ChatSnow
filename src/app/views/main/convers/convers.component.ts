@@ -5,6 +5,7 @@ import { ConversService } from './convers.service';
 import { HeaderTitleComponent } from "../../../shared/components/ui/header-title.component";
 import { Router, RouterOutlet } from '@angular/router';
 import { Button } from "primeng/button";
+import { ConversStore } from '../../../core/stores/convers/convers.store';
 
 @Component({
     selector: 'app-convers',
@@ -40,6 +41,7 @@ export class ConversComponent implements OnInit {
     readonly bpService = inject(BreakpointService)
     private conversService = inject(ConversService)
     readonly selectedComponent = this.conversService.selectedComponent
+
     bp = this.bpService.breakpoint
 
     ngOnInit(): void {

@@ -1,6 +1,6 @@
 import { RandomUserEntity, UserEntity } from "../../entities/user.entity";
 import { delay, mergeMap, Observable, of, throwError, timer } from "rxjs";
-import { _FAKE_DATA_USERS } from "../../data/fake.data";
+import { _FAKE_DATA_USERS, pushUserInData } from "../../data/fake.data";
 import { faker } from "@faker-js/faker";
 import { LoginEntity } from "../../entities/login.entity";
 import { AuthGateway } from "../../ports/auth.gateway";
@@ -15,7 +15,6 @@ type TAccounts = {
 export class AuthInMemoryAdapter extends AuthGateway {
 
     accounts: TAccounts[] = []
-    userlogin: LoginEntity|null = null
 
     withAccounts(accounts: TAccounts[]) {
         this.accounts = accounts
@@ -28,7 +27,7 @@ export class AuthInMemoryAdapter extends AuthGateway {
             return timer(DelayMs).pipe(mergeMap(() => throwError(() => new Error('user account already existing')).pipe(delay(DelayMs))))
         else {
             const newUser = RandomUserEntity({name, email}) as UserEntity
-            _FAKE_DATA_USERS.push(newUser)
+            pushUserInData(newUser)
             this.accounts.push({name, email, password})
             return of(null).pipe(delay(DelayMs))
         }
@@ -43,21 +42,13 @@ export class AuthInMemoryAdapter extends AuthGateway {
             console.log('fake users => ', _FAKE_DATA_USERS)
             if(!profile)
             return timer(DelayMs).pipe(mergeMap(() => throwError(() => new Error('internal error, profile not found')).pipe(delay(DelayMs))))
-            this.userlogin = {
+            const result: LoginEntity = {
                 user: profile,
                 accessToken: faker.string.uuid(),
                 refreshToken: faker.string.uuid()
             }
-            return of(this.userlogin).pipe(delay(DelayMs))
+            return of(result).pipe(delay(DelayMs))
         }
-    }
-
-    logout(): void {
-        this.userlogin = null
-    }
-
-    isAuth(): Observable<boolean> {
-        return this.userlogin ? of(true) : of(false)
     }
 
 }

@@ -1,4 +1,4 @@
-import { inject, Injectable } from "@angular/core";
+import { inject, Injectable, signal, WritableSignal } from "@angular/core";
 import { AuthGateway } from "../../core/ports/auth.gateway";
 import { debounceTime } from "rxjs";
 import { Router } from "@angular/router";
@@ -6,6 +6,9 @@ import { toSignal } from "@angular/core/rxjs-interop";
 import { ToastService } from "../services/toast.service";
 import { LoadingService } from "../services/loading.service";
 import { BreakpointService } from "../services/breakpoint.service";
+import { _FAKE_DATA_CONVERS, _FAKE_DATA_USERS, _FAKE_DATA_USERS_ONLINE } from "../../core/data/fake.data";
+import { ProfileGateway } from "../../core/ports/profile.gateway";
+import { UserEntity } from "../../core/entities/user.entity";
 
 type Tsignup = {name: string, email: string, password: string}
 type Tsignin = {email: string, password: string}
@@ -18,6 +21,9 @@ export class AuthService {
     private loading = inject(LoadingService)
 
     conversUrl = inject(BreakpointService).isMobile() ? 'mobile/convers' : 'convers'
+    userAuth: WritableSignal<UserEntity|null> = signal(null)
+    accessToken: string|null = null
+    refreshToken: string|null = null
 
     signup({name, email, password}: Tsignup) {
         this.loading.set(true)
@@ -58,6 +64,9 @@ export class AuthService {
                     }, 'top-right')
                 },
                 next: (response) => {
+                    this.accessToken = response.accessToken
+                    this.refreshToken = response.refreshToken
+                    this.userAuth.set(response.user)
                     this.router.navigateByUrl(this.conversUrl).then(() => {
                         this.loading.set(false)
                         this.toastService.show({
@@ -72,7 +81,7 @@ export class AuthService {
 
     signOut() {
         this.loading.set(true)
-        this.authGateway.logout()
+        this.userAuth.set(null)
         this.router.navigateByUrl('home/login').then(() => {
             this.loading.set(false)
             this.toastService.show({
@@ -84,6 +93,6 @@ export class AuthService {
     }
 
     isLogin() {
-        return toSignal(this.authGateway.isAuth())
+        return this.userAuth() !== null
     }
 }

@@ -27,18 +27,9 @@ import { MsgRequestService } from "../msg-request.service";
                 </div>
             </p-message>
             @if(this.selected() === 'request') {
-                <app-item-convers (onSelect)="selectComponent()" [idSelected]="'bf'" />
-                <app-item-convers/>
-                <app-item-convers/>
-                <app-item-convers/>
-                <app-item-convers/>
-                <app-item-convers/>
-                <app-item-convers/>
-                <app-item-convers/>
-                <app-item-convers/>
-                <app-item-convers/>
+                <!-- <app-item-convers (onSelect)="selectComponent()" [idSelected]="'bf'" /> -->
             } @else {
-                <app-item-convers/>
+                <!-- <app-item-convers/> -->
             }
         </div>
     </div>

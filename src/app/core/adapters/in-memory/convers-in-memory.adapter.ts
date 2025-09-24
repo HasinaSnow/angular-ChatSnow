@@ -20,6 +20,7 @@ export class ConversInMemoryAdapter extends ConversGateway {
         const convers = this.convers.find(chat => chat.id == id)
         return of(convers ?? null)
     }
+
     override update(data: Partial<ConversEntity>, id: string): Observable<ConversEntity> {
         this.convers = this.convers.map(chat => chat.id == id
             ? ({...chat, ...data})
@@ -33,11 +34,15 @@ export class ConversInMemoryAdapter extends ConversGateway {
     override addNew(data: Partial<ConversEntity>): Observable<ConversEntity> {
         const newConvers: ConversEntity = {
             id: "",
-            name: "",
+            name: null,
             type: "private",
+            urlAvatar: null,
             participants: [],
+            lastMsg: null,
             createdAt: new Date(),
             createdBy: "",
+            updatedAt: null,
+            updatedBy: null,
             ...data
         }
         this.convers.push(newConvers)

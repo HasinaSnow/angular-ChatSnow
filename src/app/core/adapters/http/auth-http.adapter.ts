@@ -4,17 +4,10 @@ import { AuthGateway } from "../../ports/auth.gateway";
 
 export class AuthHttpAdapter extends AuthGateway {
 
-    override logout(): void {
-        throw new Error("Method not implemented.");
-    }
-
     override login(email: string, password: string): Observable<LoginEntity> {
         throw new Error("Method not implemented.");
     }
     override register(name: string, email: string, password: string): Observable<null> {
-        throw new Error("Method not implemented.");
-    }
-    override isAuth(): Observable<boolean> {
         throw new Error("Method not implemented.");
     }
 
