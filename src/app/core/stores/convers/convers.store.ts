@@ -17,7 +17,7 @@ export const ConversStore = signalStore(
         conversList: computed(() => {
             const myId = profileStore.profile()?.id
             if(myId) {
-                const onlines = onlineStore.OnlineUser()
+                const onlines = onlineStore.onlineUsers()
                 return store.entities().map((convers) => ({
                     ...convers,
                     name: convers.name

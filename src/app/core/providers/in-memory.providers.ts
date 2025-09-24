@@ -8,8 +8,14 @@ import { AuthGateway } from "../ports/auth.gateway";
 import { AuthInMemoryAdapter } from "../adapters/in-memory/auth-in-memory.adapter";
 import { ProfileGateway } from "../ports/profile.gateway";
 import { ProfileInMemoryAdpater } from "../adapters/in-memory/profile-in-memory.adapter";
+import { OnlineUserGateway } from "../ports/online-user.gateway";
+import { OnlineUserInMemoryAdapter } from "../adapters/in-memory/online-user-in-memory.adatper";
 
 export const InMemoryProviders: Provider[] = [
+    {
+        provide: OnlineUserGateway,
+        useValue: new OnlineUserInMemoryAdapter()
+    },
     {
         provide: ProfileGateway,
         useValue: new ProfileInMemoryAdpater()

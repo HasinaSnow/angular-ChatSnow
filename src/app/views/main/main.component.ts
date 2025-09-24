@@ -3,7 +3,7 @@ import { Router, RouterOutlet } from '@angular/router';
 import { MainSidebarComponent } from "./components/main-sidebar.component";
 import { CommonModule } from '@angular/common';
 import { MainMenubar } from "./components/main-menubar.component";
-import { FakeSocketService } from '../../core/services/fake-socket.service';
+import { OnlineUserStore } from '../../core/stores/user/online-user.store';
 
 @Component({
     selector: 'app-main',
@@ -13,7 +13,6 @@ import { FakeSocketService } from '../../core/services/fake-socket.service';
         MainSidebarComponent,
         MainMenubar
     ],
-    providers: [FakeSocketService],
     template: `
         <div class="flex flex-col sm:flex-row h-full w-full sm:p-3 lg:p-4 xl:p-6">
             <!-- main sidebar -->
@@ -34,18 +33,12 @@ import { FakeSocketService } from '../../core/services/fake-socket.service';
 
         </div>`
 })
-export class MainComponent implements OnInit, OnDestroy {
-
-    private socketService = inject(FakeSocketService)
+export class MainComponent implements OnDestroy {
     private router = inject(Router)
-
-    ngOnInit(): void {
-        this.socketService.patchOnlineUsers()
-    }
+    private onlineUserStore = inject(OnlineUserStore)
 
     ngOnDestroy(): void {
-        console.log('on destroy => unsubscribe stream online users')
-        this.socketService.unsubscribeStream()
+        this.onlineUserStore.unsubscribe()
     }
 
     showMenuBar() {

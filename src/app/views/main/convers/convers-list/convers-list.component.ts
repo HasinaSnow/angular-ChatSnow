@@ -61,7 +61,7 @@ import { OnlineUserStore } from '../../../../core/stores/user/online-user.store'
 export class ConversListComponent {
     private conversService = inject(ConversService)
     private store = inject(ConversStore)
-    onlines = inject(OnlineUserStore).OnlineUser
+    onlines = inject(OnlineUserStore).onlineUsers
     conversList = this.store.conversList
 
     items: MenuItem[] = [

@@ -2,12 +2,10 @@ import { inject, Injectable, signal, WritableSignal } from "@angular/core";
 import { AuthGateway } from "../../core/ports/auth.gateway";
 import { debounceTime } from "rxjs";
 import { Router } from "@angular/router";
-import { toSignal } from "@angular/core/rxjs-interop";
 import { ToastService } from "../services/toast.service";
 import { LoadingService } from "../services/loading.service";
 import { BreakpointService } from "../services/breakpoint.service";
-import { _FAKE_DATA_CONVERS, _FAKE_DATA_USERS, _FAKE_DATA_USERS_ONLINE } from "../../core/data/fake.data";
-import { ProfileGateway } from "../../core/ports/profile.gateway";
+import { _FAKE_DATA_CONVERS, _FAKE_DATA_USERS } from "../../core/data/fake.data";
 import { UserEntity } from "../../core/entities/user.entity";
 
 type Tsignup = {name: string, email: string, password: string}
