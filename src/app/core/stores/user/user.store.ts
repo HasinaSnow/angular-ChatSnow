@@ -1,19 +1,28 @@
-import { patchState, signalStore, withMethods, withState } from "@ngrx/signals";
+import { patchState, signalStore, withHooks, withMethods, withState } from "@ngrx/signals";
 import { UserEntity } from "../../entities/user.entity";
 import { UserGateway } from "../../ports/user.gateway";
 import { rxMethod } from "@ngrx/signals/rxjs-interop";
 import { inject } from "@angular/core";
-import { debounceTime, pipe, switchMap, tap } from "rxjs";
+import { debounceTime, pipe, Subscription, switchMap, tap } from "rxjs";
+import { WithEntityCrud } from "../with-entity-crud.store";
+import { UserSocketGateway } from "../../ports/online-user.gateway";
+import { setEntities } from "@ngrx/signals/entities";
 
 export const UserStore = signalStore(
+    WithEntityCrud<UserEntity, Partial<UserEntity>, Partial<UserEntity>>(UserGateway),
     withState({
         searchedUsers: [] as UserEntity[],
         oneUser: null as UserEntity|null,
         myProfile: null as UserEntity|null
     }),
-    withMethods((store, userGateway = inject(UserGateway)) => ({
-        patchProfile: (profile: UserEntity) => patchState(store, {myProfile: profile}),
-        searchByName: rxMethod<string>(
+    withMethods((
+        store,
+        userGateway = inject(UserGateway),
+        userSocketGateway = inject(UserSocketGateway)
+    ) => {
+        let sub: Subscription
+
+        const searchByName = rxMethod<string>(
             pipe(
                 debounceTime(400),
                 switchMap((param) => userGateway.searchByName(param)),
@@ -21,8 +30,9 @@ export const UserStore = signalStore(
                     patchState(store, {searchedUsers})
                 })
             )
-        ),
-        searchById: rxMethod<string>(
+        )
+
+        const searchById = rxMethod<string>(
             pipe(
                 switchMap((id) => userGateway.retrieveOne(id)),
                 tap(oneUser => {
@@ -30,5 +40,20 @@ export const UserStore = signalStore(
                 })
             )
         )
-    }))
+
+        const listenUpdatedUsers = () => {
+            console.log("Listen online users")
+            sub = userSocketGateway.on().subscribe(users => {
+                console.log("new updated users push")
+                patchState(store, setEntities(users))
+            })
+        }
+
+        const unsubscribe = () => {
+            console.log("Unsubscribe online users")
+            sub.unsubscribe()
+        }
+
+        return {searchById, searchByName, listenUpdatedUsers, unsubscribe}
+    })
 )

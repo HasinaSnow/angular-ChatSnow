@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ConversItemInlineComponent } from "./components/convers-item-inline.component";
+import { ConversationItemPrivateComponent } from "./components/convers-item-private.component";
 import { ConversService } from '../convers.service';
 import { MenuItem } from 'primeng/api';
 import { TooltipModule } from 'primeng/tooltip';
@@ -9,12 +9,11 @@ import { InputIcon } from "primeng/inputicon";
 import { InputText } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { ConversStore } from '../../../../core/stores/convers/convers.store';
-import { OnlineUserStore } from '../../../../core/stores/user/online-user.store';
 
 @Component({
     selector: 'app-convers-list',
     imports: [
-    ConversItemInlineComponent,
+    ConversationItemPrivateComponent,
     ItemConversComponent,
     TooltipModule,
     FormsModule,
@@ -34,8 +33,12 @@ import { OnlineUserStore } from '../../../../core/stores/user/online-user.store'
             <div class="w-full flex-1 flex flex-col gap-1 pb-6 overflow-auto">
                 <!-- inline convers list -->
                 <div class="w-full flex gap-3 min-h-min overflow-y-auto pb-3 px-2">
-                    @for (online of onlines(); track $index) {
-                        <app-convers-item-inline [name]="online.name" [urlAvatar]="online.urlAvatar" />
+                    @for (user of streamUsers(); track $index) {
+                        <app-convers-item-private 
+                            [name]="user.name"
+                            [urlAvatar]="user.urlAvatar"
+                            [isOnline]="user.isOnline"
+                            />
                     }
                 </div>
 
@@ -61,8 +64,8 @@ import { OnlineUserStore } from '../../../../core/stores/user/online-user.store'
 export class ConversListComponent {
     private conversService = inject(ConversService)
     private store = inject(ConversStore)
-    onlines = inject(OnlineUserStore).onlineUsers
     conversList = this.store.conversList
+    streamUsers = this.store.streamUsers
 
     items: MenuItem[] = [
         { label: 'Profile', icon: 'pi pi-user', routerLink: './profile' },

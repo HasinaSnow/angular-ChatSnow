@@ -3,8 +3,10 @@ import { HomeComponent } from './views/home/home.component';
 import { AuthGuard } from './shared/auth/auth.guard';
 import { ConversStore } from './core/stores/convers/convers.store';
 import { UserStore } from './core/stores/user/user.store';
-import { OnlineUserStore } from './core/stores/user/online-user.store';
 import { ProfileStore } from './core/stores/profile/profile.store';
+import { inject } from '@angular/core';
+import { ActivateUserListener } from './shared/resolvers/activate-user-listener.resolver';
+import { DeactivateUserListener } from './shared/resolvers/deactivate-user-listener.resolver';
 
 export const routes: Routes = [
     {
@@ -15,7 +17,9 @@ export const routes: Routes = [
     {
         path: '',
         canActivate: [AuthGuard],
-        providers: [ConversStore, UserStore, OnlineUserStore, ProfileStore],
+        providers: [ConversStore, UserStore, ProfileStore],
+        resolve: { userStream: ActivateUserListener },
+        canDeactivate: [DeactivateUserListener],
         children: [
             {
                 path: '',

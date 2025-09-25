@@ -84,8 +84,8 @@ export function RandomConversEntity(
             name: t=== 'group' ? faker.person.fullName() : null,
             type: t,
             participants: t === 'private'
-                ? p(2) as IConversPrtcipant[]
-                : p(faker.number.int({min: 2, max: 10})) as IConversPrtcipant[],
+                ? p(10) as IConversPrtcipant[]
+                : p(faker.number.int({min: 3, max: 10})) as IConversPrtcipant[],
             lastMsg: RandomConversLstMsg(),
             createdAt: faker.date.recent(),
             createdBy: faker.person.fullName(),

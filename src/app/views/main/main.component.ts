@@ -3,7 +3,7 @@ import { Router, RouterOutlet } from '@angular/router';
 import { MainSidebarComponent } from "./components/main-sidebar.component";
 import { CommonModule } from '@angular/common';
 import { MainMenubar } from "./components/main-menubar.component";
-import { OnlineUserStore } from '../../core/stores/user/online-user.store';
+import { UserStore } from '../../core/stores/user/user.store';
 
 @Component({
     selector: 'app-main',
@@ -33,13 +33,8 @@ import { OnlineUserStore } from '../../core/stores/user/online-user.store';
 
         </div>`
 })
-export class MainComponent implements OnDestroy {
+export class MainComponent {
     private router = inject(Router)
-    private onlineUserStore = inject(OnlineUserStore)
-
-    ngOnDestroy(): void {
-        this.onlineUserStore.unsubscribe()
-    }
 
     showMenuBar() {
         const paths = this.router.url.split('/')

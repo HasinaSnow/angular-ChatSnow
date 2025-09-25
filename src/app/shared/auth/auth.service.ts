@@ -67,6 +67,7 @@ export class AuthService {
                     this.userAuth.set(response.user)
                     this.router.navigateByUrl(this.conversUrl).then(() => {
                         this.loading.set(false)
+                        console.log('_Fake-convers => ', _FAKE_DATA_CONVERS)
                         this.toastService.show({
                             detail: 'Welome, you are connected.',
                             severity: 'success',

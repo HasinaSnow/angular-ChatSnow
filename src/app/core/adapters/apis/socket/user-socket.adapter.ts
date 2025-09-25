@@ -1,8 +1,8 @@
 import { Observable } from "rxjs";
-import { SocketGateway } from "../../ports/socket.gateway";
-import { UserEntity } from "../../entities/user.entity";
+import { UserEntity } from "../../../entities/user.entity";
+import { SocketGateway } from "../../../ports/socket.gateway";
 
-export class OnlineUserSocketAdapter extends SocketGateway<UserEntity[]> {
+export class UserSocketAdapter extends SocketGateway<UserEntity[]> {
     override emit(eventName: string, data: any): void {
         throw new Error("Method not implemented.");
     }
