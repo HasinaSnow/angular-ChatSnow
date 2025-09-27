@@ -2,7 +2,7 @@ import { Gateway } from "../ports/gateway";
 import { patchState, signalStoreFeature, withMethods } from "@ngrx/signals";
 import { removeEntity, setAllEntities, setEntities, setEntity, withEntities } from "@ngrx/signals/entities";
 import { rxMethod } from "@ngrx/signals/rxjs-interop";
-import { exhaustMap, map, pipe, switchMap, tap } from "rxjs";
+import { exhaustMap, map, of, pipe, switchMap, tap } from "rxjs";
 import { ProviderToken, inject } from "@angular/core";
 import { TUniqId } from "../../shared/types/uniq-id.type";
 import { WithDataLoaded } from "./with-data-loaded.store";
@@ -21,12 +21,15 @@ export function WithEntityCrud<entity extends {id: TUniqId}, dataCreate, dataUpd
                     })
                 )
             ),
-            getOne: rxMethod<string>(
-                pipe(
-                    switchMap((idEvent) => gateway.retrieveOne(idEvent)),
-                    tap(entity => entity ? patchState(store, setEntities<entity>([entity])) : null)
+            getOne: (id: TUniqId) => {
+                return of(id).pipe(
+                    switchMap(id => {
+                        const exists = store.entities().find(element => element.id === id)
+                        return exists ? of(exists) : gateway.retrieveOne(id)
+                    }),
+                    tap((result) => { if(result) patchState(store, setEntity(result)) })
                 )
-            ),
+            },
             addNew: rxMethod<dataCreate>(
                 pipe(
                     exhaustMap(dataCreate => gateway.addNew(dataCreate as dataCreate)),

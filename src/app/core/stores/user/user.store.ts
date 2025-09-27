@@ -42,7 +42,7 @@ export const UserStore = signalStore(
         )
 
         const listenUpdatedUsers = () => {
-            console.log("Listen online users")
+            console.log("Listen updated users")
             sub = userSocketGateway.on().subscribe(users => {
                 console.log("new updated users push")
                 patchState(store, setEntities(users))

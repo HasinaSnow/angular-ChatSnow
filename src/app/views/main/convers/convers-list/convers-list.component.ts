@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ConversationItemPrivateComponent } from "./components/convers-item-private.component";
 import { ConversService } from '../convers.service';
 import { MenuItem } from 'primeng/api';

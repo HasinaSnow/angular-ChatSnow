@@ -26,10 +26,10 @@ export class BreakpointService {
         const url = this.router.url
             if(!isMobile && url.startsWith('/mobile')) {
                 // this.router.navigateByUrl(url.replace('/mobile', ''), {replaceUrl: true})
-                this.router.navigate(['convers'])
+                this.router.navigate(['home'])
             } else if(isMobile && !url.startsWith('/mobile')) {
                 // this.router.navigateByUrl('/mobile' + url, {replaceUrl: true})
-                this.router.navigate(['mobile/convers'])
+                this.router.navigate(['mobile/home'])
             }
     }
 

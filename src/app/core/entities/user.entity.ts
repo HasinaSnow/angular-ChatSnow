@@ -15,39 +15,29 @@ export interface UserEntity {
     updatedAt: Date | null,
 };
 
-export function RandomUserEntity(fields: Partial<UserEntity>, count?: number): UserEntity|UserEntity[] {
-    const isOnline = () => faker.datatype.boolean()
-    const random = (): UserEntity => ({
+export function RandomUserEntity(fields?: Partial<UserEntity>): UserEntity {
+    const isOnline = faker.datatype.boolean()
+    return {
         id: faker.string.uuid(),
         name: faker.person.fullName(),
         email: faker.internet.email(),
-        urlAvatar: '',
+        urlAvatar: './images/pdp1.jpg',
         avatarName: '',
-        isOnline: isOnline(),
+        isOnline: isOnline,
         authTokenIds: [],
-        lastSeen: isOnline() ? null : faker.date.recent(),
+        lastSeen: isOnline ? null : faker.date.recent(),
         emailVerified: true,
         createdAt: faker.date.recent(),
         updatedAt: null,
         ...fields
-    })
-    const recentDate = () => faker.date.recent()
-    if(count) {
-        let arrays = [] as UserEntity[]
-        for (let i = 0; i < count; i++) {
-            const recent = recentDate()
-            arrays.push({...random(), ...{
-                createdAt: recent,
-                updatedAt: new Date(recent.getFullYear(), recent.getMonth(), recent.getDay() + 1)
-            }})
-        }
-        return arrays
-    } else return {
-        ...random(),
-        ...{
-            createdAt: recentDate(),
-            updatedAt: new Date(recentDate().getFullYear(), recentDate().getMonth(), recentDate().getDay() + 1)
-        }
     }
-
 }
+
+export function generateUsers(count: number, currentUser: {name: string, email: string}) : UserEntity[] {
+    const users = Array.from({length: count}, () => RandomUserEntity())
+    if(currentUser)
+        users.push(RandomUserEntity({name: currentUser.name, email: currentUser.email, createdAt: new Date()}))
+    return users
+}
+
+

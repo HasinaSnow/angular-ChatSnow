@@ -1,7 +1,7 @@
 import { Observable } from "rxjs";
-import { TUniqId } from "../../../shared/types/uniq-id.type";
-import { UserEntity } from "../../entities/user.entity";
-import { UserGateway } from "../../ports/user.gateway";
+import { TUniqId } from "../../../../shared/types/uniq-id.type";
+import { UserEntity } from "../../../entities/user.entity";
+import { UserGateway } from "../../../ports/user.gateway";
 
 export class UserHttpAdapter extends UserGateway {
 

@@ -13,7 +13,7 @@ import { ListMsgComponent } from "../../../../../shared/components/ui/list-msg.c
     imports: [HeaderConversMsgComponent, ListMsgComponent, Button],
     template: `
     <div class="flex-1 flex flex-col gap-2 overflow-auto h-full w-full">
-        <app-header-convers-msg [withCancel]="withCancel()" (onGoToInfo)="goToInfo()" (onCancel)="cancel()" />
+        <!-- <app-header-convers-msg [withCancel]="withCancel()" (onGoToInfo)="goToInfo()" (onCancel)="cancel()" /> -->
         <div #msgList class="flex-1 overflow-auto px-2">
             <app-list-msg/>
         </div>

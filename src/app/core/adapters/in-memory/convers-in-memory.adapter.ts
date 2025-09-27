@@ -1,34 +1,39 @@
-import { Observable, of } from "rxjs";
+import { BehaviorSubject, map, Observable, of } from "rxjs";
 import { TUniqId } from "../../../shared/types/uniq-id.type";
 import { ConversEntity } from "../../entities/convers.entity";
 import { ConversGateway } from "../../ports/convers.gateway";
 
 export class ConversInMemoryAdapter extends ConversGateway {
 
-    convers: ConversEntity[] = []
+    convers!: BehaviorSubject<ConversEntity[]>
 
-    withConvers(convers: ConversEntity[]) {
+    withConvers(convers: BehaviorSubject<ConversEntity[]>) {
         this.convers = convers
         return this
     }
 
     override retrieveAll(): Observable<ConversEntity[]> {
-        return of(this.convers)
+        return this.convers.asObservable()
     }
 
     override retrieveOne(id: TUniqId): Observable<ConversEntity | null> {
-        const convers = this.convers.find(chat => chat.id == id)
-        return of(convers ?? null)
+        return this.convers.asObservable().pipe(
+            map(convers => convers
+                .find(c => c.id === id) ?? null
+            )
+        )
     }
 
     override update(data: Partial<ConversEntity>, id: string): Observable<ConversEntity> {
-        this.convers = this.convers.map(chat => chat.id == id
-            ? ({...chat, ...data})
-            : chat
+        const convers = this.convers.getValue().map(c => c.id === id
+            ? ({...c, ...data})
+            : c
         )
-        const convers = this.convers.find(chat => chat.id == id)
-        if(convers) return of(convers)
-        else throw new Error('categ not found')
+        const existingConvers = convers.find(conv => conv.id === id)
+        if(existingConvers) {
+            this.convers.next(convers)
+            return of(existingConvers)
+        } else throw new Error('Conversation not found')
     }
 
     override addNew(data: Partial<ConversEntity>): Observable<ConversEntity> {
@@ -38,6 +43,7 @@ export class ConversInMemoryAdapter extends ConversGateway {
             type: "private",
             urlAvatar: null,
             participants: [],
+            exParticipants: [],
             lastMsg: null,
             createdAt: new Date(),
             createdBy: "",
@@ -45,12 +51,15 @@ export class ConversInMemoryAdapter extends ConversGateway {
             updatedBy: null,
             ...data
         }
-        this.convers.push(newConvers)
+        const current = this.convers.getValue()
+        current.push(newConvers)
+        this.convers.next(current)
         return of(newConvers)
     }
 
     override remove(id: string): Observable<void> {
-        this.convers = this.convers.filter(chat => chat.id !== id)
+        const current = this.convers.getValue().filter(c => c.id !== id)
+        this.convers.next(current)
         return of()
     }
 

@@ -1,4 +1,4 @@
-import { signalStore, withComputed, withHooks, withMethods, withState } from "@ngrx/signals";
+import { signalStore, withComputed, withHooks, withMethods } from "@ngrx/signals";
 import { WithEntityCrud } from "../with-entity-crud.store";
 import { ConversEntity } from "../../entities/convers.entity";
 import { ConversGateway } from "../../ports/convers.gateway";
@@ -8,7 +8,7 @@ import { UserStore } from "../user/user.store";
 
 export const ConversStore = signalStore(
     WithEntityCrud<ConversEntity, Partial<ConversEntity>, Partial<ConversEntity>>(ConversGateway),
-    withMethods((store) => ({})),
+    withMethods((store, conversGateway = inject(ConversGateway)) => ({})),
     withComputed((
         store,
         userStore = inject(UserStore),
@@ -21,9 +21,9 @@ export const ConversStore = signalStore(
                 return store.entities().map((convers) => ({
                     ...convers,
                     name: convers.name
-                        ?? convers.type == 'group' 
-                            ? convers.participants.map(p => p.name).join(', ')
-                            : convers.participants.find(p => p.idUser != myId)?.name as string,
+                        ?? convers.type === 'group'
+                            ? convers.participants.filter(p => p.idUser !== myId).map(p => p.name).join(', ')
+                            : convers.participants.filter(p => p.idUser !== myId).map(p => p.name).join(''),
                     isOnline: users
                         .filter(user => user.isOnline)
                         .map(user => user.id)

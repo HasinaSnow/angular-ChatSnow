@@ -9,7 +9,7 @@ import { IMsgReaction } from "../reactions.component";
     <div #chatContent class="lg:px-4 flex pt-1 pb-9 flex-col gap-3 overflow-auto">
         <ng-content select="[msg-info]"></ng-content>
         @for (msg of msgList(); track $index) {
-            <app-item-msg [withInteraction]="msg.withInteraction" [reactions]="reactions" [msg]="msg.msg" [isReceived]="msg.isReceived"/>
+            <app-item-msg [msgItem]="msg" />
         }
     </div>`,
     imports: [ItemMsgComponent]
@@ -19,7 +19,6 @@ export class ListMsgComponent {
     private scrollService = inject(ScrollService)
 
     msgList = input<IItemMsg[]>()
-    interaction = signal<boolean>(true)
 
     reactions: IMsgReaction[] = [
         {

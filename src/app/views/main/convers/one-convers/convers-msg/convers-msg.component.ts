@@ -1,10 +1,11 @@
-import { Component, computed, ElementRef, inject, OnInit, viewChild } from '@angular/core';
+import { Component, computed, ElementRef, inject, OnInit, Signal, viewChild } from '@angular/core';
 import { ConversService } from '../../convers.service';
 import { HeaderConversMsgComponent } from '../../../../../shared/components/ui/header-convers-msg.component';
 import { ConversMsgFormComponent } from './components/convers-msg-form.component';
 import { BreakpointService } from '../../../../../shared/services/breakpoint.service';
 import { Router } from '@angular/router';
 import { ListMsgComponent } from '../../../../../shared/components/ui/list-msg.component';
+import { OneConversStore } from '../../../../../core/stores/convers/one-convers.store';
 
 @Component({
     selector: 'app-convers-msg',
@@ -15,11 +16,11 @@ import { ListMsgComponent } from '../../../../../shared/components/ui/list-msg.c
 ],
     template: `<div class="flex flex-col overflow-auto h-full w-full">
         <!-- header -->
-        <app-header-convers-msg [hiddenInfoBtn]="hiddenBtnInfo()" (onGoToInfo)="goToConversInfo()" (onCancel)="cancel()" />
+        <app-header-convers-msg [hiddenInfoBtn]="hiddenBtnInfo()" (onGoToInfo)="goToConversInfo()" (onCancel)="cancel()" [oneConvers]="oneConvers()" />
 
         <!-- msg list -->
         <div #chatContent class="px-2 lg:px-4 pt-3 flex flex-1 pb-9 flex-col gap-2 overflow-auto">
-           <app-list-msg [msgList]=""/>
+           <app-list-msg [msgList]="msgItems()"/>
         </div>
 
         <!-- footer -->
@@ -29,12 +30,15 @@ import { ListMsgComponent } from '../../../../../shared/components/ui/list-msg.c
     </div>`
 })
 export class ConversMsgComponent implements OnInit {
+    private chatContent = viewChild<ElementRef<HTMLElement>>('chatContent')
+
     private conversService = inject(ConversService)
     private router = inject(Router)
     private bpService = inject(BreakpointService)
-    private chatContent = viewChild<ElementRef<HTMLElement>>('chatContent')
-    idConvers = ''
+    private store = inject(OneConversStore)
 
+    oneConvers = this.store.oneConvers
+    msgItems = this.store.msgItems
     hiddenBtnInfo = computed<boolean>(() => !this.bpService.isMobile() && this.bpService.screenWidth() >= this.bpService.breakpoint.lg)
 
     ngOnInit() {

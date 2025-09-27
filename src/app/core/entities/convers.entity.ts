@@ -8,6 +8,7 @@ export interface ConversEntity {
     type: 'private'|'group',
     urlAvatar: string|null,
     participants: IConversPrtcipant[],
+    exParticipants: IConversPrtcipant[],
     lastMsg: IConversLastMsg|null,
     createdAt: Date,
     createdBy: TUniqId,
@@ -30,31 +31,15 @@ export interface IConversLastMsg {
     createdAt: Date
 }
 
-export function RandomConversPrtcipant(fields?: Partial<IConversPrtcipant>, count?: number, randomUsers?: () => UserEntity[]): IConversPrtcipant|IConversPrtcipant[] {
-    const random = (fields?: Partial<IConversPrtcipant>): IConversPrtcipant => ({
+export function RandomConversPrtcipant(fields?: Partial<IConversPrtcipant>): IConversPrtcipant {
+    const randomUnreadCount = () => faker.number.int({min: 0, max: 15})
+    return {
         idUser: faker.string.uuid(),
         urlAvatar: './images/pdp1.jpg',
-        unreadCount: faker.number.int({min: 0, max: 15}),
+        unreadCount: randomUnreadCount(),
         name: faker.person.fullName(),
         ...fields
-    })
-    if(count) {
-        let arrays: IConversPrtcipant[] = []
-        if(randomUsers) {
-            const prtcipants = randomUsers().map(user => random({
-                idUser: user.id,
-                urlAvatar: user.urlAvatar,
-                name: user.name
-            }))
-            for (let i = 0; i < count; i++) {
-                const p = faker.helpers.arrayElement(prtcipants)
-                arrays = [...arrays, p]
-            }
-        } else {
-            for (let i = 0; i < count; i++) arrays.push(random(fields))
-        }
-        return arrays
-    } else return random(fields)
+    }
 
 }
 
@@ -71,35 +56,39 @@ export function RandomConversLstMsg(fields?: Partial<IConversLastMsg>): IConvers
 
 export function RandomConversEntity(
     fields: Partial<ConversEntity>,
-    count?: number,
-    randomPrtcipants?: IConversPrtcipant[]
-): ConversEntity|ConversEntity[] {
-    const type = () => faker.helpers.arrayElement(['group','private'])
-    const random = (t: 'group'|'private'): ConversEntity => {
-        let p = (count: number) => RandomConversPrtcipant({}, count)
-        if(randomPrtcipants)
-            p = (count: number) => faker.helpers.arrayElements(randomPrtcipants, count)
-        return {
-            id: faker.string.uuid(),
-            name: t=== 'group' ? faker.person.fullName() : null,
-            type: t,
-            participants: t === 'private'
-                ? p(10) as IConversPrtcipant[]
-                : p(faker.number.int({min: 3, max: 10})) as IConversPrtcipant[],
-            lastMsg: RandomConversLstMsg(),
-            createdAt: faker.date.recent(),
-            createdBy: faker.person.fullName(),
-            urlAvatar: null,
-            updatedAt: null,
-            updatedBy: null,
-            ...fields
-        }
+): ConversEntity {
+    return {
+        id: faker.string.uuid(),
+        name: null,
+        type: 'private',
+        urlAvatar: './images/pdp1.jpg',
+        participants: [],
+        exParticipants: [],
+        lastMsg: null,
+        createdAt: faker.date.recent(),
+        createdBy: "",
+        updatedAt: null,
+        updatedBy: null,
+        ...fields
     }
+}
 
-    if(count) {
-        let arrays = [] as ConversEntity[]
-        for (let i = 0; i < count; i++) arrays.push(random(type())) 
-        return arrays
-    } else return random(type())
+export function generateConvers(users: UserEntity[], count: number, currentUserId: TUniqId): ConversEntity[] {
+    const allPartcipants: IConversPrtcipant[] = users.map(user => RandomConversPrtcipant({
+        idUser: user.id,
+        name: user.name
+    }))
 
+    return Array.from({length: count}, () => {
+        const type = faker.helpers.arrayElement(['group','private'])
+        const partcipants: IConversPrtcipant[] = type === 'private'
+            ? faker.helpers.arrayElements(allPartcipants, 2)
+            : faker.helpers.arrayElements(allPartcipants, {min: 3, max: 5})
+
+        partcipants.pop()
+        partcipants.unshift(allPartcipants.find(p => p.idUser === currentUserId) as IConversPrtcipant)
+        return RandomConversEntity({
+            participants: partcipants
+        })
+    })
 }

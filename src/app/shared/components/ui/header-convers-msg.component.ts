@@ -1,4 +1,4 @@
-import { Component, inject, input, output, signal, WritableSignal } from '@angular/core';
+import { Component, computed, inject, input, output, signal, WritableSignal } from '@angular/core';
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
 import { TextareaModule } from 'primeng/textarea';
@@ -6,10 +6,12 @@ import { IconField } from "primeng/iconfield";
 import { InputIcon } from "primeng/inputicon";
 import { InputText } from 'primeng/inputtext';
 import { BreakpointService } from '../../services/breakpoint.service';
+import { ConversEntity } from '../../../core/entities/convers.entity';
+import { LittleNamePipe } from '../../pipes/little-name.pipe';
 
 @Component({
     selector: 'app-header-convers-msg',
-    imports: [AvatarModule, ButtonModule, TextareaModule, IconField, InputIcon, InputText],
+    imports: [AvatarModule, ButtonModule, TextareaModule, IconField, InputIcon, InputText, LittleNamePipe],
     template: `
     <div class="w-full flex items-center justify-between py-3 px-2 gap-1 border-b border-surface">
         @if(!isSearching()) {
@@ -18,10 +20,14 @@ import { BreakpointService } from '../../services/breakpoint.service';
                 @if(withCancel()) {
                     <p-button (onClick)="onCancel.emit()" icon="pi pi-arrow-left text-muted-color" rounded="true" size="large" variant="text" severity="secondary" />
                 }
-                <p-avatar image="./favicon.ico" class="mr-2" size="large" shape="circle"/>
+                <p-avatar image="{{oneConvers()?.urlAvatar}}" class="mr-2" size="large" shape="circle"/>
                 <div class="flex-1">
-                    <div class="text-color font-medium leading-6 cursor-pointer hover:text-muted-color-emphasis transition-colors">PrimeTek</div>
-                    <div class="text-muted-color leading-5 line-clamp-1 mt-1">Cody Fisher, Esther Howard, Jerome Bell, Kristin Watson, Ronald Richards, Darrell Steward</div>
+                    <div class="text-color line-clamp-1 font-medium leading-6 cursor-pointer hover:text-muted-color-emphasis transition-colors">{{oneConvers()?.name}}</div>
+                    <div class="text-muted-color leading-5 line-clamp-1 mt-1">
+                        @for (pName of participantNames(); track $index) {
+                            <span>{{pName | littleName}} ,</span>
+                        }
+                    </div>
                 </div>
             </div>
             <!-- right -->
@@ -47,6 +53,12 @@ export class HeaderConversMsgComponent {
     private bpService = inject(BreakpointService)
     onCancel = output()
     onGoToInfo = output()
+    oneConvers = input.required<ConversEntity|null>()
+
+    participantNames = computed(() => {
+        return this.oneConvers()?.participants.map(p => p.name)
+    })
+
     isSearching: WritableSignal<boolean> = signal(false)
     withCancel = input<boolean>(this.withCancelBtn())
     hiddenInfoBtn = input<boolean>(false)

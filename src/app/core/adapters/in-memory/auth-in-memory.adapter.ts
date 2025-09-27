@@ -1,6 +1,6 @@
 import { RandomUserEntity, UserEntity } from "../../entities/user.entity";
 import { delay, mergeMap, Observable, of, throwError, timer } from "rxjs";
-import { _FAKE_DATA_USERS, pushUserInData } from "../../data/fake.data";
+import { _FAKE_DATA_CONVERS, _FAKE_DATA_MSGS, _FAKE_DATA_USERS, generateDataUsers } from "../../data/fake.data";
 import { faker } from "@faker-js/faker";
 import { LoginEntity } from "../../entities/login.entity";
 import { AuthGateway } from "../../ports/auth.gateway";
@@ -26,9 +26,8 @@ export class AuthInMemoryAdapter extends AuthGateway {
         if(userExists)
             return timer(DelayMs).pipe(mergeMap(() => throwError(() => new Error('user account already existing')).pipe(delay(DelayMs))))
         else {
-            const newUser = RandomUserEntity({name, email}) as UserEntity
-            pushUserInData(newUser)
             this.accounts.push({name, email, password})
+            generateDataUsers(10, {name, email})
             return of(null).pipe(delay(DelayMs))
         }
     }
@@ -38,8 +37,8 @@ export class AuthInMemoryAdapter extends AuthGateway {
         if(!userExists || userExists.password !== password)
             return timer(DelayMs).pipe(mergeMap(() => throwError(() => new Error('invalid credentials')).pipe(delay(DelayMs))))
         else {
-            const profile = _FAKE_DATA_USERS.find(user => user.email === email)
-            console.log('fake users => ', _FAKE_DATA_USERS)
+            const profile = _FAKE_DATA_USERS.getValue().find(user => user.email === email)
+            console.log('fake users => ', profile)
             if(!profile)
             return timer(DelayMs).pipe(mergeMap(() => throwError(() => new Error('internal error, profile not found')).pipe(delay(DelayMs))))
             const result: LoginEntity = {

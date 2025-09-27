@@ -4,10 +4,11 @@ import { AvatarModule } from 'primeng/avatar';
 import { BadgeModule } from 'primeng/badge';
 import { IConversLastMsg } from '../../../core/entities/convers.entity';
 import { DatePipe } from '@angular/common';
+import { LittleNamePipe } from '../../pipes/little-name.pipe';
 
 @Component({
     selector: 'app-item-convers',
-    imports: [BadgeModule, AvatarModule, RouterLink, RouterLinkActive, DatePipe],
+    imports: [BadgeModule, AvatarModule, RouterLink, RouterLinkActive, DatePipe, LittleNamePipe],
     template: `
         <div (click)="onSelect.emit()" [routerLink]="['./', idSelected()]" routerLinkActive="bg-surface-200 dark:bg-surface-800 text-surface-800 dark:text-surface-100" class="p-3 flex gap-2 items-center hover:bg-emphasis transition-all duration-200 cursor-pointer rounded overflow-hidden">
             <div class="relative flex items-center flex-col justify-center">
@@ -25,7 +26,7 @@ import { DatePipe } from '@angular/common';
                     @if(unreadCount() > 0) {
                         <p-badge size="small" value="{{unreadCount() > 9 ? '+9': unreadCount()}}" styleClass="bg-primary !rounded-full !p-0.5 !flex !items-center !w-fit !justify-center !text-xs"/>
                     }
-                    <span class="font-semibold line-clamp-1 max-w-16">{{litleAuthorName()}}:</span>
+                    <span class="font-semibold line-clamp-1 max-w-16">{{ lastMsg()?.authorName | littleName}}:</span>
                     <span class="flex-1 line-clamp-1">{{lastMsg()?.content}}</span>
 
                 </p>
@@ -43,9 +44,4 @@ export class ItemConversComponent {
     createdAt = input.required<Date>()
     isOnline = input.required<boolean>()
     unreadCount = input.required<number>()
-
-    litleAuthorName = computed(() => {
-        const names = this.lastMsg()?.authorName as string
-        return names.split(' ').reduce((p, n) => p.length < n.length ? p : n)
-    })
 }

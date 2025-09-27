@@ -1,7 +1,8 @@
-import { interval, map, Observable } from "rxjs";
+import { interval, map, Observable, switchMap } from "rxjs";
 import { SocketGateway } from "../../ports/socket.gateway";
-import { _FAKE_RANDOM_STREAM_USERS } from "../../data/fake.data";
-import { UserEntity } from "../../entities/user.entity";
+import { _FAKE_DATA_USERS } from "../../data/fake.data";
+import { RandomUserEntity, UserEntity } from "../../entities/user.entity";
+import { faker } from "@faker-js/faker";
 
 export class UserSocketInMemoryAdapter extends SocketGateway<UserEntity[]> {
 
@@ -10,8 +11,14 @@ export class UserSocketInMemoryAdapter extends SocketGateway<UserEntity[]> {
     }
 
     on(): Observable<UserEntity[]> {
-        return interval(4000).pipe(
-            map(_ => _FAKE_RANDOM_STREAM_USERS())
+        return _FAKE_DATA_USERS.asObservable().pipe(
+            switchMap(users => interval(4000)
+                .pipe(map(_ => users
+                    .map(user => RandomUserEntity({
+                        ...user,
+                        isOnline: faker.datatype.boolean({probability: 0.6})
+                    }))
+                )))
         )
     }
 

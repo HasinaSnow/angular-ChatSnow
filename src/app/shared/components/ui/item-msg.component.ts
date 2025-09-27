@@ -8,47 +8,58 @@ import { BreakpointService } from '../../services/breakpoint.service';
 import { PopupComponent } from "./popup.component";
 import { PopupService } from '../../services/popup.service';
 import { MsgOptionsComponent } from "../msg-option.component";
+import { TUniqId } from '../../types/uniq-id.type';
+import { IReplyToMsg, TMsgType } from '../../../core/entities/msg.entity';
+import { IConversPrtcipant } from '../../../core/entities/convers.entity';
+import { LittleNamePipe } from '../../pipes/little-name.pipe';
 
 export interface IItemMsg {
     isReceived: boolean,
-    replytoMsg: string,
-    msg: string,
+    content: string,
     reactions: IMsgReaction[],
     withInteraction: boolean,
+    id: TUniqId,
+    type: TMsgType,
+    seenBy: IConversPrtcipant[],
+    idConvers: TUniqId,
+    author: IConversPrtcipant,
+    replyToMsg: IReplyToMsg|null, // permet de repondre à un message spécifique
+    attachments: string[],
+    timestamp: Date,
 }
 
 @Component({
     selector: 'app-item-msg',
-    imports: [AvatarModule, Message, EmojiComponent, PopupComponent, MsgOptionsComponent],
+    imports: [AvatarModule, Message, EmojiComponent, PopupComponent, MsgOptionsComponent, LittleNamePipe],
     template: `
-    @if(isReceived()) {
+    @if(msgItem().isReceived) {
         <div class="flex items-start gap-2 w-fit max-w-[75%]">
             <div class="flex items-center gap-2 py-1 sticky top-0 transition-all">
                 <p-avatar image="./favicon.ico" styleClass="h-10 w-10 text-sm font-medium" size="normal" shape="circle"/>
             </div>
-            @if(replytoMsg()) {
+            @if(msgItem().replyToMsg) {
                 <div class="mt-1">
                     <small class="text-muted-color px-2 flex items-center gap-2">
                         <i class="pi pi-undo" style="font-size: .8rem;"></i>
-                        <strong>Marc h.</strong> a répondu à <strong>Hari</strong>
+                        <strong>{{ msgItem().author.name | littleName }}</strong> a répondu à <strong>{{ msgItem().replyToMsg?.author | littleName}}</strong>
                     </small>
                     <div class="flex-1 w-full mt-6 pt-3 relative">
                         <div class="absolute z-0 -top-5 pb-4 w-fit border border-surface rounded-br-2xl rounded-t-2xl">
                             <p class="w-full line-clamp-1 text-sm text-muted-color px-3 pt-1">
-                                {{replytoMsg()}}
+                                {{msgItem().replyToMsg?.content}}
                             </p>
                         </div>
                         <div class="relative flex justify-end">
                             <p-message (click)="togglePopupMsgOptions($event)" size="small" styleClass=" cursor-pointerrelative pb-0.5 w-fit !bg-surface-0 dark:!bg-surface-950 relative z-10 max-w-full" severity="primary">
-                                {{msg()}}
+                                {{msgItem().content}}
                             </p-message>
-                            @if(reactions().length > 0) {
+                            @if(msgItem().reactions.length > 0) {
                                 <div class="absolute z-100 w-fit -bottom-6 rounded-full right-0 border border-surface px-1 text-color bg-surface dark:!bg-surface-950">
                                     <span (click)="openReactions()" class="flex cursor-pointer gap-1 items-center pt-0.5 pb-1 text-xs font-bold">
                                         @for (emoji of reactionEmojis(); track $index) {
                                             <ngx-emoji [size]="17" [isNative]="true" [emoji]="emoji" ></ngx-emoji>
                                         }
-                                        {{reactions().length}}
+                                        {{msgItem().reactions.length}}
                                     </span>
                                 </div>
                             }
@@ -58,15 +69,15 @@ export interface IItemMsg {
             } @else {
                 <div class="relative flex justify-end">
                     <p-message (click)="togglePopupMsgOptions($event)" size="small" styleClass="cursor-pointer !bg-surface-0 pb-0.5 dark:!bg-surface-950" severity="secondary">
-                        {{msg()}}
+                        {{msgItem().content}}
                     </p-message>
-                    @if(reactions().length > 0) {
+                    @if(msgItem().reactions.length > 0) {
                         <div class="absolute z-100 w-fit -bottom-6 rounded-full right-0 border border-surface px-1 text-color bg-surface-100 dark:!bg-surface-950">
                             <span (click)="openReactions()" class="flex cursor-pointer gap-1 items-center pt-0.5 pb-1 text-xs font-bold">
                                 @for (emoji of reactionEmojis(); track $index) {
                                     <ngx-emoji [size]="17" [isNative]="true" [emoji]="emoji" ></ngx-emoji>
                                 }
-                                {{reactions().length}}
+                                {{msgItem().reactions.length}}
                             </span>
                         </div>
                     }
@@ -75,29 +86,29 @@ export interface IItemMsg {
         </div>
     } @else {
         <div class="flex flex-row-reverse py-1 ml-auto items-start gap-2 w-fit max-w-[75%]">
-            @if(replytoMsg()) {
+            @if(msgItem().replyToMsg) {
                 <div class="mt-1">
                     <small class="text-muted-color px-2 flex items-center gap-2">
                         <i class="pi pi-undo" style="font-size: .8rem;"></i>
-                        <strong>Vous</strong> avez répondu à <strong>Hari</strong>
+                        <strong>{{ msgItem().author.name | littleName }}</strong> avez répondu à <strong>{{ msgItem().replyToMsg?.author | littleName}}</strong>
                     </small>
                     <div class="flex-1 w-full mt-6 pt-3 relative">
                         <div class="absolute right-0 z-0 -top-5 pb-4 w-fit border border-surface rounded-bl-2xl rounded-t-2xl">
                             <p class="w-full line-clamp-1 text-sm text-muted-color px-3 pt-1">
-                                {{replytoMsg()}}
+                                {{msgItem().replyToMsg?.content}}
                             </p>
                         </div>
                         <div class="relative flex justify-end">
                             <p-message (click)="togglePopupMsgOptions($event)" size="small" styleClass="cursor-pointer w-fit pb-0.5 !bg-surface-300 dark:!bg-surface-800 relative z-10 max-w-full" severity="secondary">
-                                {{msg()}}
+                                {{msgItem().content}}
                             </p-message>
-                            @if(reactions().length > 0) {
+                            @if(msgItem().reactions.length > 0) {
                                 <div class="absolute z-100 w-fit -bottom-6 rounded-full right-0 border border-surface px-1 text-color bg-surface-300 dark:!bg-surface-800">
                                     <span (click)="openReactions()" class="flex cursor-pointer gap-1 items-center pt-0.5 pb-1 text-xs font-bold">
                                         @for (emoji of reactionEmojis(); track $index) {
                                             <ngx-emoji [size]="17" [isNative]="true" [emoji]="emoji" ></ngx-emoji>
                                         }
-                                        {{reactions().length}}
+                                        {{msgItem().reactions.length}}
                                     </span>
                                 </div>
                             }
@@ -107,15 +118,15 @@ export interface IItemMsg {
             } @else {
                 <div class="relative flex justify-end">
                     <p-message (click)="togglePopupMsgOptions($event)" size="small" styleClass="cursor-pointer relative pb-0.5 !bg-surface-0 dark:!bg-surface-950">
-                        {{msg()}}
+                        {{msgItem().content}}
                     </p-message>
-                    @if(reactions().length > 0) {
+                    @if(msgItem().reactions.length > 0) {
                         <div class="absolute z-100 w-fit -bottom-6 rounded-full right-0 border border-surface px-1 text-color bg-surface-300 dark:!bg-surface-800">
                             <span (click)="openReactions()" class="flex-row-reverse flex cursor-pointer gap-1 items-center pt-0.5 pb-1 text-xs font-bold">
                                 @for (emoji of reactionEmojis(); track $index) {
                                     <ngx-emoji [size]="17" [isNative]="true" [emoji]="emoji" ></ngx-emoji>
                                 }
-                                {{reactions().length}}
+                                {{msgItem().reactions.length}}
                             </span>
                         </div>
                     }
@@ -127,18 +138,14 @@ export interface IItemMsg {
 
     <app-popup #popupMsgOptions>
         <div popupContent>
-            <app-msg-options (onClosePopupOptions)="closePopupOptions()" [isReceived]="isReceived()"></app-msg-options>
+            <app-msg-options (onClosePopupOptions)="closePopupOptions()" [isReceived]="msgItem().isReceived"></app-msg-options>
         </div>
     </app-popup>
     `
 })
 export class ItemMsgComponent implements OnInit {
-    isReceived = input.required<boolean>()
-    replytoMsg = input<string>()
-    msg = input.required<string>()
-    reactions = input<IMsgReaction[]>([])
-    withInteraction = input<boolean>()
-    reactionEmojis = computed(() => [...new Set(this.reactions().map(reaction => reaction.emoji))])
+    msgItem = input.required<IItemMsg>()
+    reactionEmojis = computed(() => [...new Set(this.msgItem().reactions.map(reaction => reaction.emoji))])
 
     private bpService = inject(BreakpointService)
     private dialogService = inject(DialogService)
@@ -153,7 +160,7 @@ export class ItemMsgComponent implements OnInit {
         this.ref = this.dialogService.open(ReactionsComponent, {
             header: 'Reactions',
             inputValues: {
-                reactions: this.reactions
+                reactions: this.msgItem().reactions
             },
             modal: true,
             closable: true,
@@ -167,8 +174,8 @@ export class ItemMsgComponent implements OnInit {
 
     togglePopupMsgOptions($event: MouseEvent) {
         console.log('popup msg option')
-        if(this.withInteraction())
-            this.popupService.togglePopup(this.popupMsgOptions, $event, this.isReceived() ? 'bottom-right': 'bottom-left')
+        if(this.msgItem().withInteraction)
+            this.popupService.togglePopup(this.popupMsgOptions, $event, this.msgItem().isReceived ? 'bottom-right': 'bottom-left')
     }
 
     closePopupOptions(){

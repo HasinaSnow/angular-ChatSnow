@@ -1,41 +1,55 @@
-import { Observable, of } from "rxjs";
+import { BehaviorSubject, map, Observable, of } from "rxjs";
 import { TUniqId } from "../../../shared/types/uniq-id.type";
 import { UserEntity } from "../../entities/user.entity";
 import { UserGateway } from "../../ports/user.gateway";
 
 export class UserInMemoryAdapter extends UserGateway {
 
-    users: UserEntity[] = []
+    users!: BehaviorSubject<UserEntity[]>
 
-    withUsers(users: UserEntity[]) {
+    withUsers(users: BehaviorSubject<UserEntity[]>) {
         this.users = users
         return this
     }
 
     override retrieveByIds(ids: TUniqId[]): Observable<UserEntity[]> {
-        return of(this.users.filter(user => ids.includes(user.id)))
+        return this.users.asObservable().pipe(
+            map(users => users.
+                filter(user => ids.includes(user.id))
+            )
+        )
     }
 
     override searchByName(key: string): Observable<UserEntity[]> {
-        return of(this.users.filter(user => user.name.includes(key)))
+        return this.users.asObservable().pipe(
+            map(users => users
+                .filter(user => user.name.includes(key))
+            )
+        )
     }
+
     override retrieveAll(): Observable<UserEntity[]> {
         return of([] as UserEntity[])
     }
 
     override retrieveOne(id: TUniqId): Observable<UserEntity | null> {
-        const user = this.users.find(user => user.id === id)
-        return of(user ?? null)
+        return this.users.asObservable().pipe(
+            map(users => users
+                .find(user => user.id === id) ?? null
+            )
+        )
     }
 
     override update(data: Partial<UserEntity>, id: string): Observable<UserEntity> {
-        this.users = this.users.map(user => user.id === id
+        const users = this.users.getValue().map(user => user.id === id
             ? ({...user, ...data})
             : user
         )
-        const user = this.users.find(user => user.id === id)
-        if(user) return of(user)
-        else throw new Error('User not found')
+        const user = users.find(user => user.id === id)
+        if(user) {
+            this.users.next(users)
+            return of(user)
+        } else throw new Error('User not found')
     }
 
     override addNew(data: Partial<UserEntity>): Observable<UserEntity> {
@@ -53,12 +67,15 @@ export class UserInMemoryAdapter extends UserGateway {
             updatedAt: null,
             ...data
         }
-        this.users.push(newUser)
+        const current = this.users.getValue()
+        current.push(newUser)
+        this.users.next(current)
         return of(newUser)
     }
 
     override remove(id: string): Observable<void> {
-        this.users = this.users.filter(user => user.id !== id)
+        const current = this.users.getValue().filter(user => user.id !== id)
+        this.users.next(current)
         return of()
     }
 

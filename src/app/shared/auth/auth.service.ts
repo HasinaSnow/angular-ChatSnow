@@ -5,7 +5,6 @@ import { Router } from "@angular/router";
 import { ToastService } from "../services/toast.service";
 import { LoadingService } from "../services/loading.service";
 import { BreakpointService } from "../services/breakpoint.service";
-import { _FAKE_DATA_CONVERS, _FAKE_DATA_USERS } from "../../core/data/fake.data";
 import { UserEntity } from "../../core/entities/user.entity";
 
 type Tsignup = {name: string, email: string, password: string}
@@ -67,7 +66,6 @@ export class AuthService {
                     this.userAuth.set(response.user)
                     this.router.navigateByUrl(this.conversUrl).then(() => {
                         this.loading.set(false)
-                        console.log('_Fake-convers => ', _FAKE_DATA_CONVERS)
                         this.toastService.show({
                             detail: 'Welome, you are connected.',
                             severity: 'success',

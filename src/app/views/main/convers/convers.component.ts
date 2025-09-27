@@ -46,7 +46,7 @@ export class ConversComponent implements OnInit {
 
     ngOnInit(): void {
         if(!this.bpService.isMobile())
-            this.router.navigateByUrl('/convers/bf')
+            this.router.navigateByUrl('/convers/')
     }
 
     addConvers() {
