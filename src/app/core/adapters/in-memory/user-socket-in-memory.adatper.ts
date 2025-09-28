@@ -1,4 +1,4 @@
-import { interval, map, Observable, switchMap } from "rxjs";
+import { interval, map, Observable, of, switchMap } from "rxjs";
 import { SocketGateway } from "../../ports/socket.gateway";
 import { _FAKE_DATA_USERS } from "../../data/fake.data";
 import { RandomUserEntity, UserEntity } from "../../entities/user.entity";
@@ -20,6 +20,8 @@ export class UserSocketInMemoryAdapter extends SocketGateway<UserEntity[]> {
                     }))
                 )))
         )
+        // const users = _FAKE_DATA_USERS.getValue()
+        // return of(users.map(user => RandomUserEntity({...user})))
     }
 
 }

@@ -1,4 +1,4 @@
-import { Component, computed, ElementRef, inject, OnInit, Signal, viewChild } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { ConversService } from '../../convers.service';
 import { HeaderConversMsgComponent } from '../../../../../shared/components/ui/header-convers-msg.component';
 import { ConversMsgFormComponent } from './components/convers-msg-form.component';
@@ -6,20 +6,22 @@ import { BreakpointService } from '../../../../../shared/services/breakpoint.ser
 import { Router } from '@angular/router';
 import { ListMsgComponent } from '../../../../../shared/components/ui/list-msg.component';
 import { OneConversStore } from '../../../../../core/stores/convers/one-convers.store';
+import { AutoScrollBottomDirective } from '../../../../../shared/directives/auto-scroll-bottom.directive';
 
 @Component({
     selector: 'app-convers-msg',
     imports: [
     HeaderConversMsgComponent,
     ConversMsgFormComponent,
-    ListMsgComponent
+    ListMsgComponent,
+    AutoScrollBottomDirective
 ],
     template: `<div class="flex flex-col overflow-auto h-full w-full">
         <!-- header -->
         <app-header-convers-msg [hiddenInfoBtn]="hiddenBtnInfo()" (onGoToInfo)="goToConversInfo()" (onCancel)="cancel()" [oneConvers]="oneConvers()" />
 
         <!-- msg list -->
-        <div #chatContent class="px-2 lg:px-4 pt-3 flex flex-1 pb-9 flex-col gap-2 overflow-auto">
+        <div autoScrollBottom class="px-2 lg:px-4 pt-3 flex flex-1 pb-9 flex-col gap-2 overflow-y-auto">
            <app-list-msg [msgList]="msgItems()"/>
         </div>
 
@@ -29,9 +31,7 @@ import { OneConversStore } from '../../../../../core/stores/convers/one-convers.
         </div>
     </div>`
 })
-export class ConversMsgComponent implements OnInit {
-    private chatContent = viewChild<ElementRef<HTMLElement>>('chatContent')
-
+export class ConversMsgComponent {
     private conversService = inject(ConversService)
     private router = inject(Router)
     private bpService = inject(BreakpointService)
@@ -40,15 +40,6 @@ export class ConversMsgComponent implements OnInit {
     oneConvers = this.store.oneConvers
     msgItems = this.store.msgItems
     hiddenBtnInfo = computed<boolean>(() => !this.bpService.isMobile() && this.bpService.screenWidth() >= this.bpService.breakpoint.lg)
-
-    ngOnInit() {
-        this.scrollToBottom()
-    }
-
-    scrollToBottom() {
-        const element = this.chatContent()
-        if(element) element.nativeElement.scrollTop = element.nativeElement.scrollHeight
-    }
 
     cancel() {
         const paths = this.router.url.split('/')
