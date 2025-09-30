@@ -13,7 +13,7 @@ export interface IImage {
     template: `
     @if(images() && images().length > 0) {
         <div class="grid grid-cols-5 h-fit gap-2 max-w-[800px]">
-            @for(image of images(); track $index) {
+            @for(image of images(); track image.src) {
                 <img [src]="image.src" [alt]="image.alt" class="cursor-pointer object-cover rounded" (click)="imageClick($index)" style="display: block;">
             }
         </div>

@@ -33,7 +33,7 @@ import { ConversStore } from '../../../../core/stores/convers/convers.store';
             <div class="w-full flex-1 flex flex-col gap-1 pb-6 overflow-auto">
                 <!-- inline convers list -->
                 <div class="w-full flex gap-3 min-h-min overflow-y-auto pb-3 px-2">
-                    @for (user of streamUsers(); track $index) {
+                    @for (user of streamUsers(); track user.id) {
                         <app-convers-item-private 
                             [name]="user.name"
                             [urlAvatar]="user.urlAvatar"
@@ -43,7 +43,7 @@ import { ConversStore } from '../../../../core/stores/convers/convers.store';
                 </div>
 
                 <!-- convers item -->
-                 @for(convers of conversList(); track $index) {
+                 @for(convers of conversList(); track convers.id) {
                     <app-item-convers 
                       (onSelect)="selectComponent()"
                       [idSelected]="convers.id"
