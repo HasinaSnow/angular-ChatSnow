@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, viewChild} from '@angular/core';
-import { MenuItem } from 'primeng/api';
+import { ConfirmationService, MenuItem } from 'primeng/api';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { TooltipModule } from 'primeng/tooltip'
@@ -9,6 +9,7 @@ import { PopupComponent } from "../../../shared/components/ui/popup.component";
 import { MainSettingsComponent } from "./main-settings.component";
 import { BreakpointService } from '../../../shared/services/breakpoint.service';
 import { AuthService } from '../../../shared/auth/auth.service';
+import { LogoutConfirm } from '../../../shared/helpers/logout-confirmation';
 
 @Component({
     selector: 'app-main-sidebar',
@@ -50,7 +51,7 @@ import { AuthService } from '../../../shared/auth/auth.service';
             <div tooltipStyleClass="ml-1 font-semibold" pTooltip="Settings" (click)="togglePopupSettings($event)" class="relative z-50 flex items-center hover:bg-highlight-emphasis p-3 hover:text-primary text-color transition-all rounded font-bold gap-2 cursor-pointer">
                 <i class="pi pi-cog text-inherit" style="font-size: 1rem"></i>
             </div>
-            <div (click)="logout()" pTooltip="Sign out" tooltipStyleClass="ml-1 font-semibold" class="hidden sm:flex items-center p-3 hover:text-red-500 text-color transition-all rounded font-bold gap-2 cursor-pointer">
+            <div (click)="logout($event)" pTooltip="Sign out" tooltipStyleClass="ml-1 font-semibold" class="hidden sm:flex items-center p-3 hover:text-red-500 text-color transition-all rounded font-bold gap-2 cursor-pointer">
                 <i class="pi pi-sign-out text-inherit" style="font-size: 1rem"></i>
             </div>
         </div>
@@ -66,6 +67,7 @@ export class MainSidebarComponent implements OnInit {
     popupSettings = viewChild<PopupComponent|undefined>('popupSettings')
     popupHome = viewChild<PopupComponent|undefined>('popupHome')
 
+    private confirmService = inject(ConfirmationService)
     private authService = inject(AuthService)
     private popupService = inject(PopupService)
     private bpService = inject(BreakpointService)
@@ -100,8 +102,11 @@ export class MainSidebarComponent implements OnInit {
         this.popupService.togglePopup(this.popupHome, $event)
     }
 
-    logout() {
-        
+    logout($event: MouseEvent) {
+        this.confirmService.confirm({
+            ...LogoutConfirm($event, this.bpService),
+            accept: () => this.authService.signOut(),
+        })
     }
 
 

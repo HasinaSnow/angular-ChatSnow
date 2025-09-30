@@ -193,7 +193,6 @@ export class ProfileComponent {
                         this.confirmService.confirm({
                             ...LogoutConfirm($event, this.bpService),
                             accept: () => this.authService.signOut(),
-                            reject: () => console.log('deconnexion annulée!')
                         })
                     }
                 },
