@@ -7,7 +7,7 @@ import { EmojiData } from '@ctrl/ngx-emoji-mart/ngx-emoji';
     selector: 'app-emoji-picker',
     template: `
         <emoji-mart
-            [isNative]="true" 
+            [isNative]="true"
             (emojiSelect)="selectEmoji($event)"
             [showPreview]="false"
             [darkMode]="isDark()"

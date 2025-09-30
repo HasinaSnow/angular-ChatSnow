@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { ListMsgComponent } from '../../../../../shared/components/ui/list-msg.component';
 import { OneConversStore } from '../../../../../core/stores/convers/one-convers.store';
 import { AutoScrollBottomDirective } from '../../../../../shared/directives/auto-scroll-bottom.directive';
+import { MsgEntity } from '../../../../../core/entities/msg.entity';
 
 @Component({
     selector: 'app-convers-msg',
@@ -27,7 +28,7 @@ import { AutoScrollBottomDirective } from '../../../../../shared/directives/auto
 
         <!-- footer -->
         <div class="w-full border-t border-surface p-2 py-3 flex justify-between items-center">
-            <app-convers-msg-form class="w-full"/>
+            <app-convers-msg-form (onSendMsg)="addNewMsg($event)" class="w-full"/>
         </div>
     </div>`
 })
@@ -40,6 +41,10 @@ export class ConversMsgComponent {
     oneConvers = this.store.oneConvers
     msgItems = this.store.msgItems
     hiddenBtnInfo = computed<boolean>(() => !this.bpService.isMobile() && this.bpService.screenWidth() >= this.bpService.breakpoint.lg)
+
+    addNewMsg(newMsg: string) {
+        this.store.addMsg(newMsg)
+    }
 
     cancel() {
         const paths = this.router.url.split('/')

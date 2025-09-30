@@ -1,6 +1,6 @@
 import { BehaviorSubject, map, Observable, of } from "rxjs";
 import { TUniqId } from "../../../shared/types/uniq-id.type";
-import { MsgEntity } from "../../entities/msg.entity";
+import { MsgEntity, randomMsgEntity } from "../../entities/msg.entity";
 import { MsgGateway } from "../../ports/msg.gateway";
 
 export class MsgInMemoryAdapter extends MsgGateway {
@@ -45,8 +45,7 @@ export class MsgInMemoryAdapter extends MsgGateway {
     }
 
     override addNew(data: Partial<MsgEntity>): Observable<MsgEntity> {
-        const newMsg: MsgEntity = {
-            id: "",
+        const newMsg: MsgEntity = randomMsgEntity({
             content: "",
             type: "text",
             seenBy: [],
@@ -56,7 +55,7 @@ export class MsgInMemoryAdapter extends MsgGateway {
             attachments: [],
             timestamp: new Date(),
             ...data
-        }
+        })
         const current = this.msgs.getValue()
         current.push(newMsg)
         this.msgs.next(current)

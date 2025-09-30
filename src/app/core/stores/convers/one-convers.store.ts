@@ -6,7 +6,7 @@ import { ConversStore } from "./convers.store";
 import { TUniqId } from "../../../shared/types/uniq-id.type";
 import { ProfileStore } from "../profile/profile.store";
 import { IItemMsg } from "../../../shared/components/ui/item-msg.component";
-import { pipe, Subscription, switchMap, tap } from "rxjs";
+import { exhaustMap, pipe, Subscription, switchMap, tap } from "rxjs";
 import { MsgSocketGateway } from "../../ports/msg-socket.gateway";
 import { MsgGateway } from "../../ports/msg.gateway";
 import { rxMethod } from "@ngrx/signals/rxjs-interop";
@@ -19,8 +19,8 @@ export const OneConversStore = signalStore(
     withComputed((
         store,
         profileStore = inject(ProfileStore),
-    ) => ({
-        msgItems: computed(() => {
+    ) => {
+        const msgItems = computed(() => {
             const myId = profileStore.profile()?.id
             const oneConvers = store.oneConvers()
             const seenBy = (ids: TUniqId[]) => oneConvers
@@ -60,7 +60,9 @@ export const OneConversStore = signalStore(
                 .sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime())
         })
 
-    })),
+        return {msgItems}
+
+    }),
     withMethods((
         store,
         conversStore = inject(ConversStore),
@@ -91,32 +93,6 @@ export const OneConversStore = signalStore(
             })
         ))
 
-        // const patchOneConvers = (idConvers: TUniqId) => {
-            // conversStore.getOne(idConvers).subscribe({
-            //     next: (convers) => {
-            //         const myId = profileStore.profile()?.id
-            //         const oneConvers = {
-            //             ...convers,
-            //             name: convers?.name
-            //                 ?? convers?.type === 'group'
-            //                     ? convers?.participants.filter(p => p.idUser !== myId).map(p => p.name).join(', ')
-            //                     : convers?.participants.filter(p => p.idUser !== myId).map(p => p.name).join(''),
-            //             participants: convers?.participants.map(p => {
-            //                 if(p.idUser === myId) {
-            //                     p.name = 'Vous'
-            //                     return p
-            //                 } else return p}),
-            //             unreadCount: convers?.participants.find(p => p.idUser === myId)?.unreadCount as number
-            //         } as ConversEntity
-            //         patchState(store, {oneConvers})
-            //     },
-            //     error: (result) => {
-            //         console.log('patch error onConvers : ', result)
-            //         // patchState(store, {oneConvers: result})
-            //     }
-            // })
-        // }
-
         const loadMsgList = rxMethod<TUniqId>(
             pipe(
                 switchMap((idConvers) => msgGateway.retrieveByIdConvers(idConvers)),
@@ -127,11 +103,26 @@ export const OneConversStore = signalStore(
             )
         )
 
-        // const patchMsgList = (idConvers: string) => 
-        //     {
-        //     if(idConvers) msgGateway.getMsgsByIdConvers(idConvers)
-        //         .subscribe(value => { patchState(store, {msgList: value}) })
-        // }
+        const addMsg = rxMethod<string>(
+            pipe(
+                exhaustMap(msgContent => {
+                    const myId = profileStore.profile()?.id
+                    const newMsgEntity: Partial<MsgEntity> = {
+                        type: 'text',
+                        author: myId,
+                        idConvers: store.oneConvers()?.id,
+                        replyToMsg: null,
+                        content: msgContent,
+                        timestamp: new Date()
+                    }
+                    return msgGateway.addNew(newMsgEntity)
+                }),
+                tap(newMsg => {
+                    console.log('msg[added]')
+                    patchState(store, {msgList: [...store.msgList(), newMsg]})
+                })
+            )
+        )
 
         const listenMsgInOneConvers = () => {
             sub = msgSocketGateway.on().subscribe(msg => {
@@ -147,6 +138,6 @@ export const OneConversStore = signalStore(
             sub.unsubscribe()
         }
 
-        return  {patchOneConvers, loadMsgList, listenMsgInOneConvers, unsubscribe}
+        return  {patchOneConvers, loadMsgList, addMsg, listenMsgInOneConvers, unsubscribe}
     })
 )
