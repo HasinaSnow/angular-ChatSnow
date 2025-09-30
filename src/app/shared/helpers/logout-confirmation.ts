@@ -6,7 +6,7 @@ export const LogoutConfirm = ($event: any, bpService: BreakpointService): Confir
         target: $event.target as EventTarget,
         message: 'Etes-vous sûre de vouloir se déconnecter ?',
         header: 'Log out ?',
-        closable: !bpService.isMobile,
+        closable: !bpService.isMobile(),
         closeOnEscape: true,
         icon: 'pi pi-exclamation-triangle',
         rejectVisible: bpService.isMobile(),

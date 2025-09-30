@@ -6,10 +6,12 @@ import { ConversStore } from "./convers.store";
 import { TUniqId } from "../../../shared/types/uniq-id.type";
 import { ProfileStore } from "../profile/profile.store";
 import { IItemMsg } from "../../../shared/components/ui/item-msg.component";
-import { exhaustMap, pipe, Subscription, switchMap, tap } from "rxjs";
+import { exhaustMap, of, pipe, Subscription, switchMap, tap } from "rxjs";
 import { MsgSocketGateway } from "../../ports/msg-socket.gateway";
 import { MsgGateway } from "../../ports/msg.gateway";
 import { rxMethod } from "@ngrx/signals/rxjs-interop";
+import { EmojiData } from "@ctrl/ngx-emoji-mart/ngx-emoji";
+import { IMsgReaction } from "../../../shared/components/reactions.component";
 
 export const OneConversStore = signalStore(
     withState({
@@ -47,7 +49,11 @@ export const OneConversStore = signalStore(
                         idConvers: m.idConvers,
                         isReceived: m.author !== myId,
                         content: m.content,
-                        reactions: [],
+                        reactions: m.emojiReactions.map<IMsgReaction>(r => ({
+                            author: {id: r.author, name: author(r.author).name, imgUrl: author(r.author).urlAvatar ?? ''},
+                            emoji: r.emoji,
+                            removable: r.author === myId
+                        })),
                         withInteraction: true,
                         type: m.type,
                         replyToMsg: replyToMsg,
@@ -124,6 +130,56 @@ export const OneConversStore = signalStore(
             )
         )
 
+        const addReaction = rxMethod<{id: TUniqId ,reaction: string|EmojiData}>(
+            pipe(
+                switchMap(creds => {
+                    const lastMsg = store.msgList().find(msg => msg.id === creds.id)
+                    const myId = profileStore.profile()?.id
+                    if(lastMsg && myId) {
+                        const toUpdated: MsgEntity = {
+                            ...lastMsg,
+                            emojiReactions: lastMsg.emojiReactions.find(r => r.author === myId)
+                                ? lastMsg.emojiReactions.map(r => r.author === myId ? {emoji: creds.reaction, author: myId} : r)
+                                : [...lastMsg.emojiReactions, {emoji: creds.reaction, author: myId}]
+                        }
+                        return msgGateway.update(toUpdated, creds.id)
+                    }
+                    return of(null)
+                }),
+                tap(msg => {
+                    if(msg) {
+                        const msgList = store.msgList()
+                        const updatedMsglist = msgList.map(m => m.id === msg.id ? msg : m)
+                        patchState(store, {msgList: updatedMsglist})
+                    }
+                })
+            )
+        )
+
+        const removeReaction = rxMethod<TUniqId>(
+            pipe(
+                switchMap(idMsg => {
+                    const lastMsg = store.msgList().find(msg => msg.id === idMsg)
+                    const myId = profileStore.profile()?.id
+                    if(lastMsg && myId) {
+                        const toUpdated: MsgEntity = {
+                            ...lastMsg,
+                            emojiReactions: lastMsg.emojiReactions.filter(r => r.author !== myId)
+                        }
+                        return msgGateway.update(toUpdated, idMsg)
+                    }
+                    return of(null)
+                }),
+                tap(msg => {
+                    if(msg) {
+                        const msgList = store.msgList()
+                        const updatedMsglist = msgList.map(m => m.id === msg.id ? msg : m)
+                        patchState(store, {msgList: updatedMsglist})
+                    }
+                })
+            )
+        )
+
         const listenMsgInOneConvers = () => {
             sub = msgSocketGateway.on().subscribe(msg => {
                 if(msg.idConvers === store.oneConvers()?.id) {
@@ -138,6 +194,6 @@ export const OneConversStore = signalStore(
             sub.unsubscribe()
         }
 
-        return  {patchOneConvers, loadMsgList, addMsg, listenMsgInOneConvers, unsubscribe}
+        return  {patchOneConvers, loadMsgList, addMsg, addReaction, removeReaction, listenMsgInOneConvers, unsubscribe}
     })
 )

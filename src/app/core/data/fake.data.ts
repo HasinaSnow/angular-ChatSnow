@@ -37,7 +37,7 @@ export const listenMsg = _FAKE_DATA_CONVERS.pipe(
             allMsgs.push(msg)
             _FAKE_DATA_MSGS.next(allMsgs)
         }),
-        share() // partager le même valeur de retour pour chaque abonnés
+        // share() // partager le même valeur de retour pour chaque abonnés
     )),
     share() // partager le même valeur de retour pour chaque abonnés
 )

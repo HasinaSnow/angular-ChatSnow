@@ -5,6 +5,7 @@ import { PopupComponent } from './ui/popup.component';
 import { PopupService } from '../services/popup.service';
 import { EmojiData, EmojiComponent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { EmojiPickerComponent } from './ui/emoji-picker.component';
+import { _EMOJI_DATA_LIST } from '../../core/data/emoji-list.data';
 
 @Component({
     selector: 'app-msg-options',
@@ -18,8 +19,8 @@ import { EmojiPickerComponent } from './ui/emoji-picker.component';
         <app-popup #popupReactionEmoji>
             <div popupContent class="bg-transparent z-50 flex gap-2 items-center">
                 @for (emoji of reactionEmojis(); track $index) {
-                    <p-button severity="secondary" rounded="true" styleClass="bg-green-500" size="small">
-                        <ngx-emoji [size]="17" [isNative]="true" [emoji]="emoji" ></ngx-emoji>
+                    <p-button (onClick)="selectReaction(emoji)" severity="secondary" rounded="true" styleClass="bg-green-500" size="small">
+                        <ngx-emoji [size]="20" [isNative]="true" [emoji]="emoji" ></ngx-emoji>
                     </p-button>
                 }
                 <p-button (onClick)="openEmojiPicker()" icon="pi pi-plus" severity="secondary" rounded="true" size="small"></p-button>
@@ -32,15 +33,21 @@ export class MsgOptionsComponent {
     ref: DynamicDialogRef|undefined
     private dialogService = inject(DialogService)
     onClosePopupOptions = output()
+    onSelectEmoji = output<string|EmojiData>()
 
     isReceived = input.required<boolean>()
-    reactionEmojis = input<(string|EmojiData)[]>(['smile', 'smile', 'smile', 'smile'])
+    reactionEmojis = input<(string|EmojiData)[]>(_EMOJI_DATA_LIST) //EmojiData.shortname
 
     private popupService = inject(PopupService)
     popupReactionEmoji = viewChild<PopupComponent|undefined>('popupReactionEmoji')
 
     toggleReactionEmojis($event: MouseEvent) {
         this.popupService.togglePopup(this.popupReactionEmoji,  $event, this.isReceived() ? 'bottom-right' : 'bottom-left')
+    }
+
+    selectReaction(shortname: string|EmojiData) {
+        this.onSelectEmoji.emit(shortname)
+        this.closeAllPopups()
     }
 
     openEmojiPicker() {

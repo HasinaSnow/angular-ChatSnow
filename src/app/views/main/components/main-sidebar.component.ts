@@ -63,7 +63,7 @@ import { LogoutConfirm } from '../../../shared/helpers/logout-confirmation';
 
     </div>`
 })
-export class MainSidebarComponent implements OnInit {
+export class MainSidebarComponent {
     popupSettings = viewChild<PopupComponent|undefined>('popupSettings')
     popupHome = viewChild<PopupComponent|undefined>('popupHome')
 
@@ -77,9 +77,6 @@ export class MainSidebarComponent implements OnInit {
         { label: 'Menu', icon: 'pi pi-bars', routerLink: 'menu'},
         { label: 'Chat', icon: 'pi pi-comment', routerLink: 'convers'},
     ];
-
-    ngOnInit() {
-    }
 
     selectUrl($event: MouseEvent, currentUrl: string) {
         const url = this.router.url

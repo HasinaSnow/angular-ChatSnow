@@ -8,6 +8,8 @@ import { ListMsgComponent } from '../../../../../shared/components/ui/list-msg.c
 import { OneConversStore } from '../../../../../core/stores/convers/one-convers.store';
 import { AutoScrollBottomDirective } from '../../../../../shared/directives/auto-scroll-bottom.directive';
 import { MsgEntity } from '../../../../../core/entities/msg.entity';
+import { EmojiData } from '@ctrl/ngx-emoji-mart/ngx-emoji';
+import { TUniqId } from '../../../../../shared/types/uniq-id.type';
 
 @Component({
     selector: 'app-convers-msg',
@@ -23,7 +25,7 @@ import { MsgEntity } from '../../../../../core/entities/msg.entity';
 
         <!-- msg list -->
         <div autoScrollBottom class="px-2 lg:px-4 pt-3 flex flex-1 pb-9 flex-col gap-2 overflow-y-auto">
-           <app-list-msg [msgList]="msgItems()"/>
+           <app-list-msg (removeReaction)="removeReaction($event)" (addReaction)="addReaction($event)" [msgList]="msgItems()"/>
         </div>
 
         <!-- footer -->
@@ -44,6 +46,15 @@ export class ConversMsgComponent {
 
     addNewMsg(newMsg: string) {
         this.store.addMsg(newMsg)
+    }
+
+    addReaction(creds : {id: TUniqId , reaction: string|EmojiData}) {
+        this.store.addReaction(creds)
+    }
+
+    removeReaction(idMsg: TUniqId) {
+        console.log('remove reaction', idMsg)
+        this.store.removeReaction(idMsg)
     }
 
     cancel() {

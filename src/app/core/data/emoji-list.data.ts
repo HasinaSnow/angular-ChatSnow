@@ -1,0 +1,1 @@
+export const _EMOJI_DATA_LIST = ['heart', 'smile', 'open_mouth', 'rage', '+1']

@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, OnInit, viewChild } from '@angular/core';
+import { Component, computed, inject, input, OnInit, output, viewChild } from '@angular/core';
 import { EmojiComponent, EmojiData } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { AvatarModule } from 'primeng/avatar';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
@@ -54,12 +54,16 @@ export interface IItemMsg {
                                 {{msgItem().content}}
                             </p-message>
                             @if(msgItem().reactions.length > 0) {
-                                <div class="absolute z-100 w-fit -bottom-6 rounded-full right-0 border border-surface px-1 text-color bg-surface dark:!bg-surface-950">
+                                <div class="absolute z-100 w-fit -bottom-6 rounded-full right-0 border border-surface px-1 text-color bg-surface-100 dark:!bg-surface-950">
                                     <span (click)="openReactions()" class="flex cursor-pointer gap-1 items-center pt-0.5 pb-1 text-xs font-bold">
-                                        @for (emoji of reactionEmojis(); track $index) {
-                                            <ngx-emoji [size]="17" [isNative]="true" [emoji]="emoji" ></ngx-emoji>
-                                        }
-                                        {{msgItem().reactions.length}}
+                                        <div>
+                                            @for (emoji of reactionEmojis(); track $index) {
+                                                <ngx-emoji [size]="17" [isNative]="true" [emoji]="emoji" ></ngx-emoji>
+                                            }
+                                        </div>
+                                        <div>
+                                            {{msgItem().reactions.length}}
+                                        </div>
                                     </span>
                                 </div>
                             }
@@ -77,10 +81,14 @@ export interface IItemMsg {
                     @if(msgItem().reactions.length > 0) {
                         <div class="absolute z-100 w-fit -bottom-6 rounded-full right-0 border border-surface px-1 text-color bg-surface-100 dark:!bg-surface-950">
                             <span (click)="openReactions()" class="flex cursor-pointer gap-1 items-center pt-0.5 pb-1 text-xs font-bold">
-                                @for (emoji of reactionEmojis(); track $index) {
-                                    <ngx-emoji [size]="17" [isNative]="true" [emoji]="emoji" ></ngx-emoji>
-                                }
-                                {{msgItem().reactions.length}}
+                                <div>
+                                    @for (emoji of reactionEmojis(); track $index) {
+                                        <ngx-emoji [size]="17" [isNative]="true" [emoji]="emoji" ></ngx-emoji>
+                                    }
+                                </div>
+                                <div>
+                                    {{msgItem().reactions.length}}
+                                </div>
                             </span>
                         </div>
                     }
@@ -108,10 +116,14 @@ export interface IItemMsg {
                             @if(msgItem().reactions.length > 0) {
                                 <div class="absolute z-100 w-fit -bottom-6 rounded-full right-0 border border-surface px-1 text-color bg-surface-300 dark:!bg-surface-800">
                                     <span (click)="openReactions()" class="flex cursor-pointer gap-1 items-center pt-0.5 pb-1 text-xs font-bold">
-                                        @for (emoji of reactionEmojis(); track $index) {
-                                            <ngx-emoji [size]="17" [isNative]="true" [emoji]="emoji" ></ngx-emoji>
-                                        }
-                                        {{msgItem().reactions.length}}
+                                        <div>
+                                            @for (emoji of reactionEmojis(); track $index) {
+                                                <ngx-emoji [size]="17" [isNative]="true" [emoji]="emoji" ></ngx-emoji>
+                                            }
+                                        </div>
+                                        <div>
+                                            {{msgItem().reactions.length}}
+                                        </div>
                                     </span>
                                 </div>
                             }
@@ -125,31 +137,40 @@ export interface IItemMsg {
                     </p-message>
                     @if(msgItem().reactions.length > 0) {
                         <div class="absolute z-100 w-fit -bottom-6 rounded-full right-0 border border-surface px-1 text-color bg-surface-300 dark:!bg-surface-800">
-                            <span (click)="openReactions()" class="flex-row-reverse flex cursor-pointer gap-1 items-center pt-0.5 pb-1 text-xs font-bold">
-                                @for (emoji of reactionEmojis(); track $index) {
-                                    <ngx-emoji [size]="17" [isNative]="true" [emoji]="emoji" ></ngx-emoji>
-                                }
-                                {{msgItem().reactions.length}}
+                            <span (click)="openReactions()" class="flex cursor-pointer gap-1 items-center pt-0.5 pb-1 text-xs font-bold">
+                                <div>
+                                    @for (emoji of reactionEmojis(); track $index) {
+                                        <ngx-emoji [size]="17" [isNative]="true" [emoji]="emoji" ></ngx-emoji>
+                                    }
+                                </div>
+                                <div>
+                                    {{msgItem().reactions.length}}
+                                </div>
                             </span>
                         </div>
                     }
                 </div>
             }
-
         </div>
     }
 
     <app-popup #popupMsgOptions>
         <div popupContent>
-            <app-msg-options (onClosePopupOptions)="closePopupOptions()" [isReceived]="msgItem().isReceived"></app-msg-options>
+            <app-msg-options
+            (onSelectEmoji)="addReaction.emit($event)"
+            (onClosePopupOptions)="closePopupOptions()"
+            [isReceived]="msgItem().isReceived"
+            ></app-msg-options>
         </div>
     </app-popup>
     `
 })
-export class ItemMsgComponent implements OnInit {
+export class ItemMsgComponent {
     msgItem = input.required<IItemMsg>()
-    reactionEmojis = computed(() => [...new Set(this.msgItem().reactions.map(reaction => reaction.emoji))])
+    addReaction = output<string|EmojiData>()
+    removeReaction = output<TUniqId>()
 
+    reactionEmojis = computed(() => [...new Set(this.msgItem().reactions.map(reaction => reaction.emoji))])
     private bpService = inject(BreakpointService)
     private dialogService = inject(DialogService)
     ref: DynamicDialogRef|undefined
@@ -157,13 +178,15 @@ export class ItemMsgComponent implements OnInit {
     popupMsgOptions = viewChild<PopupComponent|undefined>('popupMsgOptions')
     private popupService = inject(PopupService)
 
-    ngOnInit() { }
-
     openReactions() {
         this.ref = this.dialogService.open(ReactionsComponent, {
             header: 'Reactions',
             inputValues: {
-                reactions: this.msgItem().reactions
+                reactions: this.msgItem().reactions,
+                onRemoveReaction: () => {
+                    this.ref?.close()
+                    this.removeReaction.emit(this.msgItem().id)
+                }
             },
             modal: true,
             closable: true,

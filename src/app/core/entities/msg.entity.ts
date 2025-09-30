@@ -1,6 +1,8 @@
 import { faker } from "@faker-js/faker";
 import { TUniqId } from "../../shared/types/uniq-id.type";
 import { ConversEntity } from "./convers.entity";
+import { EmojiData } from "@ctrl/ngx-emoji-mart/ngx-emoji";
+import { _EMOJI_DATA_LIST } from "../data/emoji-list.data";
 
 export type TMsgType = 'text'|'image'|'file'|'remove-users'|'add-users'
 
@@ -11,9 +13,15 @@ export interface IReplyToMsg {
     attachments: string[]
 }
 
+export interface IEmojiReaction {
+    emoji: string|EmojiData,
+    author: TUniqId,
+}
+
 export interface MsgEntity {
     id: TUniqId,
     content: string,
+    emojiReactions: IEmojiReaction[],
     type: TMsgType,
     seenBy: TUniqId[],
     idConvers: TUniqId,
@@ -41,6 +49,7 @@ export function randomMsgEntity(fields?: Partial<MsgEntity>): MsgEntity {
         content: faker.word.words(faker.number.int({min: 3, max: 30})),
         type: randomMsgType(),
         seenBy: [],
+        emojiReactions: [],
         idConvers: faker.string.uuid(),
         author: faker.string.uuid(),
         replyToMsg: faker.helpers.arrayElement([randomReplyToMsg(), null]),
@@ -48,6 +57,14 @@ export function randomMsgEntity(fields?: Partial<MsgEntity>): MsgEntity {
         timestamp: faker.date.recent(),
         ...fields
     }
+}
+
+export function randomEmojiReactions(conv: ConversEntity) {
+    return faker.helpers
+        .arrayElements(conv.participants.map<IEmojiReaction>(p => ({
+            emoji: faker.helpers.arrayElement(_EMOJI_DATA_LIST),
+            author: p.idUser,
+        })), {min: 0, max: conv.participants.length})
 }
 
 export function generateMsgs(convers: ConversEntity[]): MsgEntity[] {
@@ -59,9 +76,10 @@ export function generateMsgs(convers: ConversEntity[]): MsgEntity[] {
                 idConvers: conv.id,
                 author: faker.helpers.arrayElement(conv.participants.map(p => p.idUser)),
                 seenBy: faker.helpers.arrayElements(conv.participants.map(p => p.idUser), {min: 1, max: conv.participants.length}),
+                emojiReactions: Array.from(new Map(randomEmojiReactions(conv).map(reaction => [reaction.author, reaction])).values()),
                 replyToMsg: faker.helpers.arrayElement([
                     randomReplyToMsg({
-                    author: faker.helpers.arrayElement(conv.participants.map(p => p.idUser))
+                        author: faker.helpers.arrayElement(conv.participants.map(p => p.idUser))
                     }),
                     null
                 ]),
