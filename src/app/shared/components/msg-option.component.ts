@@ -9,7 +9,7 @@ import { EmojiPickerComponent } from './ui/emoji-picker.component';
 @Component({
     selector: 'app-msg-options',
     template: `
-        <div class="{{isReceived() ? 'flex-row':'flex-row-reverse'}} flex gap-2 items-center mt-2">
+        <div class="{{isReceived() ? 'flex-row':'flex-row-reverse'}} flex gap-2 items-center mt-0.5">
             <p-button (onClick)="toggleReactionEmojis($event)" icon="pi pi-face-smile" severity="secondary" rounded="true" size="small" variant="outlined"></p-button>
             <p-button icon="pi pi-refresh" severity="secondary" rounded="true" size="small" variant="outlined"></p-button>
             <p-button icon="pi pi-ellipsis-h" severity="secondary" rounded="true" size="small" variant="outlined"></p-button>

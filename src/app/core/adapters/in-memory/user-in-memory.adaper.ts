@@ -13,7 +13,7 @@ export class UserInMemoryAdapter extends UserGateway {
     }
 
     override retrieveByIds(ids: TUniqId[]): Observable<UserEntity[]> {
-        return this.users.asObservable().pipe(
+        return of(this.users.getValue()).pipe(
             map(users => users.
                 filter(user => ids.includes(user.id))
             )
@@ -21,7 +21,7 @@ export class UserInMemoryAdapter extends UserGateway {
     }
 
     override searchByName(key: string): Observable<UserEntity[]> {
-        return this.users.asObservable().pipe(
+        return of(this.users.getValue()).pipe(
             map(users => users
                 .filter(user => user.name.includes(key))
             )
@@ -33,7 +33,7 @@ export class UserInMemoryAdapter extends UserGateway {
     }
 
     override retrieveOne(id: TUniqId): Observable<UserEntity | null> {
-        return this.users.asObservable().pipe(
+        return of(this.users.getValue()).pipe(
             map(users => users
                 .find(user => user.id === id) ?? null
             )

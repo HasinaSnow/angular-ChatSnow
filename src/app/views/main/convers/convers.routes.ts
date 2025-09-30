@@ -6,7 +6,7 @@ import { ConversParticipantComponent } from "./one-convers/convers-info/pages/co
 import { ConversMediaComponent } from "./one-convers/convers-info/pages/convers-media.component";
 import { LoadOneConvers } from "../../../shared/resolvers/load-one-convers.resolver";
 import { OneConversStore } from "../../../core/stores/convers/one-convers.store";
-import { ActivateMsgListnerForOneConvers, DeactivateMsgForOneConvers } from "../../../shared/resolvers/msg-listener.resolver";
+import { ActivateMsgListenerForOneConvers, DeactivateMsgForOneConvers } from "../../../shared/resolvers/msg-listener.resolver";
 
 export const ConversRoutes: Routes = [
     {
@@ -17,7 +17,7 @@ export const ConversRoutes: Routes = [
                 path: ':id',
                 component: OneConversComponent,
                 providers: [OneConversStore],
-                resolve: {load: LoadOneConvers, msgStream: ActivateMsgListnerForOneConvers },
+                resolve: {loadOneConvers: LoadOneConvers, msgStream: ActivateMsgListenerForOneConvers },
                 canDeactivate: [DeactivateMsgForOneConvers],
                 children: [
                     {
@@ -46,7 +46,7 @@ export const ConversRoutesMobile: Routes = [
     {
         path: ':id',
         providers: [OneConversStore],
-        resolve: {load: LoadOneConvers, msgStream: ActivateMsgListnerForOneConvers },
+        resolve: {load: LoadOneConvers, msgStream: ActivateMsgListenerForOneConvers },
         canDeactivate: [DeactivateMsgForOneConvers],
         children: [
             {

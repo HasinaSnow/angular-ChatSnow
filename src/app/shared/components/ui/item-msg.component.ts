@@ -50,7 +50,7 @@ export interface IItemMsg {
                             </p>
                         </div>
                         <div class="relative flex justify-end">
-                            <p-message (click)="togglePopupMsgOptions($event)" size="small" styleClass=" cursor-pointerrelative pb-0.5 w-fit !bg-surface-0 dark:!bg-surface-950 relative z-10 max-w-full" severity="primary">
+                            <p-message (click)="togglePopupMsgOptions($event)" size="small" styleClass="cursor-pointer pb-0.5 w-fit !shadow-md !text-color !bg-surface-0 dark:!bg-surface-950 relative z-10 max-w-full" severity="secondary">
                                 {{msgItem().content}}
                             </p-message>
                             @if(msgItem().reactions.length > 0) {
@@ -67,8 +67,11 @@ export interface IItemMsg {
                     </div>
                 </div>
             } @else {
-                <div class="relative flex justify-end">
-                    <p-message (click)="togglePopupMsgOptions($event)" size="small" styleClass="cursor-pointer !bg-surface-0 pb-0.5 dark:!bg-surface-950" severity="secondary">
+                <div class="relative flex flex-col justify-end">
+                    <small class="text-muted-color px-2 my-1 flex items-center gap-2">
+                        <strong>{{ msgItem().author.name | littleName }}</strong>
+                    </small>
+                    <p-message (click)="togglePopupMsgOptions($event)" size="small" styleClass="cursor-pointer !shadow-md !text-color !bg-surface-0 pb-0.5 dark:!bg-surface-950" severity="secondary">
                         {{msgItem().content}}
                     </p-message>
                     @if(msgItem().reactions.length > 0) {
@@ -99,7 +102,7 @@ export interface IItemMsg {
                             </p>
                         </div>
                         <div class="relative flex justify-end">
-                            <p-message (click)="togglePopupMsgOptions($event)" size="small" styleClass="cursor-pointer w-fit pb-0.5 !bg-surface-300 dark:!bg-surface-800 relative z-10 max-w-full" severity="secondary">
+                            <p-message (click)="togglePopupMsgOptions($event)" size="small" styleClass="cursor-pointer w-fit pb-0.5 !shadow-md !text-color !bg-surface-300 dark:!bg-surface-800 relative z-10 max-w-full" severity="secondary">
                                 {{msgItem().content}}
                             </p-message>
                             @if(msgItem().reactions.length > 0) {
@@ -117,7 +120,7 @@ export interface IItemMsg {
                 </div>
             } @else {
                 <div class="relative flex justify-end">
-                    <p-message (click)="togglePopupMsgOptions($event)" size="small" styleClass="cursor-pointer relative pb-0.5 !bg-surface-0 dark:!bg-surface-950">
+                    <p-message (click)="togglePopupMsgOptions($event)" size="small" styleClass="cursor-pointer w-fit pb-0.5 !text-color !shadow-md !bg-surface-300 dark:!bg-surface-800 relative z-10 max-w-full" severity="secondary">
                         {{msgItem().content}}
                     </p-message>
                     @if(msgItem().reactions.length > 0) {

@@ -1,4 +1,3 @@
-import { RandomUserEntity, UserEntity } from "../../entities/user.entity";
 import { delay, mergeMap, Observable, of, throwError, timer } from "rxjs";
 import { _FAKE_DATA_CONVERS, _FAKE_DATA_MSGS, _FAKE_DATA_USERS, generateDataUsers } from "../../data/fake.data";
 import { faker } from "@faker-js/faker";

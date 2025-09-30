@@ -43,7 +43,7 @@ export function randomMsgEntity(fields?: Partial<MsgEntity>): MsgEntity {
         seenBy: [],
         idConvers: faker.string.uuid(),
         author: faker.string.uuid(),
-        replyToMsg: randomReplyToMsg(),
+        replyToMsg: faker.helpers.arrayElement([randomReplyToMsg(), null]),
         attachments: [] as string[],
         timestamp: faker.date.recent(),
         ...fields
@@ -59,9 +59,13 @@ export function generateMsgs(convers: ConversEntity[]): MsgEntity[] {
                 idConvers: conv.id,
                 author: faker.helpers.arrayElement(conv.participants.map(p => p.idUser)),
                 seenBy: faker.helpers.arrayElements(conv.participants.map(p => p.idUser), {min: 1, max: conv.participants.length}),
-                replyToMsg: randomReplyToMsg({
+                replyToMsg: faker.helpers.arrayElement([
+                    randomReplyToMsg({
                     author: faker.helpers.arrayElement(conv.participants.map(p => p.idUser))
-                })
+                    }),
+                    null
+                ]),
+                timestamp: new Date()
             })
         )]
     })

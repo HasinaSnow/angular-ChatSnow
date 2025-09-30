@@ -13,18 +13,18 @@ export class MsgInMemoryAdapter extends MsgGateway {
     }
 
     override retrieveByIdConvers(idConvers: TUniqId): Observable<MsgEntity[]> {
-        return this.msgs.asObservable().pipe(
+        return of(this.msgs.getValue()).pipe(
             map(msgs => msgs
                 .filter(msg => msg.idConvers === idConvers))
             )
     }
 
     override retrieveAll(): Observable<MsgEntity[]> {
-        return this.msgs.asObservable()
+        return of(this.msgs.getValue())
     }
 
     override retrieveOne(id: TUniqId): Observable<MsgEntity | null> {
-        return this.msgs.asObservable().pipe(
+        return of(this.msgs.getValue()).pipe(
             map(msgs => msgs
                 .find(msg => msg.id === id) ?? null
             )

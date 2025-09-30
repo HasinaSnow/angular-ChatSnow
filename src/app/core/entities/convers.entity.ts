@@ -9,7 +9,7 @@ export interface ConversEntity {
     urlAvatar: string|null,
     participants: IConversPrtcipant[],
     exParticipants: IConversPrtcipant[],
-    lastMsg: IConversLastMsg|null,
+    lastMsg: IConversLastMsg,
     createdAt: Date,
     createdBy: TUniqId,
     updatedAt: Date|null
@@ -32,11 +32,11 @@ export interface IConversLastMsg {
 }
 
 export function RandomConversPrtcipant(fields?: Partial<IConversPrtcipant>): IConversPrtcipant {
-    const randomUnreadCount = () => faker.number.int({min: 0, max: 15})
+    // const randomUnreadCount = () => faker.number.int({min: 0, max: 15})
     return {
         idUser: faker.string.uuid(),
         urlAvatar: './images/pdp1.jpg',
-        unreadCount: randomUnreadCount(),
+        unreadCount: 0,
         name: faker.person.fullName(),
         ...fields
     }
@@ -64,7 +64,7 @@ export function RandomConversEntity(
         urlAvatar: './images/pdp1.jpg',
         participants: [],
         exParticipants: [],
-        lastMsg: null,
+        lastMsg: RandomConversLstMsg(),
         createdAt: faker.date.recent(),
         createdBy: "",
         updatedAt: null,
@@ -88,6 +88,7 @@ export function generateConvers(users: UserEntity[], count: number, currentUserI
         partcipants.pop()
         partcipants.unshift(allPartcipants.find(p => p.idUser === currentUserId) as IConversPrtcipant)
         return RandomConversEntity({
+            type,
             participants: partcipants
         })
     })

@@ -1,14 +1,34 @@
-import { signalStore, withComputed, withHooks, withMethods } from "@ngrx/signals";
+import { patchState, signalStore, withComputed, withMethods } from "@ngrx/signals";
 import { WithEntityCrud } from "../with-entity-crud.store";
 import { ConversEntity } from "../../entities/convers.entity";
 import { ConversGateway } from "../../ports/convers.gateway";
 import { computed, inject } from "@angular/core";
 import { ProfileStore } from "../profile/profile.store";
 import { UserStore } from "../user/user.store";
+import { Subscription } from "rxjs";
+import { ConversSocketGateway } from "../../ports/convers-soket.gateway";
+import { setEntity } from "@ngrx/signals/entities";
 
 export const ConversStore = signalStore(
     WithEntityCrud<ConversEntity, Partial<ConversEntity>, Partial<ConversEntity>>(ConversGateway),
-    withMethods((store, conversGateway = inject(ConversGateway)) => ({})),
+    withMethods((
+        store,
+        conversSocketGateway = inject(ConversSocketGateway)
+    ) => {
+        let sub: Subscription
+
+        const listenUpdateConvers = () => {
+            sub = conversSocketGateway.on().subscribe(convers => {
+                patchState(store, setEntity(convers))
+            })
+        }
+
+        const unsubscribe = () => {
+            sub.unsubscribe()
+        }
+
+        return  {listenUpdateConvers, unsubscribe}
+    }),
     withComputed((
         store,
         userStore = inject(UserStore),
@@ -20,6 +40,10 @@ export const ConversStore = signalStore(
                 const users = userStore.entities()
                 return store.entities().map((convers) => ({
                     ...convers,
+                    lastMsg: {
+                        ...convers.lastMsg,
+                        authorName: convers.lastMsg.authorId === myId ? 'Vous' : convers.lastMsg.authorName
+                    },
                     name: convers.name
                         ?? convers.type === 'group'
                             ? convers.participants.filter(p => p.idUser !== myId).map(p => p.name).join(', ')
@@ -60,9 +84,4 @@ export const ConversStore = signalStore(
             return [...new Map([...usersInPrivateConvers, ...streamUsers].map(user => [user.id, user])).values()]
         })
     })),
-    withHooks({
-        onInit: ({load}) => {
-            load()
-        }
-    })
 )

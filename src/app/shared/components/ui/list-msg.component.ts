@@ -6,7 +6,7 @@ import { IMsgReaction } from "../reactions.component";
 @Component({
     selector: 'app-list-msg',
     template: `
-    <div class="lg:px-4 flex pt-1 pb-9 flex-col gap-3">
+    <div class="lg:px-4 flex pt-1 pb-9 flex-col gap-13">
         <ng-content select="[msg-info]"></ng-content>
         @for (msg of msgList(); track $index) {
             <app-item-msg [msgItem]="msg" />

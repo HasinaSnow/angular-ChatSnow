@@ -1,7 +1,7 @@
-import { interval, map, Observable, of, switchMap } from "rxjs";
-import { generateMsgs, MsgEntity } from "../../entities/msg.entity";
+import { Observable } from "rxjs";
+import { MsgEntity } from "../../entities/msg.entity";
 import { SocketGateway } from "../../ports/socket.gateway";
-import { _FAKE_DATA_CONVERS, _FAKE_DATA_MSGS } from "../../data/fake.data";
+import { _FAKE_DATA_CONVERS, _FAKE_DATA_MSGS, listenMsg } from "../../data/fake.data";
 
 export class MsgSocketInMemoryAdapter extends SocketGateway<MsgEntity> {
 
@@ -10,11 +10,7 @@ export class MsgSocketInMemoryAdapter extends SocketGateway<MsgEntity> {
     }
 
     override on(): Observable<MsgEntity> {
-        return _FAKE_DATA_CONVERS.asObservable().pipe(
-            switchMap(convers => interval(4000)
-                .pipe(map(_ => generateMsgs(convers)[0]))
-            ))
-        // return of(generateMsgs(_FAKE_DATA_CONVERS.getValue())[0])
+        return listenMsg
     }
 
 }

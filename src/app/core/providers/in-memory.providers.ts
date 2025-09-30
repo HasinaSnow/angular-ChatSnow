@@ -14,20 +14,10 @@ import { MsgGateway } from "../ports/msg.gateway";
 import { MsgInMemoryAdapter } from "../adapters/in-memory/msg-in-memory.adapter";
 import { MsgSocketGateway } from "../ports/msg-socket.gateway";
 import { MsgSocketInMemoryAdapter } from "../adapters/in-memory/msg-socket-in-memory.adapter";
+import { ConversSocketGateway } from "../ports/convers-soket.gateway";
+import { ConversSocketInMemoryAdapter } from "../adapters/in-memory/convers-socket-in-memory.adapter";
 
-export const InMemoryProviders: Provider[] = [
-    {
-        provide: UserSocketGateway,
-        useValue: new UserSocketInMemoryAdapter()
-    },
-    {
-        provide: ProfileGateway,
-        useValue: new ProfileInMemoryAdpater()
-    },
-    {
-        provide: AuthGateway,
-        useValue: new AuthInMemoryAdapter()
-    },
+const userGateways = [
     {
         provide: UserGateway,
         useValue: new UserInMemoryAdapter().withUsers(_FAKE_DATA_USERS)
@@ -35,11 +25,35 @@ export const InMemoryProviders: Provider[] = [
     {
         provide: UserSocketGateway,
         useValue: new UserSocketInMemoryAdapter()
+    }
+]
+
+const authGateways = [
+    {
+        provide: AuthGateway,
+        useValue: new AuthInMemoryAdapter()
+    }
+]
+
+const profileGateways = [
+    {
+        provide: ProfileGateway,
+        useValue: new ProfileInMemoryAdpater()
     },
+]
+
+const conversGateways = [
     {
         provide: ConversGateway,
         useValue: new ConversInMemoryAdapter().withConvers(_FAKE_DATA_CONVERS)
     },
+    {
+        provide: ConversSocketGateway,
+        useValue: new ConversSocketInMemoryAdapter()
+    },
+]
+
+const msgGateways = [
     {
         provide: MsgGateway,
         useValue: new MsgInMemoryAdapter().withMsgs(_FAKE_DATA_MSGS)
@@ -48,4 +62,13 @@ export const InMemoryProviders: Provider[] = [
         provide: MsgSocketGateway,
         useValue: new MsgSocketInMemoryAdapter()
     }
+
+]
+
+export const InMemoryProviders: Provider[] = [
+    ...userGateways,
+    ...authGateways,
+    ...profileGateways,
+    ...conversGateways,
+    ...msgGateways
 ]

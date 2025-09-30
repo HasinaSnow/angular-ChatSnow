@@ -1,7 +1,8 @@
 import { BehaviorSubject, map, Observable, of } from "rxjs";
 import { TUniqId } from "../../../shared/types/uniq-id.type";
-import { ConversEntity } from "../../entities/convers.entity";
+import { ConversEntity, RandomConversEntity } from "../../entities/convers.entity";
 import { ConversGateway } from "../../ports/convers.gateway";
+import { _FAKE_DATA_MSGS } from "../../data/fake.data";
 
 export class ConversInMemoryAdapter extends ConversGateway {
 
@@ -13,11 +14,28 @@ export class ConversInMemoryAdapter extends ConversGateway {
     }
 
     override retrieveAll(): Observable<ConversEntity[]> {
-        return this.convers.asObservable()
+        return of(this.convers.getValue()).pipe(
+            map(convers => {
+                const msgs = _FAKE_DATA_MSGS.getValue()
+                return convers.map<ConversEntity>(c => {
+                    const lastMsg = msgs.filter(m => m.idConvers === c.id).reduce((p, n) => p.timestamp > n.timestamp ? p : n)
+                    return {
+                        ...c,
+                        lastMsg: {
+                            idMsg: lastMsg.id,
+                            authorId: lastMsg.author,
+                            content: lastMsg.content,
+                            authorName: c.participants.find(p => p.idUser === lastMsg.author)?.name ?? '',
+                            createdAt: lastMsg.timestamp
+                        }
+                    }
+                })
+            })
+        )
     }
 
     override retrieveOne(id: TUniqId): Observable<ConversEntity | null> {
-        return this.convers.asObservable().pipe(
+        return of(this.convers.getValue()).pipe(
             map(convers => convers
                 .find(c => c.id === id) ?? null
             )
@@ -37,20 +55,7 @@ export class ConversInMemoryAdapter extends ConversGateway {
     }
 
     override addNew(data: Partial<ConversEntity>): Observable<ConversEntity> {
-        const newConvers: ConversEntity = {
-            id: "",
-            name: null,
-            type: "private",
-            urlAvatar: null,
-            participants: [],
-            exParticipants: [],
-            lastMsg: null,
-            createdAt: new Date(),
-            createdBy: "",
-            updatedAt: null,
-            updatedBy: null,
-            ...data
-        }
+        const newConvers: ConversEntity = RandomConversEntity({createdAt: new Date(), ...data})
         const current = this.convers.getValue()
         current.push(newConvers)
         this.convers.next(current)

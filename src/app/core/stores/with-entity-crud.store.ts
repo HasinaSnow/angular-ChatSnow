@@ -25,9 +25,10 @@ export function WithEntityCrud<entity extends {id: TUniqId}, dataCreate, dataUpd
                 return of(id).pipe(
                     switchMap(id => {
                         const exists = store.entities().find(element => element.id === id)
-                        return exists ? of(exists) : gateway.retrieveOne(id)
+                        return exists ? of(exists) : gateway.retrieveOne(id).pipe(
+                            tap((result) => { if(result) patchState(store, setEntity(result)) })
+                        )
                     }),
-                    tap((result) => { if(result) patchState(store, setEntity(result)) })
                 )
             },
             addNew: rxMethod<dataCreate>(
