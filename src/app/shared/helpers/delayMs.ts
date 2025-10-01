@@ -1,1 +1,1 @@
-export const DelayMs = 2000
+export const DelayMs = 500

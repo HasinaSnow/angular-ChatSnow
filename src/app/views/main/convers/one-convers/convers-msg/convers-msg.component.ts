@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { ConversService } from '../../convers.service';
 import { HeaderConversMsgComponent } from '../../../../../shared/components/ui/header-convers-msg.component';
 import { ConversMsgFormComponent } from './components/convers-msg-form.component';
@@ -7,7 +7,6 @@ import { Router } from '@angular/router';
 import { ListMsgComponent } from '../../../../../shared/components/ui/list-msg.component';
 import { OneConversStore } from '../../../../../core/stores/convers/one-convers.store';
 import { AutoScrollBottomDirective } from '../../../../../shared/directives/auto-scroll-bottom.directive';
-import { MsgEntity } from '../../../../../core/entities/msg.entity';
 import { EmojiData } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { TUniqId } from '../../../../../shared/types/uniq-id.type';
 
@@ -24,9 +23,19 @@ import { TUniqId } from '../../../../../shared/types/uniq-id.type';
         <app-header-convers-msg [hiddenInfoBtn]="hiddenBtnInfo()" (onGoToInfo)="goToConversInfo()" (onCancel)="cancel()" [oneConvers]="oneConvers()" />
 
         <!-- msg list -->
-        <div autoScrollBottom class="px-2 lg:px-4 pt-3 flex flex-1 pb-9 flex-col gap-2 overflow-y-auto">
-           <app-list-msg (removeReaction)="removeReaction($event)" (addReaction)="addReaction($event)" [msgList]="msgItems()"/>
-        </div>
+        @if(msgItems().length === 0) {
+            <div class="flex-1 flex items-center justify-center text-lg">
+                <p class="w-[70%] flex flex-col text-color items-center text-center">
+                    <i class="pi pi-comment text-primary" style="font-size: 2rem;"></i>
+                    Send new message and chat with : 
+                    <span class="font-semibold">{{oneConvers()?.name}}</span>
+                </p>
+            </div>
+        } @else {
+            <div autoScrollBottom class="px-2 lg:px-4 pt-3 flex flex-1 pb-9 flex-col gap-2 overflow-y-auto">
+                <app-list-msg (removeReaction)="removeReaction($event)" (addReaction)="addReaction($event)" [msgList]="msgItems()"/>
+            </div>
+        }
 
         <!-- footer -->
         <div class="w-full border-t border-surface p-2 py-3 flex justify-between items-center">
@@ -34,11 +43,15 @@ import { TUniqId } from '../../../../../shared/types/uniq-id.type';
         </div>
     </div>`
 })
-export class ConversMsgComponent {
+export class ConversMsgComponent implements OnInit{
     private conversService = inject(ConversService)
     private router = inject(Router)
     private bpService = inject(BreakpointService)
     private store = inject(OneConversStore)
+    
+    ngOnInit(): void {
+        console.log('mslist ====>', this.msgItems())
+    }
 
     oneConvers = this.store.oneConvers
     msgItems = this.store.msgItems

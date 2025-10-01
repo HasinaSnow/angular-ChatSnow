@@ -17,7 +17,17 @@ import { ConversStore } from '../../../core/stores/convers/convers.store';
                         <app-header-title [title]="'Chat'" [icon]="'pi pi-comments'"/>
                         <p-button variant="text" severity="secondary" outlined="true" icon="pi pi-plus" (onClick)="addConvers()"></p-button>
                     </div>
-                    <app-convers-list class="flex-1 overflow-auto"/>
+                    @if(store.entities().length === 0) {
+                        <div class="flex-1 flex items-center justify-center">
+                            <p class="px-2 flex flex-col gap-2 text-lg text-color items-center text-center">
+                            <i class="pi pi-comments text-primary" style="font-size: 2rem;"></i>
+                            Create new conversation and chat with them : 
+                            <p-button label="New chat" icon="pi pi-plus" outlined="true" styleClass="m-0"></p-button>
+                        </p>
+                </div>
+                    } @else {
+                        <app-convers-list class="flex-1 overflow-auto"/>
+                    }
                 </div>
             } @else {
                 <div class="grid grid-rows-1 md:grid-cols-3 lg:grid-cols-4 w-full h-full">
@@ -41,6 +51,7 @@ export class ConversComponent implements OnInit {
     readonly bpService = inject(BreakpointService)
     private conversService = inject(ConversService)
     readonly selectedComponent = this.conversService.selectedComponent
+    store = inject(ConversStore)
 
     bp = this.bpService.breakpoint
 
