@@ -1,12 +1,12 @@
 import { patchState, signalStore, withComputed, withMethods, withState } from "@ngrx/signals";
-import { ConversEntity, IConversPrtcipant } from "../../entities/convers.entity";
+import { ConversEntity, IConversLastMsg, IConversPrtcipant } from "../../entities/convers.entity";
 import { MsgEntity } from "../../entities/msg.entity";
 import { computed, inject } from "@angular/core";
 import { ConversStore } from "./convers.store";
 import { TUniqId } from "../../../shared/types/uniq-id.type";
 import { ProfileStore } from "../profile/profile.store";
 import { IItemMsg } from "../../../shared/components/ui/item-msg.component";
-import { exhaustMap, of, pipe, Subscription, switchMap, tap } from "rxjs";
+import { exhaustMap, last, of, pipe, Subscription, switchMap, tap } from "rxjs";
 import { MsgSocketGateway } from "../../ports/msg-socket.gateway";
 import { MsgGateway } from "../../ports/msg.gateway";
 import { rxMethod } from "@ngrx/signals/rxjs-interop";
@@ -148,14 +148,26 @@ export const OneConversStore = signalStore(
                         author: myId,
                         idConvers: store.oneConvers()?.id,
                         replyToMsg: null,
-                        content: msgContent,
+                        content: msgContent.trim(),
                         timestamp: new Date()
                     }
                     return msgGateway.addNew(newMsgEntity)
                 }),
                 tap(newMsg => {
-                    console.log('msg[added]')
-                    patchState(store, {msgList: [...store.msgList(), newMsg]})
+                    const oneConvers = store.oneConvers()
+                    if(oneConvers) {
+                        const lastMsg: IConversLastMsg = {
+                            idMsg: newMsg.id,
+                            content: newMsg.content,
+                            authorName: oneConvers?.participants.find(p => p.idUser === newMsg.author)?.name ?? '_nameError',
+                            authorId: newMsg.author,
+                            createdAt: newMsg.timestamp
+                        }
+                        const updatedConvers: ConversEntity = {...oneConvers, lastMsg, updatedAt: newMsg.timestamp}
+                        console.log('msg[added] and convers lastMsg updated')
+                        conversStore.patchOneConvers(updatedConvers)
+                        patchState(store, {msgList: [...store.msgList(), newMsg]})
+                    }
                 })
             )
         )

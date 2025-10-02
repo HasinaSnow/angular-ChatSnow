@@ -27,8 +27,6 @@ export const routes: Routes = [
         resolve: {
             loadProfile: LoadProfile,
             userStream: ActivateUserListener,
-            loadAllConvers: LoadAllConvers,
-            conversStream: ActivateConversListener
         },
         canDeactivate: [DeactivateUserListener, DeactivateConversListener],
         children: [

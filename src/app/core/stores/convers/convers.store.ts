@@ -77,6 +77,10 @@ export const ConversStore = signalStore(
     ) => {
         let sub: Subscription
 
+        const patchOneConvers = (convers: ConversEntity) => {
+            patchState(store, setEntity(convers))
+        }
+
         const listenUpdateConvers = () => {
             sub = conversSocketGateway.on().subscribe(convers => {
                 patchState(store, setEntity(convers))
@@ -102,6 +106,6 @@ export const ConversStore = signalStore(
             sub.unsubscribe()
         }
 
-        return  {listenUpdateConvers, emitUnreadCountTo0, unsubscribe}
+        return  {patchOneConvers, listenUpdateConvers, emitUnreadCountTo0, unsubscribe}
     })
 )

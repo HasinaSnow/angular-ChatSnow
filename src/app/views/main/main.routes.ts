@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { LoadAllConvers } from '../../shared/resolvers/load-all-convers.resolver';
+import { ActivateConversListener, DeactivateConversListener } from '../../shared/resolvers/convers-listener.resolver';
 
 export const MainRoutes: Routes = [
     {
@@ -12,6 +14,11 @@ export const MainRoutes: Routes = [
             },
             {
                 path: 'convers',
+                resolve: {
+                    loadAllConvers: LoadAllConvers,
+                    conversStream: ActivateConversListener
+                },
+                canDeactivate: [DeactivateConversListener],
                 title: 'ChatSnow - conversation',
                 loadChildren: () => import('./convers/convers.routes').then(m => m.ConversRoutes)
             },
