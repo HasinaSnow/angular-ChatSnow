@@ -37,7 +37,6 @@ export class PopupService {
     private positionComputed(rect: DOMRect, popup: HTMLElement, position: TPopupPosition) {
         const popupWidth = popup.getBoundingClientRect().width
         const popupHeight = popup.getBoundingClientRect().height
-        console.log('popuwidth height', popupWidth, popupHeight)
         const screenHeight = document.documentElement.clientHeight
         const screenWidth = document.documentElement.clientWidth
         let client: {top: string, bottom: string, left: string, right: string} = {

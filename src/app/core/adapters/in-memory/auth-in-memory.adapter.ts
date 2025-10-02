@@ -37,7 +37,6 @@ export class AuthInMemoryAdapter extends AuthGateway {
             return timer(DelayMs).pipe(mergeMap(() => throwError(() => new Error('invalid credentials')).pipe(delay(DelayMs))))
         else {
             const profile = _FAKE_DATA_USERS.getValue().find(user => user.email === email)
-            console.log('fake users => ', profile)
             if(!profile)
             return timer(DelayMs).pipe(mergeMap(() => throwError(() => new Error('internal error, profile not found')).pipe(delay(DelayMs))))
             const result: LoginEntity = {

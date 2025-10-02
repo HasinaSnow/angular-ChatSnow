@@ -43,15 +43,11 @@ import { TUniqId } from '../../../../../shared/types/uniq-id.type';
         </div>
     </div>`
 })
-export class ConversMsgComponent implements OnInit{
+export class ConversMsgComponent {
     private conversService = inject(ConversService)
     private router = inject(Router)
     private bpService = inject(BreakpointService)
     private store = inject(OneConversStore)
-
-    ngOnInit(): void {
-        console.log('mslist ====>', this.msgItems())
-    }
 
     conversMsg = this.store.oneConversMsg
     conversMsgHeader = this.store.conversMsgHeader

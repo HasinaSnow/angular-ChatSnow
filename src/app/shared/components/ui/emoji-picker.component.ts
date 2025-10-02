@@ -38,7 +38,6 @@ export class EmojiPickerComponent {
 
     selectEmoji(value: any) {
         const selectedEmoji = value.emoji as EmojiData
-        console.log(selectedEmoji)
         this.emojiSelect.emit(selectedEmoji)
         this.onSelectEmoji()(selectedEmoji)
     }

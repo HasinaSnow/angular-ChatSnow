@@ -6,7 +6,6 @@ import { ConversStore } from "../../core/stores/convers/convers.store"
 
 export const LoadOneConvers = (route: ActivatedRouteSnapshot) => {
     let idRoute = route.paramMap.get('id')
-    console.log('IDROUTE =>', idRoute)
     if(idRoute === '' || idRoute === null) {
         const conversStore = inject(ConversStore)
         idRoute = conversStore.conversList()[0].id

@@ -39,7 +39,11 @@ export const ConversStore = signalStore(
                             .includes(idUser)
                         ),
                     unreadCount: convers.participants.find(p => p.idUser === myId)?.unreadCount as number
-                }))
+                })).sort((a, b) => {
+                    const dateA = (a.updatedAt ?? a.createdAt).getTime()
+                    const dateB = (b.updatedAt ?? b.createdAt).getTime()
+                    return dateB - dateA
+                })
             } return []
         }),
         streamUsers: computed(() => {

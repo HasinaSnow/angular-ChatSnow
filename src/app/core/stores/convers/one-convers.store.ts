@@ -36,6 +36,9 @@ export const OneConversStore = signalStore(
             const author = (id: TUniqId) => {
                 const p = oneConvers?.participants.find(participant => participant.idUser === id)
                 const exP = oneConvers?.exParticipants.find(participant => participant.idUser === id) as IConversPrtcipant
+                if(id === myId) {
+                    p ? p.name = 'You' : exP.name = 'You'
+                }
                 return p ?? exP
             }
 
@@ -100,9 +103,7 @@ export const OneConversStore = signalStore(
                             : oneConvers?.participants.filter(p => p.idUser !== myId).map(p => p.name).join('') ?? '__errorName',
                     participants: oneConvers?.participants.map<IConversPrtcipant>(p => {
                         if(p.idUser === myId) {
-                            p.name = 'petasse3'
-                            const myPseudo = 'You'
-                            return {...p, name: myPseudo}
+                            return {...p, name: 'You'}
                         } else return p}) ?? [],
                 }
                 return oneConversMsg
@@ -133,7 +134,6 @@ export const OneConversStore = signalStore(
             pipe(
                 switchMap((idConvers) => msgGateway.retrieveByIdConvers(idConvers)),
                 tap(msgs => {
-                    console.log('msgs list loaded =>', msgs.length)
                     patchState(store, {msgList: msgs})
                 })
             )
