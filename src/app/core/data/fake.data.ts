@@ -20,9 +20,12 @@ export function generateDataUsers(count: number, userRegister: {name: string, em
 
 }
 
-export const listenMsg = _FAKE_DATA_CONVERS.pipe(
-    switchMap(convers => interval(4000).pipe(
-        map(_ => generateMsgs(convers)[faker.number.int({min: 0, max: 8})]),
+export const listenMsg = _ID_USER_AUTH.pipe(
+    switchMap(idAuth => interval(4000).pipe(
+        map(_ => {
+            const convers = _FAKE_DATA_CONVERS.getValue()
+            return generateMsgs(convers)[faker.number.int({min: 0, max: 8})]
+        }),
         // optimiser le tableau de tous les msgs en mémoire 
         tap(msg => {
             console.log('push[newMsg]')
@@ -37,7 +40,6 @@ export const listenMsg = _FAKE_DATA_CONVERS.pipe(
             allMsgs.push(msg)
             _FAKE_DATA_MSGS.next(allMsgs)
         }),
-        // share() // partager le même valeur de retour pour chaque abonnés
     )),
     share() // partager le même valeur de retour pour chaque abonnés
 )

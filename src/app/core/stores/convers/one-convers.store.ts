@@ -21,6 +21,7 @@ export const OneConversStore = signalStore(
     withComputed((
         store,
         profileStore = inject(ProfileStore),
+        conversStore = inject(ConversStore)
     ) => {
         const msgItems = computed(() => {
             const myId = profileStore.profile()?.id
@@ -33,8 +34,8 @@ export const OneConversStore = signalStore(
                 })
                 : []
             const author = (id: TUniqId) => {
-                const p = oneConvers?.participants.find(c => c.idUser === id)
-                const exP = oneConvers?.exParticipants.find(c => c.idUser === id) as IConversPrtcipant
+                const p = oneConvers?.participants.find(participant => participant.idUser === id)
+                const exP = oneConvers?.exParticipants.find(participant => participant.idUser === id) as IConversPrtcipant
                 return p ?? exP
             }
 
@@ -66,7 +67,50 @@ export const OneConversStore = signalStore(
                 .sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime())
         })
 
-        return {msgItems}
+        const conversMsgHeader = computed(() => {
+            const myId = profileStore.profile()?.id
+            const oneConvers = store.oneConvers()
+            if(!oneConvers) return null
+            let entities = conversStore.entities().find(c => c.id === oneConvers.id)
+            if(!entities) return null
+            return {
+                ...oneConvers,
+                name: entities?.name
+                    ?? entities?.type === 'group'
+                        ? entities?.participants.filter(p => p.idUser !== myId).map(p => p.name).join(', ') ?? '__errorName'
+                        : entities?.participants.filter(p => p.idUser !== myId).map(p => p.name).join('') ?? '__errorName',
+                participants: entities?.participants.map<IConversPrtcipant>(p => {
+                    if(p.idUser === myId) {
+                        const myPseudo = 'You'
+                        // p.name = 'petasse2'
+                        return {...p, name: myPseudo}
+                    } else return p}) ?? [],
+            }
+        })
+
+        const oneConversMsg = computed(() => {
+            const myId = profileStore.profile()?.id
+            const oneConvers = store.oneConvers()
+            if(oneConvers) {
+                const oneConversMsg: ConversEntity = {
+                    ...oneConvers,
+                    name: oneConvers?.name
+                        ?? oneConvers?.type === 'group'
+                            ? oneConvers?.participants.filter(p => p.idUser !== myId).map(p => p.name).join(', ') ?? '__errorName'
+                            : oneConvers?.participants.filter(p => p.idUser !== myId).map(p => p.name).join('') ?? '__errorName',
+                    participants: oneConvers?.participants.map<IConversPrtcipant>(p => {
+                        if(p.idUser === myId) {
+                            p.name = 'petasse3'
+                            const myPseudo = 'You'
+                            return {...p, name: myPseudo}
+                        } else return p}) ?? [],
+                }
+                return oneConversMsg
+            }
+            return oneConvers
+        })
+
+        return {msgItems, oneConversMsg, conversMsgHeader}
 
     }),
     withMethods((
@@ -80,21 +124,7 @@ export const OneConversStore = signalStore(
 
         const patchOneConvers = rxMethod<TUniqId>(pipe(
             switchMap(idConvers => conversStore.getOne(idConvers)),
-            tap(convers => {
-                const myId = profileStore.profile()?.id
-                const oneConvers = {
-                    ...convers,
-                    name: convers?.name
-                        ?? convers?.type === 'group'
-                            ? convers?.participants.filter(p => p.idUser !== myId).map(p => p.name).join(', ')
-                            : convers?.participants.filter(p => p.idUser !== myId).map(p => p.name).join(''),
-                    participants: convers?.participants.map(p => {
-                        if(p.idUser === myId) {
-                            p.name = 'Vous'
-                            return p
-                        } else return p}),
-                    unreadCount: convers?.participants.find(p => p.idUser === myId)?.unreadCount as number
-                } as ConversEntity
+            tap(oneConvers => {
                 patchState(store, {oneConvers})
             })
         ))
@@ -182,10 +212,16 @@ export const OneConversStore = signalStore(
 
         const listenMsgInOneConvers = () => {
             sub = msgSocketGateway.on().subscribe(msg => {
-                if(msg.idConvers === store.oneConvers()?.id) {
+                const oneConvers = store.oneConvers()
+                if(oneConvers && msg.idConvers === oneConvers.id) {
+                    // mettre à jour le store
                     let msgList = store.msgList()
                     msgList.shift()
                     patchState(store, {msgList: [...msgList, msg]})
+
+                    // mettre à jour le unreadCount
+                    const myId = profileStore.profile()?.id
+                    if(myId) conversStore.emitUnreadCountTo0(oneConvers, myId)
                 }
             })
         }

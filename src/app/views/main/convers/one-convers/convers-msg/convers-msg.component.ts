@@ -20,7 +20,7 @@ import { TUniqId } from '../../../../../shared/types/uniq-id.type';
 ],
     template: `<div class="flex flex-col overflow-auto h-full w-full">
         <!-- header -->
-        <app-header-convers-msg [hiddenInfoBtn]="hiddenBtnInfo()" (onGoToInfo)="goToConversInfo()" (onCancel)="cancel()" [oneConvers]="oneConvers()" />
+        <app-header-convers-msg [hiddenInfoBtn]="hiddenBtnInfo()" (onGoToInfo)="goToConversInfo()" (onCancel)="cancel()" [oneConvers]="conversMsgHeader()" />
 
         <!-- msg list -->
         @if(msgItems().length === 0) {
@@ -28,7 +28,7 @@ import { TUniqId } from '../../../../../shared/types/uniq-id.type';
                 <p class="w-[70%] flex flex-col text-color items-center text-center">
                     <i class="pi pi-comment text-primary" style="font-size: 2rem;"></i>
                     Send new message and chat with : 
-                    <span class="font-semibold">{{oneConvers()?.name}}</span>
+                    <span class="font-semibold">{{conversMsg()?.name}}</span>
                 </p>
             </div>
         } @else {
@@ -48,12 +48,13 @@ export class ConversMsgComponent implements OnInit{
     private router = inject(Router)
     private bpService = inject(BreakpointService)
     private store = inject(OneConversStore)
-    
+
     ngOnInit(): void {
         console.log('mslist ====>', this.msgItems())
     }
 
-    oneConvers = this.store.oneConvers
+    conversMsg = this.store.oneConversMsg
+    conversMsgHeader = this.store.conversMsgHeader
     msgItems = this.store.msgItems
     hiddenBtnInfo = computed<boolean>(() => !this.bpService.isMobile() && this.bpService.screenWidth() >= this.bpService.breakpoint.lg)
 

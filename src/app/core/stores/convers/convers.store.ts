@@ -8,27 +8,10 @@ import { UserStore } from "../user/user.store";
 import { Subscription } from "rxjs";
 import { ConversSocketGateway } from "../../ports/convers-soket.gateway";
 import { setEntity } from "@ngrx/signals/entities";
+import { TUniqId } from "../../../shared/types/uniq-id.type";
 
 export const ConversStore = signalStore(
     WithEntityCrud<ConversEntity, Partial<ConversEntity>, Partial<ConversEntity>>(ConversGateway),
-    withMethods((
-        store,
-        conversSocketGateway = inject(ConversSocketGateway)
-    ) => {
-        let sub: Subscription
-
-        const listenUpdateConvers = () => {
-            sub = conversSocketGateway.on().subscribe(convers => {
-                patchState(store, setEntity(convers))
-            })
-        }
-
-        const unsubscribe = () => {
-            sub.unsubscribe()
-        }
-
-        return  {listenUpdateConvers, unsubscribe}
-    }),
     withComputed((
         store,
         userStore = inject(UserStore),
@@ -42,7 +25,7 @@ export const ConversStore = signalStore(
                     ...convers,
                     lastMsg: {
                         ...convers.lastMsg,
-                        authorName: convers.lastMsg.authorId === myId ? 'Vous' : convers.lastMsg.authorName
+                        authorName: convers.lastMsg.authorId === myId ? 'You' : convers.lastMsg.authorName
                     },
                     name: convers.name
                         ?? convers.type === 'group'
@@ -84,4 +67,37 @@ export const ConversStore = signalStore(
             return [...new Map([...usersInPrivateConvers, ...streamUsers].map(user => [user.id, user])).values()]
         })
     })),
+    withMethods((
+        store,
+        conversSocketGateway = inject(ConversSocketGateway)
+    ) => {
+        let sub: Subscription
+
+        const listenUpdateConvers = () => {
+            sub = conversSocketGateway.on().subscribe(convers => {
+                patchState(store, setEntity(convers))
+            })
+        }
+
+        const emitUnreadCountTo0 = (convers: ConversEntity, idUser: TUniqId) => {
+            // mise à jour immediat de la list côté store (front)
+            const entity = store.entities().find(c => c.id === convers.id)
+            if(!entity) return
+            const participants = entity.participants.map(p => {
+                if(p.idUser === idUser) p.unreadCount = 0
+                return p
+            })
+            entity.participants = participants
+            patchState(store, setEntity(entity))
+
+            // emettre via websocket la mise à jour
+            conversSocketGateway.emit('unread-count-to-0', { convers: entity, idUser})
+        }
+
+        const unsubscribe = () => {
+            sub.unsubscribe()
+        }
+
+        return  {listenUpdateConvers, emitUnreadCountTo0, unsubscribe}
+    })
 )
