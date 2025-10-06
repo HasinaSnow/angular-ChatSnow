@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { ConversationItemPrivateComponent } from "./components/convers-item-private.component";
+import { StreamUserSuggestionComponent } from "./components/stream-user-suggestion.component";
 import { ConversService } from '../convers.service';
 import { MenuItem } from 'primeng/api';
 import { TooltipModule } from 'primeng/tooltip';
@@ -10,18 +10,19 @@ import { InputText } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { ConversStore } from '../../../../core/stores/convers/convers.store';
 import { TUniqId } from '../../../../shared/types/uniq-id.type';
+import { TSuggestion } from '../../../../shared/types/suggestion.type';
 
 @Component({
     selector: 'app-convers-list',
     imports: [
-    ConversationItemPrivateComponent,
-    ItemConversComponent,
-    TooltipModule,
-    FormsModule,
-    IconField,
-    InputIcon,
-    InputText
-],
+        StreamUserSuggestionComponent,
+        ItemConversComponent,
+        TooltipModule,
+        FormsModule,
+        IconField,
+        InputIcon,
+        InputText
+    ],
     template: `
         <div class="p-1 flex flex-col gap-4 overflow-auto h-full w-full">
             <!-- search -->
@@ -34,8 +35,9 @@ import { TUniqId } from '../../../../shared/types/uniq-id.type';
             <div class="w-full flex-1 flex flex-col gap-1 pb-6 overflow-auto">
                 <!-- inline convers list -->
                 <div class="w-full flex gap-3 min-h-min overflow-y-auto pb-3 px-2">
-                    @for (user of streamUsers(); track user.id) {
-                        <app-convers-item-private 
+                    @for (user of streamUsers(); track user.idUser) {
+                        <app-stream-user-suggestion 
+                            (onSelect)="startConvers(user)"
                             [name]="user.name"
                             [urlAvatar]="user.urlAvatar"
                             [isOnline]="user.isOnline"
@@ -73,6 +75,10 @@ export class ConversListComponent {
         { label: 'Chat', icon: 'pi pi-comment', routerLink: './convers'},
         { label: 'Settings', icon: 'pi pi-cog', routerLink: './profile'},
     ];
+
+    startConvers(user: TSuggestion) {
+        this.store.startConvers(user)
+    }
 
     selectComponent(idConvers: TUniqId) {
         this.store.resetUnreadCount(idConvers)

@@ -61,17 +61,17 @@ export const ConversStore = signalStore(
             const users = userStore.entities().filter(user => user.id !== myId)
             const usersInPrivateConvers = store.entities()
                 .filter(convers => convers.type === 'private')
-                .map(convers => {
+                .map<TSuggestion>(convers => {
                     const p = convers.participants.find(p => p.idUser !== myId)
                     return {
-                        id: p?.idUser as string,
+                        idUser: p?.idUser as string,
                         name: p?.name as string,
                         urlAvatar: p?.urlAvatar as string,
                         isOnline: false
                     }
                 })
-            const streamUsers = users.map(user => ({
-                id: user.id,
+            const streamUsers = users.map<TSuggestion>(user => ({
+                idUser: user.id,
                 name: user.name,
                 urlAvatar: user.urlAvatar,
                 isOnline: user.isOnline
@@ -79,7 +79,7 @@ export const ConversStore = signalStore(
             return [...new Map([
                 ...usersInPrivateConvers,
                 ...streamUsers
-            ].map(user => [user.id, user])).values()]
+            ].map(user => [user.idUser, user])).values()]
         }),
         suggestions: computed<TSuggestion[]>(() => {
             const myId = profileStore.profile()?.id

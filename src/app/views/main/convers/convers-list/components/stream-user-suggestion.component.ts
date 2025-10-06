@@ -1,13 +1,12 @@
-import { Component, computed, input } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, input, output } from '@angular/core';
 import { AvatarModule } from 'primeng/avatar';
 import { Badge } from 'primeng/badge';
 
 @Component({
-    selector: 'app-convers-item-private',
-    imports: [AvatarModule, RouterLink, Badge],
+    selector: 'app-stream-user-suggestion',
+    imports: [AvatarModule, Badge],
     template: `
-    <span [routerLink]="['./', idSelected()]" class="relative flex flex-col items-center w-fit cursor-pointer">
+    <span (click)="onSelect.emit()" class="relative flex flex-col items-center w-fit cursor-pointer">
         @if(isOnline()) {
             <p-badge class="absolute top-1 right-1 p-[1px] backdrop-blur-md" severity="success"/>
         }
@@ -15,7 +14,8 @@ import { Badge } from 'primeng/badge';
         <span class="text-xs text-color w-[59px] text-center line-clamp-1">{{name()}}</span>
     </span>`
 })
-export class ConversationItemPrivateComponent {
+export class StreamUserSuggestionComponent {
+    onSelect = output<void>()
     idSelected = input<string>()
     name = input.required<string>()
     urlAvatar = input.required<string|null>()
