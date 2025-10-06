@@ -7,12 +7,23 @@ import { ConversMediaComponent } from "./one-convers/convers-info/pages/convers-
 import { LoadOneConvers } from "../../../shared/resolvers/load-one-convers.resolver";
 import { OneConversStore } from "../../../core/stores/convers/one-convers.store";
 import { ActivateMsgListenerForOneConvers, DeactivateMsgForOneConvers } from "../../../shared/resolvers/msg-listener.resolver";
+import { ConversNewComponent } from "./convers-new/convers-new.component";
 
 export const ConversRoutes: Routes = [
     {
         path: '',
         component: ConversComponent,
         children: [
+            {
+                path: 'new',
+                component: ConversNewComponent,
+                children: [
+                    {
+                        path: '',
+                        component: ConversInfoComponent
+                    }
+                ]
+            },
             {
                 path: ':id',
                 component: OneConversComponent,

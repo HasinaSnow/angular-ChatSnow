@@ -33,6 +33,6 @@ export class ArchiveListComponent implements OnInit {
 
     selectComponent() {
         if(!this.bpService.isMobile() && this.bpService.screenWidth() <= this.bp.lg)
-            this.archiveService.swicthToComponent('outlet')
+            this.archiveService.switchToComponent('outlet')
     }
 }

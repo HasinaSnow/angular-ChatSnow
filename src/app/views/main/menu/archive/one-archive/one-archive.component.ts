@@ -54,7 +54,7 @@ export class OneArchiveComponent implements OnInit {
         if(this.bpService.isMobile())
             this.location.back()
         else if(this.bpService.screenWidth() <= this.bp.lg)
-            this.archiveService.swicthToComponent('list')
+            this.archiveService.switchToComponent('list')
     }
 
     goToInfo() {

@@ -1,8 +1,9 @@
 import { BehaviorSubject, map, Observable, of } from "rxjs";
 import { TUniqId } from "../../../shared/types/uniq-id.type";
-import { ConversEntity, RandomConversEntity } from "../../entities/convers.entity";
+import { ConversEntity, generateConvers, RandomConversEntity, RandomConversLstMsg, RandomConversPrtcipant } from "../../entities/convers.entity";
 import { ConversGateway } from "../../ports/convers.gateway";
-import { _FAKE_DATA_MSGS } from "../../data/fake.data";
+import { _FAKE_DATA_CONVERS, _FAKE_DATA_MSGS, _FAKE_DATA_USERS, _ID_USER_AUTH } from "../../data/fake.data";
+import { MsgEntity, randomMsgEntity } from "../../entities/msg.entity";
 
 export class ConversInMemoryAdapter extends ConversGateway {
 
@@ -34,12 +35,76 @@ export class ConversInMemoryAdapter extends ConversGateway {
         )
     }
 
+    override findByIdUser(idUser: TUniqId): Observable<ConversEntity | null> {
+        return of(this.convers.getValue()
+            .find(c => 
+                c.type === 'private' 
+                && c.participants.map(p => p.idUser).includes(idUser)
+            ) ?? null)
+    }
+
+    override searchByName(key: string): Observable<ConversEntity[]> {
+        return of(this.convers.getValue().filter(convers => convers.name?.includes(key)))
+    }
+
     override retrieveOne(id: TUniqId): Observable<ConversEntity | null> {
         return of(this.convers.getValue()).pipe(
             map(convers => convers
                 .find(c => c.id === id) ?? null
             )
         )
+    }
+
+    override createWithNewMsg(idUser: TUniqId, msgContent: string): Observable<ConversEntity> {
+        const conversList = _FAKE_DATA_CONVERS.getValue()
+        const users = _FAKE_DATA_USERS.getValue()
+        const msgs = _FAKE_DATA_MSGS.getValue()
+
+        const user = users.find(user => user.id === idUser)
+        const myId = _ID_USER_AUTH.getValue()
+        const me = users.find(user => user.id === myId)
+        if(myId && me && user) {
+            const newMsg = randomMsgEntity({
+                author: myId,
+                content: msgContent,
+                emojiReactions: [],
+                type: 'text',
+                replyToMsg: null,
+                attachments: [],
+                timestamp: new Date()
+            })
+
+            const newConvers = RandomConversEntity({
+                name: null,
+                type: "private",
+                urlAvatar: null,
+                exParticipants: [],
+                participants: [me, user].map(u => RandomConversPrtcipant({
+                    idUser: u.id,
+                    urlAvatar: u.urlAvatar,
+                    unreadCount: 0,
+                    name: u.name
+                })),
+                lastMsg: RandomConversLstMsg({
+                    idMsg: newMsg.id,
+                    content: newMsg.content,
+                    authorName: users.find(user => user.id === newMsg.author)?.name ?? 'user not found',
+                    authorId: newMsg.author,
+                    createdAt: newMsg.timestamp
+                }),
+                createdAt: new Date(),
+                createdBy: myId,
+            })
+
+            newMsg.idConvers = newConvers.id
+            _FAKE_DATA_CONVERS.next([...conversList, newConvers])
+            _FAKE_DATA_MSGS.next([...msgs, newMsg])
+
+            return of(newConvers)
+        }
+        else {
+            throw new Error('id user auth not initialized..')
+        }
     }
 
     override update(data: Partial<ConversEntity>, id: string): Observable<ConversEntity> {

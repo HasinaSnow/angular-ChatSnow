@@ -54,7 +54,7 @@ export class MsgRequestListComponent implements OnInit {
 
     selectComponent() {
         if(!this.bpService.isMobile() && this.bpService.screenWidth() <= this.bp.lg)
-            this.msgRqService.swicthToComponent('outlet')
+            this.msgRqService.switchToComponent('outlet')
     }
 
 }

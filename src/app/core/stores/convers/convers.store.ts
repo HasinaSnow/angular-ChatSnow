@@ -1,17 +1,27 @@
-import { patchState, signalStore, withComputed, withMethods } from "@ngrx/signals";
+import { patchState, signalStore, withComputed, withMethods, withState } from "@ngrx/signals";
 import { WithEntityCrud } from "../with-entity-crud.store";
 import { ConversEntity } from "../../entities/convers.entity";
 import { ConversGateway } from "../../ports/convers.gateway";
 import { computed, inject } from "@angular/core";
 import { ProfileStore } from "../profile/profile.store";
 import { UserStore } from "../user/user.store";
-import { Subscription } from "rxjs";
+import { debounceTime, exhaustMap, of, pipe, Subscription, switchMap, tap } from "rxjs";
 import { ConversSocketGateway } from "../../ports/convers-soket.gateway";
 import { setEntity } from "@ngrx/signals/entities";
 import { TUniqId } from "../../../shared/types/uniq-id.type";
+import { rxMethod } from "@ngrx/signals/rxjs-interop";
+import { UserGateway } from "../../ports/user.gateway";
+import { TSuggestion } from "../../../shared/types/suggestion.type";
+import { Router } from "@angular/router";
+import { ConversService } from "../../../views/main/convers/convers.service";
 
 export const ConversStore = signalStore(
     WithEntityCrud<ConversEntity, Partial<ConversEntity>, Partial<ConversEntity>>(ConversGateway),
+    withState({
+        searchKey: '' as string,
+        newConversUser: null as TSuggestion|null,
+        suggestionResult: [] as TSuggestion[]
+    }),
     withComputed((
         store,
         userStore = inject(UserStore),
@@ -60,19 +70,44 @@ export const ConversStore = signalStore(
                         isOnline: false
                     }
                 })
-
             const streamUsers = users.map(user => ({
                 id: user.id,
                 name: user.name,
                 urlAvatar: user.urlAvatar,
                 isOnline: user.isOnline
             }))
+            return [...new Map([
+                ...usersInPrivateConvers,
+                ...streamUsers
+            ].map(user => [user.id, user])).values()]
+        }),
+        suggestions: computed<TSuggestion[]>(() => {
+            const myId = profileStore.profile()?.id
+            const key = store.searchKey()
+            const users = userStore.entities()
+            const suggestionResult = store.suggestionResult().filter(user => user.idUser !== myId)
+            const usersInStore = users.map<TSuggestion>(user => ({
+                idUser: user.id,
+                name: user.name,
+                urlAvatar: user.urlAvatar,
+                isOnline: user.isOnline
+            })).filter(user => key.length > 0
+                ? user.name.toLowerCase().includes(key)
+                : true
+            ).filter(user => user.idUser !== myId)
 
-            return [...new Map([...usersInPrivateConvers, ...streamUsers].map(user => [user.id, user])).values()]
+            return [...new Map([
+                ...usersInStore,
+                ...suggestionResult
+            ].map(sugg => [sugg.idUser, sugg])).values()]
         })
     })),
     withMethods((
         store,
+        userGateway = inject(UserGateway),
+        conversGateway = inject(ConversGateway),
+        profileStore = inject(ProfileStore),
+        router = inject(Router),
         conversSocketGateway = inject(ConversSocketGateway)
     ) => {
         let sub: Subscription
@@ -80,6 +115,77 @@ export const ConversStore = signalStore(
         const patchOneConvers = (convers: ConversEntity) => {
             patchState(store, setEntity(convers))
         }
+
+        const resetUnreadCount = (idConvers: TUniqId) => {
+            const myId = profileStore.profile()?.id
+            let toUpdated = store.entities().find(c => c.id === idConvers)
+            if(toUpdated && myId) {
+                const participants = toUpdated.participants.map(p => {
+                    p.idUser === myId
+                        ? p.unreadCount = 0
+                        : null
+                    return p
+                })
+                toUpdated = {...toUpdated, participants}
+                patchState(store, setEntity(toUpdated))
+            }
+        }
+
+        const searchSuggestions = rxMethod<string>(
+            pipe(
+                debounceTime(400),
+                tap(key => { 
+                    patchState(store, {searchKey: key})
+                }),
+                switchMap(key => userGateway.searchByName(key)),
+                tap(users => {
+                    const suggestions = users.map(user => ({
+                        idUser: user.id,
+                        name: user.name,
+                        urlAvatar: user.urlAvatar,
+                        isOnline: user.isOnline
+                    }))
+
+                    patchState(store, {suggestionResult: suggestions})
+                })
+            )
+        )
+
+        const startConvers = rxMethod<TSuggestion>(
+            pipe(
+                debounceTime(300),
+                tap(sugg => {
+                    const idUser = sugg.idUser
+                    const existingConvers = store.entities().find(convers =>
+                        convers.type === "private" &&
+                        convers.participants.map(p => p.idUser).includes(idUser)
+                    )
+
+                    if(existingConvers) {
+                        router.navigate(['./convers/', existingConvers.id])
+                    }
+                    else of(idUser)
+                        .pipe(switchMap(idUser => conversGateway.findByIdUser(idUser)))
+                        .subscribe(convers => {
+                            if(convers) router.navigate(['./', convers.id])
+                            else {
+                                patchState(store, {newConversUser: sugg})
+                                router.navigate(['./convers/new/'])
+                            }
+                        })
+                }),
+            )
+        )
+
+        const createWithNewMsg = rxMethod<{idUser: TUniqId, msgContent: string}> (
+            pipe(
+                exhaustMap(data => conversGateway.createWithNewMsg(data.idUser, data.msgContent)),
+                tap(convers => {
+                    patchState(store, setEntity(convers))
+                    router.navigate(['./convers', convers.id])
+                })
+            )
+        )
 
         const listenUpdateConvers = () => {
             sub = conversSocketGateway.on().subscribe(convers => {
@@ -106,6 +212,6 @@ export const ConversStore = signalStore(
             sub.unsubscribe()
         }
 
-        return  {patchOneConvers, listenUpdateConvers, emitUnreadCountTo0, unsubscribe}
+        return  {patchOneConvers, resetUnreadCount, createWithNewMsg, searchSuggestions, startConvers, listenUpdateConvers, emitUnreadCountTo0, unsubscribe}
     })
 )

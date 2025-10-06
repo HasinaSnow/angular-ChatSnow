@@ -6,7 +6,7 @@ export class ArchiveService {
 
     cancelToDefault() { this.selectedComponent.set('list')}
 
-    swicthToComponent(value: 'outlet'|'list'|undefined) { 
+    switchToComponent(value: 'outlet'|'list'|undefined) { 
         value
             ? this.selectedComponent.set(value)
             : this.selectedComponent.update(value => value === 'list' ? 'outlet' : 'list')

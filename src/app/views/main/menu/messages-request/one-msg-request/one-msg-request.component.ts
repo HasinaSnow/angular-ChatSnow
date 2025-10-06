@@ -62,7 +62,7 @@ export class OneMsgRequestComponent {
         if(this.bpService.isMobile())
             this.location.back()
         else if(this.bpService.screenWidth() <= this.bp.lg)
-            this.msgRqService.swicthToComponent('list')
+            this.msgRqService.switchToComponent('list')
     }
 
     goToInfo() {

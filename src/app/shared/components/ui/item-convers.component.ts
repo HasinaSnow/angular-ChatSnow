@@ -22,13 +22,12 @@ import { LittleNamePipe } from '../../pipes/little-name.pipe';
                     <div class="flex-1 text-color text-md font-medium leading-6 line-clamp-1">{{name()}}</div>
                     <div class="text-xs text-muted-color">{{ lastMsg()?.createdAt | date: 'dd MMM'}}</div>
                 </div>
-                <p class="text-sm flex line-clamp-1 gap-1 leading-6 text-muted-color overflow-hidden">
+                <p class="text-sm flex line-clamp-1 gap-1 leading-6 {{unreadCount() > 0 ? 'text-color font-semibold' : 'text-muted-color'}} overflow-hidden">
                     @if(unreadCount() > 0) {
                         <p-badge size="small" value="{{unreadCount() > 9 ? '+9': unreadCount()}}" styleClass="bg-primary !rounded-full !p-0.5 !flex !items-center !w-fit !justify-center !text-xs"/>
                     }
-                    <span class="font-semibold line-clamp-1 max-w-16">{{ lastMsg()?.authorName | littleName}}:</span>
+                    <span class="font-bold line-clamp-1 max-w-16">{{ lastMsg()?.authorName | littleName}}:</span>
                     <span class="flex-1 line-clamp-1">{{lastMsg()?.content}}</span>
-
                 </p>
             </div>
         </div>

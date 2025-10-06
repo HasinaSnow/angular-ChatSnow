@@ -79,6 +79,6 @@ export class InvitationListComponent implements OnInit {
 
     selectComponent() {
         if(!this.bpService.isMobile() && this.bpService.screenWidth() <= this.bp.lg)
-            this.invitationService.swicthToComponent('outlet')
+            this.invitationService.switchToComponent('outlet')
     }
 }

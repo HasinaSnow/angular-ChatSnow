@@ -71,6 +71,6 @@ export class OneInvitationComponent {
         if(this.bpService.isMobile())
             this.location.back()
         else if(this.bpService.screenWidth() <= this.bp.lg)
-            this.invitationService.swicthToComponent('list')
+            this.invitationService.switchToComponent('list')
     }
 }

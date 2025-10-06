@@ -9,6 +9,7 @@ import { InputIcon } from "primeng/inputicon";
 import { InputText } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { ConversStore } from '../../../../core/stores/convers/convers.store';
+import { TUniqId } from '../../../../shared/types/uniq-id.type';
 
 @Component({
     selector: 'app-convers-list',
@@ -45,7 +46,7 @@ import { ConversStore } from '../../../../core/stores/convers/convers.store';
                 <!-- convers item -->
                  @for(convers of conversList(); track convers.id) {
                     <app-item-convers 
-                      (onSelect)="selectComponent()"
+                      (onSelect)="selectComponent(convers.id)"
                       [idSelected]="convers.id"
                       [urlAvatar]="convers.urlAvatar"
                       [name]="convers.name"
@@ -73,8 +74,9 @@ export class ConversListComponent {
         { label: 'Settings', icon: 'pi pi-cog', routerLink: './profile'},
     ];
 
-    selectComponent() {
-        this.conversService.swicthToComponent('msg')
+    selectComponent(idConvers: TUniqId) {
+        this.store.resetUnreadCount(idConvers)
+        this.conversService.switchToComponent('msg')
     }
 
 }

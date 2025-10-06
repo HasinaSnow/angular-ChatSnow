@@ -28,14 +28,14 @@ import { Location } from "@angular/common";
 
         <!-- list -->
         <div class="flex-1 flex flex-col overflow-auto pt-1 gap-1 px-2">
-            <app-item-friend [mutualFriends]="4"/>
+            <!-- <app-item-friend [mutualFriends]="4"/>
             <app-item-friend [mutualFriends]="1"/>
             <app-item-friend [mutualFriends]="34"/>
             <app-item-friend [mutualFriends]="45"/>
             <app-item-friend [mutualFriends]="23"/>
             <app-item-friend [mutualFriends]="12"/>
             <app-item-friend [mutualFriends]="8"/>
-            <app-item-friend [mutualFriends]="20"/>
+            <app-item-friend [mutualFriends]="20"/> -->
         </div>
     </div>
     `

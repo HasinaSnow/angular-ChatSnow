@@ -21,7 +21,7 @@ export function generateDataUsers(count: number, userRegister: {name: string, em
 }
 
 export const listenMsg = _ID_USER_AUTH.pipe(
-    switchMap(idAuth => interval(4000).pipe(
+    switchMap(idAuth => interval(7000).pipe(
         map(_ => {
             const convers = _FAKE_DATA_CONVERS.getValue()
             return generateMsgs(convers)[faker.number.int({min: 0, max: 8})]

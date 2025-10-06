@@ -12,6 +12,7 @@ import { MsgGateway } from "../../ports/msg.gateway";
 import { rxMethod } from "@ngrx/signals/rxjs-interop";
 import { EmojiData } from "@ctrl/ngx-emoji-mart/ngx-emoji";
 import { IMsgReaction } from "../../../shared/components/reactions.component";
+import { IHeaderConversMsg } from "../../../shared/components/ui/header-convers-msg.component";
 
 export const OneConversStore = signalStore(
     withState({
@@ -70,24 +71,24 @@ export const OneConversStore = signalStore(
                 .sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime())
         })
 
-        const conversMsgHeader = computed(() => {
+        const conversMsgHeader = computed<IHeaderConversMsg|null>(() => {
             const myId = profileStore.profile()?.id
             const oneConvers = store.oneConvers()
             if(!oneConvers) return null
-            let entities = conversStore.entities().find(c => c.id === oneConvers.id)
-            if(!entities) return null
+            let entity = conversStore.entities().find(c => c.id === oneConvers.id)
+            if(!entity) return null
             return {
-                ...oneConvers,
-                name: entities?.name
-                    ?? entities?.type === 'group'
-                        ? entities?.participants.filter(p => p.idUser !== myId).map(p => p.name).join(', ') ?? '__errorName'
-                        : entities?.participants.filter(p => p.idUser !== myId).map(p => p.name).join('') ?? '__errorName',
-                participants: entities?.participants.map<IConversPrtcipant>(p => {
-                    if(p.idUser === myId) {
-                        const myPseudo = 'You'
-                        // p.name = 'petasse2'
-                        return {...p, name: myPseudo}
-                    } else return p}) ?? [],
+                name: entity.name
+                ?? entity.type === 'group'
+                    ? entity.participants.filter(p => p.idUser !== myId).map(p => p.name).join(', ') ?? '__errorName'
+                    : entity.participants.filter(p => p.idUser !== myId).map(p => p.name).join('') ?? '__errorName',
+                urlAvatar: entity.type === 'group'
+                    ? entity.urlAvatar
+                    : entity.participants.filter(p => p.idUser !== myId)[0].urlAvatar ?? 'errorUrlAvatar',
+                members: entity.participants.map<string>(p => p.idUser === myId
+                    ? 'You'
+                    : p.name
+                ) ?? [],
             }
         })
 
@@ -164,7 +165,6 @@ export const OneConversStore = signalStore(
                             createdAt: newMsg.timestamp
                         }
                         const updatedConvers: ConversEntity = {...oneConvers, lastMsg, updatedAt: newMsg.timestamp}
-                        console.log('msg[added] and convers lastMsg updated')
                         conversStore.patchOneConvers(updatedConvers)
                         patchState(store, {msgList: [...store.msgList(), newMsg]})
                     }

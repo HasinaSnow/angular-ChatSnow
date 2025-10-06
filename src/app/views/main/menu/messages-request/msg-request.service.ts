@@ -6,7 +6,7 @@ export class MsgRequestService {
 
     cancelToDefault() { this.selectedComponent.set('list')}
 
-    swicthToComponent(value: 'outlet'|'list') { 
+    switchToComponent(value: 'outlet'|'list') { 
         this.selectedComponent.set(value)
     }
 }

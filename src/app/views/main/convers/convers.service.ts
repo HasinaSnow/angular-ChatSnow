@@ -4,10 +4,15 @@ import { Injectable, signal, WritableSignal } from '@angular/core';
 export class ConversService {
     idConversSelected: WritableSignal<string|null> = signal(null)
     selectedComponent: WritableSignal<'msg'|'info'> = signal('msg')
+    selectedConversView: WritableSignal<'new'|'list'> = signal('list')
 
     cancelToDefault() { this.selectedComponent.set('msg')}
 
-    swicthToComponent(value: 'msg'|'info') {
+    switchToComponent(value: 'msg'|'info') {
         this.selectedComponent.set(value)
+    }
+
+    switchToConversView(value: 'new'|'list') {
+        this.selectedConversView.set(value)
     }
 }

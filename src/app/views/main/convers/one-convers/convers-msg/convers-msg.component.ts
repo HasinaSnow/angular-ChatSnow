@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { ConversService } from '../../convers.service';
 import { HeaderConversMsgComponent } from '../../../../../shared/components/ui/header-convers-msg.component';
 import { ConversMsgFormComponent } from './components/convers-msg-form.component';
@@ -20,7 +20,7 @@ import { TUniqId } from '../../../../../shared/types/uniq-id.type';
 ],
     template: `<div class="flex flex-col overflow-auto h-full w-full">
         <!-- header -->
-        <app-header-convers-msg [hiddenInfoBtn]="hiddenBtnInfo()" (onGoToInfo)="goToConversInfo()" (onCancel)="cancel()" [oneConvers]="conversMsgHeader()" />
+        <app-header-convers-msg [hiddenInfoBtn]="hiddenBtnInfo()" (onGoToInfo)="goToConversInfo()" (onCancel)="cancel()" [headerConversMsg]="conversMsgHeader()" />
 
         <!-- msg list -->
         @if(msgItems().length === 0) {
@@ -56,6 +56,7 @@ export class ConversMsgComponent {
 
     addNewMsg(newMsg: string) {
         this.store.addMsg(newMsg)
+        this.conversService.switchToConversView('list')
     }
 
     addReaction(creds : {id: TUniqId , reaction: string|EmojiData}) {
