@@ -6,6 +6,7 @@ import { Button } from "primeng/button";
 import { FloatLabel } from "primeng/floatlabel";
 import { InputText } from "primeng/inputtext";
 import { AuthService } from "../../../shared/auth/auth.service";
+import { BreakpointService } from "../../../shared/services/breakpoint.service";
 
 @Component({
     selector: 'app-register',
@@ -105,6 +106,7 @@ import { AuthService } from "../../../shared/auth/auth.service";
 export class RegisterComponent {
     private router = inject(Router)
     private authService = inject(AuthService)
+    private bp = inject(BreakpointService)
 
     readonly registerForm = new FormGroup({
         name: new FormControl('', {nonNullable: true, validators: [Validators.required, Validators.minLength(3), Validators.maxLength(20)]}),
@@ -126,5 +128,5 @@ export class RegisterComponent {
 
     onReset() { this.registerForm.reset( )}
 
-    goToLogin() { this.router.navigateByUrl('/home/login') }
+    goToLogin() { this.router.navigateByUrl(this.bp.isMobile() ? 'mobile/home/login' : 'mobile/home/register') }
 }

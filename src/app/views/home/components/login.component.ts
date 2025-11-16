@@ -7,6 +7,7 @@ import { Button } from "primeng/button";
 import { Router } from "@angular/router";
 import { FloatLabel } from "primeng/floatlabel";
 import { AuthService } from "../../../shared/auth/auth.service";
+import { BreakpointService } from "../../../shared/services/breakpoint.service";
 
 @Component({
     selector: 'app-login',
@@ -82,6 +83,7 @@ import { AuthService } from "../../../shared/auth/auth.service";
 export class LoginComponent {
     private router = inject(Router)
     private authService = inject(AuthService)
+    private bp = inject(BreakpointService)
 
     checked: WritableSignal<boolean> = signal(true)
     readonly loginForm = new FormGroup({
@@ -92,8 +94,10 @@ export class LoginComponent {
     get emailControl() { return this.loginForm.controls.email }
     get pwdControl() { return this.loginForm.controls.password }
 
-    goToRegister() { this.router.navigateByUrl('home/register')}
-    goToForgot() {this.router.navigateByUrl('home/forgot-password')}
+    goToRegister() { 
+        this.router.navigateByUrl(this.bp.isMobile() ? 'mobile/home/register': 'home/register')
+    }
+    goToForgot() {this.router.navigateByUrl(this.bp.isMobile() ? 'mobile/home/forgot-password' : 'home/forgot-password')}
 
     onSubmit() {
         this.loginForm.markAllAsTouched()

@@ -16,8 +16,8 @@ export class AuthService {
     private router = inject(Router)
     private toastService = inject(ToastService)
     private loading = inject(LoadingService)
+    private bp = inject(BreakpointService)
 
-    conversUrl = inject(BreakpointService).isMobile() ? 'mobile/convers' : 'convers'
     userAuth: WritableSignal<UserEntity|null> = signal(null)
     accessToken: string|null = null
     refreshToken: string|null = null
@@ -36,7 +36,7 @@ export class AuthService {
                     }, 'top-right')
                 },
                 complete: () => {
-                    this.router.navigateByUrl('home/login').then(() => {
+                    this.router.navigateByUrl(this.bp.isMobile() ? 'mobile/home/login' : 'home/login').then(() => {
                         this.loading.set(false)
                         this.toastService.show({
                             detail: 'Register successfull, please check your email, and login.',
@@ -64,7 +64,7 @@ export class AuthService {
                     this.accessToken = response.accessToken
                     this.refreshToken = response.refreshToken
                     this.userAuth.set(response.user)
-                    this.router.navigateByUrl(this.conversUrl).then(() => {
+                    this.router.navigateByUrl(this.bp.isMobile() ? 'mobile/convers' : 'convers').then(() => {
                         this.loading.set(false)
                         this.toastService.show({
                             detail: 'Welome, you are connected.',
@@ -79,7 +79,7 @@ export class AuthService {
     signOut() {
         this.loading.set(true)
         this.userAuth.set(null)
-        this.router.navigateByUrl('home/login').then(() => {
+        this.router.navigateByUrl(this.bp.isMobile() ? 'mobile/home/login' : 'home/login').then(() => {
             this.loading.set(false)
             this.toastService.show({
                 detail: 'Thank you, you are disconnected.',

@@ -5,8 +5,7 @@ import { UserStore } from './core/stores/user/user.store';
 import { ProfileStore } from './core/stores/profile/profile.store';
 import { ActivateUserListener, DeactivateUserListener } from './shared/resolvers/user-listener.resolver';
 import { LoadProfile } from './shared/resolvers/load-profile.resolver';
-import { LoadAllConvers } from './shared/resolvers/load-all-convers.resolver';
-import { ActivateConversListener, DeactivateConversListener } from './shared/resolvers/convers-listener.resolver';
+import { DeactivateConversListener } from './shared/resolvers/convers-listener.resolver';
 import { ConversStore } from './core/stores/convers/convers.store';
 
 export const routes: Routes = [
