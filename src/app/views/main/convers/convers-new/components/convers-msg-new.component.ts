@@ -61,7 +61,6 @@ export class ConversMsgNewComponent {
     cancel() {
         const paths = this.router.url.split('/')
         const url = paths.filter(path => paths[paths.length - 1] !== path)
-        console.log(url)
         this.router.navigateByUrl(url.join('/'))
     }
 

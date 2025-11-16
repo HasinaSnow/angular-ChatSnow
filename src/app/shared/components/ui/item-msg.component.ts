@@ -199,7 +199,6 @@ export class ItemMsgComponent {
     }
 
     togglePopupMsgOptions($event: MouseEvent) {
-        console.log('popup msg option')
         if(this.msgItem().withInteraction)
             this.popupService.togglePopup(this.popupMsgOptions, $event, this.msgItem().isReceived ? 'bottom-right': 'bottom-left')
     }

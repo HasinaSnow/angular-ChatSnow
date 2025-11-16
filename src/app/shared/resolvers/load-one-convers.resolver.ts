@@ -9,12 +9,10 @@ export const LoadOneConvers = (route: ActivatedRouteSnapshot) => {
     if(idRoute === '' || idRoute === null) {
         const conversStore = inject(ConversStore)
         idRoute = conversStore.conversList()[0].id
-        console.log('navigate to =>', idRoute)
         // idRoute = null
         if(idRoute) inject(Router).navigate(['convers/', idRoute])
     } else {
         const oneConversStore = inject(OneConversStore)
-        console.log('load [oneConvers, msgList]', idRoute)
         oneConversStore.patchOneConvers(idRoute)
         oneConversStore.loadMsgList(idRoute)
     }

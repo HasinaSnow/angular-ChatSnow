@@ -113,7 +113,6 @@ export class ItemParticipantComponent implements OnInit {
                         label: 'Send message',
                         icon: 'pi pi-comment',
                         command: () => { 
-                            console.log('Send message')
                             const url = 'convers/'
                             this.bpService.isMobile()
                                 ? this.router.navigate(['mobile/' + url, this.id])

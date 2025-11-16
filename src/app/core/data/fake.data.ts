@@ -28,7 +28,6 @@ export const listenMsg = _ID_USER_AUTH.pipe(
         }),
         // optimiser le tableau de tous les msgs en mémoire 
         tap(msg => {
-            console.log('push[newMsg]')
             let allMsgs = _FAKE_DATA_MSGS.getValue()
             const allMsgsByIdConvers = allMsgs
                 .filter(m => m.idConvers === msg.idConvers)

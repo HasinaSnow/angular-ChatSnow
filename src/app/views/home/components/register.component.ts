@@ -119,7 +119,6 @@ export class RegisterComponent {
     get confirmControl() { return this.registerForm.controls.confirm }
 
     onSubmit() {
-        console.log('on register submit =>', this.registerForm.getRawValue())
         this.registerForm.markAllAsTouched()
         if(!this.registerForm.invalid)
             this.authService.signup(this.registerForm.getRawValue())

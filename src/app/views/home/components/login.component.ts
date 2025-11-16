@@ -96,7 +96,6 @@ export class LoginComponent {
     goToForgot() {this.router.navigateByUrl('home/forgot-password')}
 
     onSubmit() {
-        console.log('loginForm => ', this.loginForm.getRawValue())
         this.loginForm.markAllAsTouched()
         if(!this.loginForm.invalid)
             this.authService.signin(this.loginForm.getRawValue())

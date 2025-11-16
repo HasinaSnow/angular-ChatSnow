@@ -59,7 +59,6 @@ export class MsgOptionsComponent {
             closeOnEscape: true,
             inputValues: {
                 onSelectEmoji: (emoji: EmojiData) => {
-                    console.log('on select emoji =>', emoji)
                     this.onSelectEmoji.emit(emoji)
                     this.ref?.close()
                 }

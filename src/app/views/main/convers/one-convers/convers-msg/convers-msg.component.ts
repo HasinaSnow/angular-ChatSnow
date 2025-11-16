@@ -64,14 +64,12 @@ export class ConversMsgComponent {
     }
 
     removeReaction(idMsg: TUniqId) {
-        console.log('remove reaction', idMsg)
         this.store.removeReaction(idMsg)
     }
 
     cancel() {
         const paths = this.router.url.split('/')
         const url = paths.filter(path => paths[paths.length - 1] !== path)
-        console.log(url)
         this.router.navigateByUrl(url.join('/'))
     }
 

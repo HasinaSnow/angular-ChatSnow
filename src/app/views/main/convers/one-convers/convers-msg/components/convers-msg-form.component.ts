@@ -39,12 +39,10 @@ export class ConversMsgFormComponent {
     }
 
     togglePopupEmoji($event: MouseEvent) {
-        console.log('popup emoji')
         this.popupService.togglePopup(this.popupEmojiPicker, $event, 'top-right')
     }
 
     pushEmoji(value: EmojiData) {
-        console.log('selected emoji', value)
         this.msgText.update(text => text + value.native)
     }
 }

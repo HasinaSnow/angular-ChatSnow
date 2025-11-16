@@ -7,7 +7,6 @@ export class ThemeService {
 
     onEffect = effect(() => {
         const isDark = this.isDark()
-        console.log('is dark', this.isDark())
         const element = document.querySelector('html')
         isDark ? element?.classList.add('dark') : element?.classList.remove('dark')
     })

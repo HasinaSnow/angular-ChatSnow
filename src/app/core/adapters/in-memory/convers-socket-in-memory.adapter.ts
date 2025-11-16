@@ -9,7 +9,6 @@ export class ConversSocketInMemoryAdapter extends SocketGateway<ConversEntity> {
     override emit(eventName: string, data: any): void {
         switch (eventName) {
             case ('unread-count-to-0') : {
-                console.log('emit event : unreadCountTo0')
                 const {convers, idUser} = data as {convers: ConversEntity, idUser: TUniqId}
                 const conversList = _FAKE_DATA_CONVERS.getValue().map(c => {
                     if(c.id === convers.id) {
