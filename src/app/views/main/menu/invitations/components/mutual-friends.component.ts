@@ -1,5 +1,4 @@
 import { Component, inject } from "@angular/core";
-import { ItemFriendComponent } from "../../../../../shared/components/ui/item-friend.component";
 import { InputTextModule } from "primeng/inputtext";
 import { IconFieldModule } from "primeng/iconfield";
 import { InputIconModule } from "primeng/inputicon";
@@ -8,7 +7,7 @@ import { Location } from "@angular/common";
 
 @Component({
     selector: 'app-mutual-friends',
-    imports: [ItemFriendComponent, InputTextModule, IconFieldModule, InputIconModule, Button],
+    imports: [InputTextModule, IconFieldModule, InputIconModule, Button],
     template: `
     <div class="py-2 pl-3 text-color h-full w-full flex flex-col gap-3 overflow-auto">
         <!-- header -->

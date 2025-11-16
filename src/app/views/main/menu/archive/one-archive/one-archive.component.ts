@@ -1,5 +1,4 @@
 import { Component, computed, ElementRef, inject, OnInit, viewChild } from "@angular/core";
-import { HeaderConversMsgComponent } from "../../../../../shared/components/ui/header-convers-msg.component";
 import { Button } from "primeng/button";
 import { Router } from "@angular/router";
 import { ScrollService } from "../../../../../shared/services/scroll.service";
@@ -10,7 +9,7 @@ import { ListMsgComponent } from "../../../../../shared/components/ui/list-msg.c
 
 @Component({
     selector: 'app-one-archive',
-    imports: [HeaderConversMsgComponent, ListMsgComponent, Button],
+    imports: [ListMsgComponent, Button],
     template: `
     <div class="flex-1 flex flex-col gap-2 overflow-auto h-full w-full">
         <!-- <app-header-convers-msg [withCancel]="withCancel()" (onGoToInfo)="goToInfo()" (onCancel)="cancel()" /> -->

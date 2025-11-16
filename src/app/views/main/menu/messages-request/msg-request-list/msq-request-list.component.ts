@@ -1,5 +1,4 @@
 import { Component, inject, OnInit, signal } from "@angular/core";
-import { ItemConversComponent } from "../../../../../shared/components/ui/item-convers.component";
 import { Router } from "@angular/router";
 import { FormsModule } from "@angular/forms";
 import { Message } from "primeng/message";
@@ -10,7 +9,6 @@ import { MsgRequestService } from "../msg-request.service";
 @Component({
     selector: 'app-msg-request-list',
     imports: [
-        ItemConversComponent,
         FormsModule,
         Message,
         SelectMenubarComponent

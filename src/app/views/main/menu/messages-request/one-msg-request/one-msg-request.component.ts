@@ -6,14 +6,13 @@ import { ScrollService } from "../../../../../shared/services/scroll.service";
 import { Button } from "primeng/button";
 import { MessageModule } from 'primeng/message';
 import { Router } from "@angular/router";
-import { HeaderConversMsgComponent } from "../../../../../shared/components/ui/header-convers-msg.component";
 import { BreakpointService } from "../../../../../shared/services/breakpoint.service";
 import { MsgRequestService } from "../msg-request.service";
 import { ListMsgComponent } from "../../../../../shared/components/ui/list-msg.component";
 
 @Component({
     selector: 'app-one-msg-request',
-    imports: [HeaderConversMsgComponent, PanelModule, ScrollPanelModule, ListMsgComponent, Button, MessageModule],
+    imports: [PanelModule, ScrollPanelModule, ListMsgComponent, Button, MessageModule],
     template: `
     <div class="flex-1 flex flex-col gap-2 overflow-auto h-full w-full">
         <!-- <app-header-convers-msg [withCancel]="withCancel()" (onGoToInfo)="goToInfo()" (onCancel)="cancel()" /> -->

@@ -9,6 +9,9 @@ import { ConversStore } from '../../../../../core/stores/convers/convers.store';
 import { InputText } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { TSuggestion } from '../../../../../shared/types/suggestion.type';
+import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+// import { CreateNewGroupComponent } from '../../convers-new/components/convers-group-new.component';
+import { BreakpointService } from '../../../../../shared/services/breakpoint.service';
 
 @Component({
     selector: 'app-convers-suggestion',
@@ -46,21 +49,40 @@ import { TSuggestion } from '../../../../../shared/types/suggestion.type';
     imports: [HeaderTitleComponent, FormsModule, InputText, Button, IconField, InputIcon, ItemFriendComponent]
 })
 export class ConversSuggestionComponent {
-    converService = inject(ConversService)
-    store = inject(ConversStore)
+    private dialogService = inject(DialogService)
+    private bpService = inject(BreakpointService)
+    private converService = inject(ConversService)
+    private store = inject(ConversStore)
+
     suggestions = this.store.suggestions
     searchKey: WritableSignal<string> = signal('')
     searchConvers = this.store.searchSuggestions(this.searchKey)
     idSelected: WritableSignal<string> = signal('')
 
+    ref: DynamicDialogRef|undefined
+
     startConvers(suggestion: TSuggestion) {
-        console.log('start convers ...')
         this.idSelected.set(suggestion.idUser)
         this.store.startConvers(suggestion)
     }
 
-
-    openCreationGroupForm() {}
+    openCreationGroupForm() {
+        // this.ref = this.dialogService.open(CreateNewGroupComponent, {
+        //     header: 'Create new convers group',
+        //     inputValues: {
+        //         onSave: (value?: string) => {
+        //             this.ref?.close()
+        //         },
+        //     },
+        //     modal: true,
+        //     closable: !this.bpService.isMobile(),
+        //     position: 'center',
+        //     breakpoints: {
+        //         '1024px': '60vw',
+        //         '640px': '95vw',
+        //     }
+        // })
+    }
 
     back() { this.converService.switchToConversView('list') }
 }

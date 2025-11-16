@@ -1,13 +1,12 @@
 import { Component, inject, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { BreakpointService } from "../../../../../shared/services/breakpoint.service";
-import { ItemConversComponent } from "../../../../../shared/components/ui/item-convers.component";
 import { Message } from "primeng/message";
 import { ArchiveService } from "../archive.service";
 
 @Component({
     selector: 'app-archive-list',
-    imports: [ItemConversComponent, Message],
+    imports: [Message],
     template: `
     <div class="pl-1 w-full h-full flex flex-col gap-2 overflow-auto">
         <div class="flex-1 pr-1 flex flex-col gap-1 overflow-auto">

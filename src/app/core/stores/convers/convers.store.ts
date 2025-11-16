@@ -13,7 +13,6 @@ import { rxMethod } from "@ngrx/signals/rxjs-interop";
 import { UserGateway } from "../../ports/user.gateway";
 import { TSuggestion } from "../../../shared/types/suggestion.type";
 import { Router } from "@angular/router";
-import { ConversService } from "../../../views/main/convers/convers.service";
 
 export const ConversStore = signalStore(
     WithEntityCrud<ConversEntity, Partial<ConversEntity>, Partial<ConversEntity>>(ConversGateway),
