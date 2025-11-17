@@ -9,11 +9,11 @@ import { MenuItem } from "primeng/api";
         RouterLinkActive,
     ],
     template: `
-        <div class="justify-between py-2 sm:py-4 h-full overflow-auto flex items-center">
+        <div class="justify-between text-color font-medium py-2 sm:py-4 h-full overflow-auto flex items-center">
             @for (item of items; track $index) {
                 <div
                 [routerLink]="[ item.routerLink ]"
-                routerLinkActive="text-primary"
+                routerLinkActive="text-primary font-semibold"
                 class="{{item.disabled ? 'hidden' : ''}} flex items-center flex-1 justify-center p-3 gap-2 cursor-pointer">
                     <i class="{{item.icon}}" style="font-size: 1.5rem"></i>
                     <span class="text-sm">{{item.label}}</span>
