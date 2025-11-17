@@ -17,11 +17,14 @@ export interface UserEntity {
 
 export function RandomUserEntity(fields?: Partial<UserEntity>): UserEntity {
     const isOnline = faker.datatype.boolean()
+    const number = faker.number.int({min: 1, max: 10})
+    const genre = faker.helpers.arrayElement(['female', 'male'])
+    const fullName = faker.person.fullName({sex: genre})
     return {
         id: faker.string.uuid(),
-        name: faker.person.fullName(),
+        name: fullName,
         email: faker.internet.email(),
-        urlAvatar: './images/pdp1.jpg',
+        urlAvatar: `https://randomuser.me/api/portraits/thumb/${genre == "female" ? 'women' : 'men'}/${number}.jpg`,
         avatarName: '',
         isOnline: isOnline,
         authTokenIds: [],

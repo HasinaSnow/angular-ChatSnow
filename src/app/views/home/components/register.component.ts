@@ -15,7 +15,7 @@ import { BreakpointService } from "../../../shared/services/breakpoint.service";
             <div class="flex flex-col gap-3 items-center rounded shadow-lg text-color bg-surface-0 dark:bg-surface-950 p-4 h-full w-full sm:w-[400px]">
                 <!-- logo -->
                 <div class="pt-3 flex flex-col items-center gap-2">
-                    <p-avatar image="./images/pdp1.jpg" size="xlarge" shape="circle"/>
+                    <p-avatar image="./images/logo-chatsnow.png" size="xlarge" shape="circle"/>
                     <p class="font-bold text-xl">Create your account</p>
                     <p class="text-md">Please enter your details to register.</p>
                 </div>
@@ -91,14 +91,14 @@ import { BreakpointService } from "../../../shared/services/breakpoint.service";
 
                     <!-- buttons -->
                     <div class="flex gap-2 sm:p-2 py-4 w-full">
-                        <p-button (onClick)="onSubmit()" label="Register" styleClass="m-0 w-full" class="flex-1"></p-button>
+                        <p-button (onClick)="onSubmit()" label="Sign up" styleClass="m-0 w-full" class="flex-1"></p-button>
                         <p-button (onClick)="onReset()" label="reset" variant="outlined" outlined="true" severity="secondary" styleClass="m-0 w-full" class="flex-1"></p-button>
                     </div>
                 </form>
 
                 <!-- go to register -->
                 <p class="p-2">
-                    Already have an account? <span (click)="goToLogin()" class="text-primary font-semibold hover:underline cursor-pointer">Log in</span>
+                    Already have an account? <span (click)="goToLogin()" class="text-primary font-semibold hover:underline cursor-pointer">Sign in</span>
                 </p>
             </div>
     `
@@ -128,5 +128,5 @@ export class RegisterComponent {
 
     onReset() { this.registerForm.reset( )}
 
-    goToLogin() { this.router.navigateByUrl(this.bp.isMobile() ? 'mobile/home/login' : 'mobile/home/register') }
+    goToLogin() { this.router.navigateByUrl(this.bp.isMobile() ? 'mobile/home/login' : 'home/login') }
 }

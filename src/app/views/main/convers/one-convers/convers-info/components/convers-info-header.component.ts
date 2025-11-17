@@ -8,8 +8,8 @@ import { ButtonModule } from 'primeng/button';
     template: `
     <div class=" flex flex-col items-center justify-center pb-3">
         <p-avatar image="./images/pdp1.jpg" styleClass="w-32 w-32" size="xlarge" shape="circle"/>
-        <div class="leading-6 font-medium text-color text-2xl mt-3 w-full text-center">PrimeTek</div>
-        <div class="leading-5 text-muted-color text-md mt-1 w-full text-center">{{'@primetek'}}</div>
+        <div class="leading-6 font-medium text-color text-2xl mt-3 w-full text-center">Hasina Snow</div>
+        <div class="leading-5 text-muted-color text-md mt-1 w-full text-center">{{'@hasinaSnow'}}</div>
 
         <div class="flex items-center justify-center flex-wrap gap-4 mt-3">
             <p-button icon="pi pi-phone text-muted-color" variant="text" rounded="true" size="large" severity="secondary" />

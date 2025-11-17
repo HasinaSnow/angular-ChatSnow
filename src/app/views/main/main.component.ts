@@ -1,9 +1,8 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { MainSidebarComponent } from "./components/main-sidebar.component";
 import { CommonModule } from '@angular/common';
 import { MainMenubar } from "./components/main-menubar.component";
-import { UserStore } from '../../core/stores/user/user.store';
 
 @Component({
     selector: 'app-main',

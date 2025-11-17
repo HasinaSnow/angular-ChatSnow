@@ -20,7 +20,7 @@ import { AuthService } from '../../../../shared/auth/auth.service';
         <!-- img -->
         <div class="md:col-span-1 flex items-center flex-col gap-3 w-full rounded-md p-2 py-3 md:py-6">
             <div class="relative">
-                <img src="./images/pdp1.jpg" alt="" height="{{imgSize()}}" width="{{imgSize()}}" class="border border-surface rounded-full">
+                <img src="./images/pdp1.png" alt="" height="{{imgSize()}}" width="{{imgSize()}}" class="border border-surface rounded-full">
                 <i class="pi pi-plus p-3 border border-surface rounded-full absolute bottom-0 right-0 bg-surface-0 dark:bg-surface-950"></i>
             </div>
             <div class="font-bold text-2xl text-center">Hasina Niaina Snow</div>

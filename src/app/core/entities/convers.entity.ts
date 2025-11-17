@@ -35,7 +35,7 @@ export function RandomConversPrtcipant(fields?: Partial<IConversPrtcipant>): ICo
     // const randomUnreadCount = () => faker.number.int({min: 0, max: 15})
     return {
         idUser: faker.string.uuid(),
-        urlAvatar: './images/pdp1.jpg',
+        urlAvatar: fields?.urlAvatar ?? './images/pdp1.png',
         unreadCount: 0,
         name: faker.person.fullName(),
         ...fields
@@ -61,7 +61,7 @@ export function RandomConversEntity(
         id: faker.string.uuid(),
         name: null,
         type: 'private',
-        urlAvatar: './images/pdp1.jpg',
+        urlAvatar: fields.participants && fields.type === 'private' ? fields.participants[0].urlAvatar : './images/pdp1.png',
         participants: [],
         exParticipants: [],
         lastMsg: RandomConversLstMsg(),
@@ -76,7 +76,8 @@ export function RandomConversEntity(
 export function generateConvers(users: UserEntity[], count: number, currentUserId: TUniqId): ConversEntity[] {
     const allPartcipants: IConversPrtcipant[] = users.map(user => RandomConversPrtcipant({
         idUser: user.id,
-        name: user.name
+        name: user.name,
+        urlAvatar: user.urlAvatar
     }))
 
     return Array.from({length: count}, () => {
