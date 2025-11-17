@@ -37,6 +37,7 @@
     "@angular/compiler-cli": "^19.2.0",
     "@faker-js/faker": "^10.0.0",
     "@types/jasmine": "~5.1.0",
+    "angular-cli-ghpages": "^2.0.3",
     "builder-pattern": "^2.2.0",
     "jasmine-core": "~5.6.0",
     "karma": "~6.4.0",
