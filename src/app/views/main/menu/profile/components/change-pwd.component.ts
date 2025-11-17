@@ -9,7 +9,7 @@ import { InputText } from 'primeng/inputtext';
     template: `
         <div class="flex flex-col gap-2">
             <div class="w-full">
-                <label for="email" class="flex items-center font-semibold gap-1">
+                <label for="password" class="flex items-center font-semibold gap-1">
                     <i class="pi pi-lock" style="font-size: .9rem;"></i>
                     Current password
                 </label>
@@ -17,19 +17,19 @@ import { InputText } from 'primeng/inputtext';
                 <small class="w-full text-red-500 block text-end" id="email-help">invalid password.</small>
             </div>
             <div class="w-full">
-                <label for="email" class="flex items-center font-semibold gap-1">
+                <label for="newPass" class="flex items-center font-semibold gap-1">
                     <i class="pi pi-lock" style="font-size: .9rem;"></i>
                     New password
                 </label>
-                <input id="password" type="password" placeholder="your new password" class="w-full my-2" pInputText />
+                <input id="newPass" type="password" placeholder="your new password" class="w-full my-2" pInputText />
                 <small class="w-full text-red-500 block text-end" id="email-help">invalid password.</small>
             </div>
             <div class="w-full">
-                <label for="email" class="flex items-center font-semibold gap-1">
+                <label for="confirmPass" class="flex items-center font-semibold gap-1">
                     <i class="pi pi-lock" style="font-size: .9rem;"></i>
                     Confirmation
                 </label>
-                <input id="password" type="password" placeholder="confirm your new password" class="w-full my-2" pInputText />
+                <input id="confirmPass" type="password" placeholder="confirm your new password" class="w-full my-2" pInputText />
                 <small class="w-full text-red-500 block text-end" id="email-help">invalid password.</small>
             </div>
             <p class="w-full text-muted-color max-md:text-sm">
