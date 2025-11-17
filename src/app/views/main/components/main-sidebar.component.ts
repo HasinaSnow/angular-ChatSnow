@@ -27,7 +27,7 @@ import { LogoutConfirm } from '../../../shared/helpers/logout-confirmation';
         <!-- header -->
         <div class="hidden sm:block p-2 items-center justify-center gap-3">
             <!-- logo -->
-            <img src="./favicon.ico" alt="logo" height="35" width="35">
+            <img src="./images/logo-chatsnow.png" alt="logo" height="35" width="35">
         </div>
 
         <!-- content -->
