@@ -9,9 +9,6 @@ import { ConversStore } from '../../../../../core/stores/convers/convers.store';
 import { InputText } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { TSuggestion } from '../../../../../shared/types/suggestion.type';
-import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-// import { CreateNewGroupComponent } from '../../convers-new/components/convers-group-new.component';
-import { BreakpointService } from '../../../../../shared/services/breakpoint.service';
 
 @Component({
     selector: 'app-convers-suggestion',
@@ -49,8 +46,6 @@ import { BreakpointService } from '../../../../../shared/services/breakpoint.ser
     imports: [HeaderTitleComponent, FormsModule, InputText, Button, IconField, InputIcon, ItemFriendComponent]
 })
 export class ConversSuggestionComponent {
-    private dialogService = inject(DialogService)
-    private bpService = inject(BreakpointService)
     private converService = inject(ConversService)
     private store = inject(ConversStore)
 
@@ -58,8 +53,6 @@ export class ConversSuggestionComponent {
     searchKey: WritableSignal<string> = signal('')
     searchConvers = this.store.searchSuggestions(this.searchKey)
     idSelected: WritableSignal<string> = signal('')
-
-    ref: DynamicDialogRef|undefined
 
     startConvers(suggestion: TSuggestion) {
         this.idSelected.set(suggestion.idUser)

@@ -7,7 +7,7 @@ import { ProfileStore } from "../profile/profile.store";
 import { UserStore } from "../user/user.store";
 import { debounceTime, exhaustMap, of, pipe, Subscription, switchMap, tap } from "rxjs";
 import { ConversSocketGateway } from "../../ports/convers-soket.gateway";
-import { setEntity } from "@ngrx/signals/entities";
+import { setEntities, setEntity } from "@ngrx/signals/entities";
 import { TUniqId } from "../../../shared/types/uniq-id.type";
 import { rxMethod } from "@ngrx/signals/rxjs-interop";
 import { UserGateway } from "../../ports/user.gateway";
@@ -28,6 +28,7 @@ export const ConversStore = signalStore(
     ) => ({
         conversList: computed(() => {
             const myId = profileStore.profile()?.id
+            const key = store.searchKey()
             if(myId) {
                 const users = userStore.entities()
                 return store.entities().map((convers) => ({
@@ -52,7 +53,10 @@ export const ConversStore = signalStore(
                     const dateA = (a.updatedAt ?? a.createdAt).getTime()
                     const dateB = (b.updatedAt ?? b.createdAt).getTime()
                     return dateB - dateA
-                })
+                }).filter(user => key.length > 0
+                    ? user.name.toLowerCase().includes(key)
+                    : true
+                )
             } return []
         }),
         streamUsers: computed(() => {
@@ -129,6 +133,19 @@ export const ConversStore = signalStore(
                 patchState(store, setEntity(toUpdated))
             }
         }
+
+        const searchConvers = rxMethod<string>(
+            pipe(
+                debounceTime(400),
+                tap(key => { 
+                    patchState(store, {searchKey: key})
+                }),
+                switchMap(key => conversGateway.searchByName(key)),
+                tap(convers => {
+                    patchState(store, setEntities(convers))
+                })
+            )
+        )
 
         const searchSuggestions = rxMethod<string>(
             pipe(
@@ -211,6 +228,6 @@ export const ConversStore = signalStore(
             sub.unsubscribe()
         }
 
-        return  {patchOneConvers, resetUnreadCount, createWithNewMsg, searchSuggestions, startConvers, listenUpdateConvers, emitUnreadCountTo0, unsubscribe}
+        return  {patchOneConvers, resetUnreadCount, createWithNewMsg, searchSuggestions, searchConvers, startConvers, listenUpdateConvers, emitUnreadCountTo0, unsubscribe}
     })
 )

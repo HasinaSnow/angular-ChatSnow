@@ -1,8 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
 import { HeaderConversMsgComponent, IHeaderConversMsg } from '../../../../../shared/components/ui/header-convers-msg.component';
 import { ConversMsgFormComponent } from '../../one-convers/convers-msg/components/convers-msg-form.component';
-import { ListMsgComponent } from '../../../../../shared/components/ui/list-msg.component';
-import { AutoScrollBottomDirective } from '../../../../../shared/directives/auto-scroll-bottom.directive';
 import { BreakpointService } from '../../../../../shared/services/breakpoint.service';
 import { ConversStore } from '../../../../../core/stores/convers/convers.store';
 import { Router } from '@angular/router';

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal, WritableSignal } from '@angular/core';
 import { StreamUserSuggestionComponent } from "./components/stream-user-suggestion.component";
 import { ConversService } from '../convers.service';
 import { MenuItem } from 'primeng/api';
@@ -28,7 +28,7 @@ import { TSuggestion } from '../../../../shared/types/suggestion.type';
             <!-- search -->
             <p-iconfield styleClass="w-full">
                 <p-inputicon styleClass="pi pi-search" />
-                <input type="text" pInputText placeholder="Search" class="w-full" />
+                <input type="text" [(ngModel)]="searchKey" pInputText placeholder="Search" class="w-full" />
             </p-iconfield>
 
             <!-- convers list -->
@@ -69,6 +69,8 @@ export class ConversListComponent {
     private store = inject(ConversStore)
     conversList = this.store.conversList
     streamUsers = this.store.streamUsers
+    searchKey: WritableSignal<string> = signal('')
+    searchConvers = this.store.searchConvers(this.searchKey)
 
     items: MenuItem[] = [
         { label: 'Profile', icon: 'pi pi-user', routerLink: './profile' },
