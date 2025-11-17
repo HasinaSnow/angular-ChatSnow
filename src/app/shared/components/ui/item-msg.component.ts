@@ -35,7 +35,7 @@ export interface IItemMsg {
     @if(msgItem().isReceived) {
         <div class="flex items-start gap-2 w-fit max-w-[75%]">
             <div class="flex items-center gap-2 py-1 sticky top-0 transition-all">
-                <p-avatar image="./favicon.ico" styleClass="h-10 w-10 text-sm font-medium" size="normal" shape="circle"/>
+                <p-avatar image="{{msgItem().author.urlAvatar ?? './images/pdp1.png'}}" styleClass="h-10 w-10 text-sm font-medium" size="normal" shape="circle"/>
             </div>
             @if(msgItem().replyToMsg) {
                 <div class="mt-1">
