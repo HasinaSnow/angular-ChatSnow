@@ -44,6 +44,10 @@ export const MainRoutesMobile: Routes = [
             {
                 path: 'convers',
                 title: 'ChatSnow - conversation',
+                resolve: {
+                    loadAllConvers: LoadAllConvers,
+                    conversStream: ActivateConversListener
+                },
                 loadChildren: () => import('./convers/convers.routes').then(m => m.ConversRoutesMobile)
             },
             {
