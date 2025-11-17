@@ -1,0 +1,1 @@
+import{R as o}from"./chunk-JMY2VTDN.js";var n=class t{scrollToBottom(e){e.nativeElement.scrollTop=e.nativeElement.scrollHeight}static \u0275fac=function(r){return new(r||t)};static \u0275prov=o({token:t,factory:t.\u0275fac,providedIn:"root"})};export{n as a};

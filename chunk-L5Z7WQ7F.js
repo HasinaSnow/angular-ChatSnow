@@ -1,0 +1,1 @@
+var t=(o,e)=>({target:o.target,message:"Etes-vous s\xFBre de vouloir se d\xE9connecter ?",header:"Log out ?",closable:!e.isMobile(),closeOnEscape:!0,icon:"pi pi-exclamation-triangle",rejectVisible:e.isMobile(),rejectButtonProps:{label:"cancel",severity:"secondary",outlined:!0},acceptButtonProps:{label:"Log out",severity:"primary"},acceptIcon:"pi pi-sign-out"});export{t as a};
