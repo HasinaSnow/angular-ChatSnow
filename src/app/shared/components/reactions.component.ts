@@ -19,7 +19,7 @@ export interface IMsgReaction {
             @for (reaction of reactions(); track $index) {
                 <div class="flex items-center py-2 gap-4 justify-between">
                     <div class="flex gap-2 items-center">
-                        <p-avatar image="./favicon.ico" size="large" shape="circle"/>
+                        <p-avatar image="{{reaction.author.imgUrl}}" size="large" shape="circle"/>
                         <span class="font-semibod text-color">{{reaction.author.name}}</span>
                     </div>
                     <div class="flex gap-1 items-center">
