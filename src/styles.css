@@ -18,3 +18,7 @@ body {
     width: 100vw;
     overflow: hidden;
 }
+
+.safe-bottom {
+    margin-bottom: env(safe-area-inset-bottom);
+}
