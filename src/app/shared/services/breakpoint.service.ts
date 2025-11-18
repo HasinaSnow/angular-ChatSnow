@@ -21,8 +21,14 @@ export class BreakpointService {
         this.checkUrl(screen)
     })
 
+    private updateVh() {
+        const vh = window.innerHeight * 0.01
+        document.documentElement.style.setProperty('--vh', `${vh}px`)
+    }
+
     checkUrl(screen: number) {
         const isMobile = screen <= this.breakpoint.md
+        this.updateVh()
         const url = this.router.url
             if(!isMobile && url.startsWith('/mobile')) {
                 // this.router.navigateByUrl(url.replace('/mobile', ''), {replaceUrl: true})
