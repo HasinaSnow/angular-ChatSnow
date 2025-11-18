@@ -13,6 +13,7 @@ import { rxMethod } from "@ngrx/signals/rxjs-interop";
 import { UserGateway } from "../../ports/user.gateway";
 import { TSuggestion } from "../../../shared/types/suggestion.type";
 import { Router } from "@angular/router";
+import { BreakpointService } from "../../../shared/services/breakpoint.service";
 
 export const ConversStore = signalStore(
     WithEntityCrud<ConversEntity, Partial<ConversEntity>, Partial<ConversEntity>>(ConversGateway),
@@ -111,6 +112,7 @@ export const ConversStore = signalStore(
         conversGateway = inject(ConversGateway),
         profileStore = inject(ProfileStore),
         router = inject(Router),
+        pbService = inject(BreakpointService),
         conversSocketGateway = inject(ConversSocketGateway)
     ) => {
         let sub: Subscription
@@ -176,17 +178,17 @@ export const ConversStore = signalStore(
                         convers.type === "private" &&
                         convers.participants.map(p => p.idUser).includes(idUser)
                     )
+                    const url = pbService.isMobile() ? './mobile' : '.'
 
                     if(existingConvers) {
-                        router.navigate(['./convers/', existingConvers.id])
-                    }
-                    else of(idUser)
+                        router.navigate([`${url}/convers/`, existingConvers.id])
+                    } else of(idUser)
                         .pipe(switchMap(idUser => conversGateway.findByIdUser(idUser)))
                         .subscribe(convers => {
-                            if(convers) router.navigate(['./', convers.id])
+                            if(convers) router.navigate([`${url}/`, convers.id])
                             else {
                                 patchState(store, {newConversUser: sugg})
-                                router.navigate(['./convers/new/'])
+                                router.navigate([`${url}/convers/new/`])
                             }
                         })
                 }),
@@ -198,7 +200,8 @@ export const ConversStore = signalStore(
                 exhaustMap(data => conversGateway.createWithNewMsg(data.idUser, data.msgContent)),
                 tap(convers => {
                     patchState(store, setEntity(convers))
-                    router.navigate(['./convers', convers.id])
+                    const url = pbService.isMobile() ? './mobile' : '.'
+                    router.navigate([`${url}/convers`, convers.id])
                 })
             )
         )
