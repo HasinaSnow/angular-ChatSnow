@@ -13,14 +13,14 @@ import { MainMenubar } from "./components/main-menubar.component";
         MainMenubar
     ],
     template: `
-        <div class="flex flex-col safe-bottom sm:flex-row h-screen w-full sm:p-3 lg:p-4 xl:p-6">
+        <div class="flex flex-col sm:flex-row h-screen pb-safe w-full sm:p-3 lg:p-4 xl:p-6">
             <!-- main sidebar -->
-            <div class="sm:h-full sm:block hidden">
+            <div class="sm:h-screen sm:block hidden">
                 <app-main-sidebar/>
             </div>
 
             <!-- main content -->
-            <div class="flex-1 overflow-auto w-full h-full sm:rounded-xl md:rounded-2xl border border-surface bg-surface-0 dark:bg-surface-950">
+            <div class="flex-1 overflow-auto sm:rounded-xl md:rounded-2xl border border-surface bg-surface-0 dark:bg-surface-950">
                 <router-outlet/>
             </div>
 

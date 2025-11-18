@@ -5,6 +5,10 @@
 @import '@ctrl/ngx-emoji-mart/picker';
 @custom-variant dark (&:where(.dark, .dark *));
 
+:root {
+    --safe-bottom: env(safe-area-inset-bottom, 0px)
+}
+
 
 * {
     box-sizing: border-box;
@@ -19,6 +23,6 @@ body {
     overflow: hidden;
 }
 
-.safe-bottom {
-    margin-bottom: env(safe-area-inset-bottom);
+.pb-safe {
+    padding-bottom: var(--safe-bottom) !important;
 }
