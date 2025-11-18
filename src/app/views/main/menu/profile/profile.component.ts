@@ -10,6 +10,7 @@ import { ChangePasswordComponent } from './components/change-pwd.component';
 import { ConfirmationService } from 'primeng/api';
 import { LogoutConfirm } from '../../../../shared/helpers/logout-confirmation';
 import { AuthService } from '../../../../shared/auth/auth.service';
+import { ProfileStore } from '../../../../core/stores/profile/profile.store';
 
 @Component({
     selector: 'app-profile',
@@ -20,10 +21,10 @@ import { AuthService } from '../../../../shared/auth/auth.service';
         <!-- img -->
         <div class="md:col-span-1 flex items-center flex-col gap-3 w-full rounded-md p-2 py-3 md:py-6">
             <div class="relative">
-                <img src="./images/pdp1.png" alt="" height="{{imgSize()}}" width="{{imgSize()}}" class="border border-surface rounded-full">
+                <img src="{{profile()?.urlAvatar}}" alt="image profile" height="{{imgSize()}}" width="{{imgSize()}}" class="border border-surface rounded-full">
                 <i class="pi pi-plus p-3 border border-surface rounded-full absolute bottom-0 right-0 bg-surface-0 dark:bg-surface-950"></i>
             </div>
-            <div class="font-bold text-2xl text-center">Hasina Niaina Snow</div>
+            <div class="font-bold text-2xl text-center">{{profile()?.name}}</div>
         </div>
 
         <!-- sections -->
@@ -39,6 +40,7 @@ export class ProfileComponent {
     private bpService = inject(BreakpointService)
     private dialogService = inject(DialogService)
     private confirmService = inject(ConfirmationService)
+    profile = inject(ProfileStore).profile
     ref: DynamicDialogRef|undefined
 
     private location = inject(Location)
@@ -51,18 +53,16 @@ export class ProfileComponent {
         else return 180
     })
 
-    profileName: WritableSignal<string> = signal('Hasina Snow')
     showEmail: WritableSignal<boolean> = signal(false)
-    emailDescription = computed(() => this.showEmail() ? 'rakotohasinasnow@gmail.com': 'Disabled : ****')
     enableInlineSatus = signal(true)
     inlineStatus = computed(() => this.enableInlineSatus() ? 'Enabled': 'Disabled')
     darkThemeStatus = computed(() => this.themeService.isDark() ? 'Enabled': 'Disabled')
 
     accounts = [
         {
-            name: 'Hasina Niaina Snow',
-            id: 'hasina_id',
-            imgUrl: "./images/pdp1.jpg"
+            name: this.profile()?.name,
+            id: this.profile()?.id,
+            imgUrl: this.profile()?.urlAvatar
         },
         {
             name: 'Mark Anthony',
@@ -126,17 +126,16 @@ export class ProfileComponent {
                 {
                     label: 'Profile name',
                     icon: 'pi pi-user-edit',
-                    signalDescription: this.profileName,
+                    description: this.profile()?.name,
                     command: () => {
                         this.ref = this.dialogService.open(ProfileNameEditComponent, {
                             header: 'Edit your Profile name',
                             inputValues: {
-                                name: this.profileName(),
+                                name: this.profile()?.name,
                                 cancelBtnVisible: this.bpService.isMobile(),
                                 onSave: (isEdited: boolean, value?: string) => {
                                     if(isEdited && value) {
                                         console.info('new profile name saved')
-                                        this.profileName.set(value)
                                     } else console.warn('edit cancel')
                                     this.ref?.close()
                                 },
@@ -154,7 +153,7 @@ export class ProfileComponent {
                 {
                     label: 'Email',
                     icon: 'pi pi-at',
-                    signalDescription: this.emailDescription,
+                    description: this.profile()?.email,
                     signalInputCheck: this.showEmail
                 },
                 {
