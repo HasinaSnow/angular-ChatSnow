@@ -1,1 +1,0 @@
-import{a}from"./chunk-RU3K4DB3.js";import"./chunk-NYTQNNZF.js";import"./chunk-GVZ2QQVE.js";import"./chunk-GDOUQOGK.js";import"./chunk-WXR7YDA7.js";import"./chunk-GNSVLBWZ.js";import"./chunk-JMY2VTDN.js";import"./chunk-7CGTOI24.js";export{a as OneInvitationComponent};
