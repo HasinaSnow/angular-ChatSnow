@@ -185,8 +185,9 @@ export const ConversStore = signalStore(
                     } else of(idUser)
                         .pipe(switchMap(idUser => conversGateway.findByIdUser(idUser)))
                         .subscribe(convers => {
-                            if(convers) router.navigate([`${url}/`, convers.id])
+                            if(convers) router.navigate([`${url}/convers/`, convers.id])
                             else {
+                                console.log('new convers', sugg)
                                 patchState(store, {newConversUser: sugg})
                                 router.navigate([`${url}/convers/new/`])
                             }

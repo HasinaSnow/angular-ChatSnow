@@ -55,6 +55,19 @@ export const ConversRoutesMobile: Routes = [
         component: ConversComponent
     },
     {
+        path: 'new',
+        children: [
+            {
+                path: '',
+                component: ConversNewComponent
+            },
+            {
+                path: 'info',
+                component: ConversInfoComponent
+            }
+        ]
+    },
+    {
         path: ':id',
         providers: [OneConversStore],
         resolve: {load: LoadOneConvers, msgStream: ActivateMsgListenerForOneConvers },
@@ -77,5 +90,5 @@ export const ConversRoutesMobile: Routes = [
                 component: ConversMediaComponent
             }
         ]
-    }
+    },
 ]

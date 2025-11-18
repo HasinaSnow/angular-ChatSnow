@@ -5,6 +5,7 @@ import { AvatarModule } from "primeng/avatar";
 import { BadgeModule } from "primeng/badge";
 import { ButtonModule } from "primeng/button";
 import { MenuService } from "../menu.service";
+import { ProfileStore } from "../../../../core/stores/profile/profile.store";
 
 @Component({
     selector: 'app-menu-list',
@@ -19,10 +20,10 @@ import { MenuService } from "../menu.service";
         <div class="flex flex-col gap-4 p-2 text-color overflow-auto w-full h-full">
                 <!-- account -->
                 <div (click)="selectComponent($event, './profile')" routerLink="./profile" class="flex pb-3 border-b border-surface items-center gap-3 cursor-pointer">
-                    <p-avatar image="./images/pdp1.jpg" styleClass="font-medium text-base" size="large" shape="circle"/>
+                    <p-avatar image="{{profile()?.urlAvatar}}" styleClass="font-medium text-base" size="large" shape="circle"/>
                     <div class="flex flex-1 flex-col">
-                        <span class="font-semibold text-md line-clamp-1">Hasina Niaina Snow</span>
-                        <span class="text-sm text-muted-color line-clamp-1">hasina.niaina.snow</span>
+                        <span class="font-semibold text-md w-full line-clamp-1">{{profile()?.name}}</span>
+                        <span class="text-sm text-muted-color w-full line-clamp-1">{{profile()?.email}}</span>
                     </div>
                     <p-badge size="small" value="5" class="bg-primary"/>
                 </div>
@@ -45,6 +46,7 @@ import { MenuService } from "../menu.service";
 export class MenuListComponent {
     private menuService = inject(MenuService)
     private router = inject(Router)
+    profile = inject(ProfileStore).profile
 
     items: MenuItem[] = [
         {

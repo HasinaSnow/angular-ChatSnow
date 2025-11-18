@@ -41,7 +41,7 @@ export interface IItemMsg {
                 <div class="mt-1">
                     <small class="text-muted-color px-2 flex items-center gap-2">
                         <i class="pi pi-undo" style="font-size: .8rem;"></i>
-                        <strong>{{ msgItem().author.name | littleName }}</strong> a répondu à <strong>{{ msgItem().replyToMsg?.author | littleName}}</strong>
+                        <strong>{{ msgItem().author.name | littleName }}</strong> {{msgItem().replyToMsg?.author === 'You' ? 'answered' : 'replied to'}} <strong>{{ msgItem().replyToMsg?.author | littleName}}</strong>
                     </small>
                     <div class="flex-1 w-full mt-6 pt-3 relative">
                         <div class="absolute z-0 -top-5 pb-4 w-fit border border-surface rounded-br-2xl rounded-t-2xl">
@@ -101,7 +101,7 @@ export interface IItemMsg {
                 <div class="mt-1">
                     <small class="text-muted-color px-2 flex items-center gap-2">
                         <i class="pi pi-undo" style="font-size: .8rem;"></i>
-                        <strong>{{ msgItem().author.name | littleName }}</strong> avez répondu à <strong>{{ msgItem().replyToMsg?.author | littleName}}</strong>
+                        <strong>{{ msgItem().author.name | littleName }}</strong> {{msgItem().replyToMsg?.author === 'You' ? 'answered' : 'replied to'}} <strong>{{ msgItem().replyToMsg?.author | littleName}}</strong>
                     </small>
                     <div class="flex-1 w-full mt-6 pt-3 relative">
                         <div class="absolute right-0 z-0 -top-5 pb-4 w-fit border border-surface rounded-bl-2xl rounded-t-2xl">

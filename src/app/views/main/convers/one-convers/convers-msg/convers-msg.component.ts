@@ -18,7 +18,7 @@ import { TUniqId } from '../../../../../shared/types/uniq-id.type';
     ListMsgComponent,
     AutoScrollBottomDirective
 ],
-    template: `<div class="flex flex-col safe-bottom overflow-auto h-full w-full">
+    template: `<div class="flex flex-col overflow-auto h-full w-full">
         <!-- header -->
         <app-header-convers-msg [hiddenInfoBtn]="hiddenBtnInfo()" (onGoToInfo)="goToConversInfo()" (onCancel)="cancel()" [headerConversMsg]="conversMsgHeader()" />
 

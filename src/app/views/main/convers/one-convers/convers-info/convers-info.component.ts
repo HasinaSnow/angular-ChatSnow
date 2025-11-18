@@ -10,6 +10,7 @@ import { BreakpointService } from '../../../../../shared/services/breakpoint.ser
 import { DynamicDialogRef, DialogService, DynamicDialogConfig } from 'primeng/dynamicdialog'
 import { BlockComponent } from '../../../../../shared/components/ui/block.component';
 import { Location } from '@angular/common';
+import { OneConversStore } from '../../../../../core/stores/convers/one-convers.store';
 
 @Component({
     selector: 'app-convers-info',
@@ -27,7 +28,7 @@ import { Location } from '@angular/common';
             </div>
 
             <!-- header -->
-            <app-convers-info-header/>
+            <app-convers-info-header [oneConvers]="oneConvers()"/>
 
             <!-- list info -->
             <app-list-menu-item [items]="menuSettingsItems"/>
@@ -39,6 +40,7 @@ export class ConversInfoComponent implements OnInit {
     private bpService = inject(BreakpointService)
     private location = inject(Location)
     private router = inject(Router)
+    oneConvers = inject(OneConversStore).oneConvers
 
     private confirmService = inject(ConfirmationService)
     private dialogService = inject(DialogService)

@@ -19,7 +19,7 @@ import { TUniqId } from '../../../../../shared/types/uniq-id.type';
         <div class="flex-1 flex items-center justify-center text-lg">
             <p class="w-[70%] flex flex-col text-color items-center text-center">
                 <i class="pi pi-comment text-primary" style="font-size: 2rem;"></i>
-                Send new message and chat with : 
+                Send new message and chat with :
                 <span class="font-semibold">{{newConversUser()?.name}}</span>
             </p>
         </div>
