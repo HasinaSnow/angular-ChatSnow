@@ -15,7 +15,7 @@ import { MainMenubar } from "./components/main-menubar.component";
     template: `
         <div class="flex flex-col sm:flex-row h-screen-safe w-full sm:p-3 lg:p-4 xl:p-6">
             <!-- main sidebar -->
-            <div class="sm:h-screen sm:block hidden">
+            <div class="sm:h-full sm:block hidden">
                 <app-main-sidebar/>
             </div>
 
