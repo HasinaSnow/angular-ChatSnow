@@ -6,7 +6,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-    --safe-bottom: env(safe-area-inset-bottom, 0px)
+    --safe-bottom: env(safe-area-inset-bottom)
 }
 
 
